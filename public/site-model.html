@@ -207,7 +207,9 @@ body{background:var(--void);color:var(--fg);font-family:var(--font-body);font-si
       var f = list[i];
       for(var k=0;k<f.dots.length;k++){
         var d = f.dots[k];
-        f.curve.getPointAt((d.userData.off + t*f.speed) % 1, _v);
+        var u = (d.userData.off + t*f.speed) % 1;
+        if(!(u >= 0)) u = u < 0 ? u + 1 : 0;
+        f.curve.getPointAt(u, _v);
         d.position.copy(_v);
       }
     }
@@ -638,8 +640,8 @@ body{background:var(--void);color:var(--fg);font-family:var(--font-body);font-si
   var t0 = performance.now(), last = t0, loopErr = false;
   function frame(now){
     try{
-      var dt = (now - last)/1000; last = now;
-      var t = reduced ? 0 : (now - t0)/1000;
+      var dt = Math.max(0, (now - last)/1000); last = now;
+      var t = reduced ? 0 : Math.max(0, (now - t0)/1000);
       stepFlows(active.flows, t);
       if(!reduced && !drag){
         idle += dt;
