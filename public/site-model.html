@@ -1,0 +1,666 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Hydrox Site Model</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Condensed:wght@500;600&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous"></script>
+<style>
+/* Dark exhibition viewer: pale massing models on a deep ground plane, energy flows as the only colour. */
+:root{
+  --void:#070b0f; --ground:#0d1419; --line:#1e2a33;
+  --fg:#e8eff4; --muted:#8ea0ad;
+  --power:#f5a524; --heat:#ff6f4d; --steam:#9fc6e8; --h2:#2fd4c8; --oxy:#a98cf0; --chem:#c8d94e;
+  --font-display:"IBM Plex Sans Condensed","Helvetica Neue",Arial,sans-serif;
+  --font-body:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  color-scheme:dark;
+}
+html,body{height:100%;overflow:hidden}
+body{background:var(--void);color:var(--fg);font-family:var(--font-body);font-size:14px}
+#stage{position:relative;height:100%;width:100%}
+#stage canvas{display:block;width:100%;height:100%}
+.ov{position:absolute;pointer-events:none;z-index:2}
+
+#brand{top:0;left:0;padding-block:18px 0;
+  padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:20px}
+#brand h1{font-family:var(--font-display);font-size:22px;font-weight:600;margin:0;line-height:1.1}
+#brand .sub{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--muted);margin-top:6px}
+#brand .badge{display:inline-block;margin-top:10px;font-family:var(--font-mono);font-size:9.5px;
+  letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--line);
+  border-radius:3px;padding:3px 8px;color:var(--muted)}
+#brand .badge[data-b="1"]{color:var(--h2);border-color:rgba(47,212,200,.45)}
+#brand .badge[data-b="2"]{color:var(--heat);border-color:rgba(255,111,77,.45)}
+#brand .badge[data-b="3"]{color:var(--chem);border-color:rgba(200,217,78,.45)}
+
+#tabs{top:0;right:0;pointer-events:auto;padding-block:18px 0;
+  padding-right:max(20px,env(safe-area-inset-right,0px));display:flex;gap:6px}
+#tabs button{
+  font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;
+  background:rgba(15,23,29,.85);color:var(--muted);border:1px solid var(--line);
+  border-radius:4px;padding:8px 12px;cursor:pointer;transition:color .15s,border-color .15s;
+}
+#tabs button:hover{color:var(--fg)}
+#tabs button[aria-pressed="true"]{color:var(--fg);border-color:var(--fg)}
+#tabs button:focus-visible{outline:2px solid var(--h2);outline-offset:2px}
+
+#legend{bottom:0;left:0;padding-block:0 18px;
+  padding-left:max(20px,env(safe-area-inset-left,0px));padding-right:20px;
+  display:flex;flex-direction:column;gap:7px}
+#legend .lbl{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--muted);margin-bottom:2px}
+.lrow{display:flex;align-items:center;gap:9px;font-size:12px;color:var(--muted)}
+.lrow .dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+
+#hint{bottom:0;right:0;padding-block:0 18px;
+  padding-right:max(20px,env(safe-area-inset-right,0px));padding-left:20px;
+  font-family:var(--font-mono);font-size:10px;letter-spacing:.09em;
+  text-transform:uppercase;color:var(--muted);text-align:right}
+
+#tip{position:absolute;z-index:5;pointer-events:none;max-width:295px;min-width:195px;
+  background:rgba(10,16,21,.95);border:1px solid var(--line);border-left:3px solid var(--h2);
+  border-radius:5px;padding:11px 13px 12px;opacity:0;transform:translateY(5px);
+  transition:opacity .14s ease,transform .14s ease;box-shadow:0 14px 38px rgba(0,0,0,.6)}
+#tip.on{opacity:1;transform:translateY(0)}
+#tip .tname{font-family:var(--font-display);font-size:15px;font-weight:600;line-height:1.2}
+#tip .ttag{font-family:var(--font-mono);font-size:9.5px;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--muted);margin-top:4px}
+#tip .tdesc{font-size:12.5px;line-height:1.5;color:#c3d1db;margin-top:8px}
+
+@media (max-width:700px){
+  #brand h1{font-size:17px}
+  #tabs button{padding:7px 9px;font-size:9px}
+  #hint{display:none}
+  #tip{max-width:225px}
+}
+@media (prefers-reduced-motion:reduce){#tip{transition:none}}
+</style>
+
+<div id="stage">
+  <div class="ov" id="brand">
+    <h1>Hydrox</h1>
+    <div class="sub" id="bsub">Stage 1 · Barakah · electrolysis</div>
+    <div class="badge" id="bbadge" data-b="1">Deployable today</div>
+  </div>
+
+  <div class="ov" id="tabs">
+    <button type="button" data-s="1" aria-pressed="true">Stage 1</button>
+    <button type="button" data-s="2" aria-pressed="false">Stage 2</button>
+    <button type="button" data-s="3" aria-pressed="false">Stage 3</button>
+  </div>
+
+  <div class="ov" id="legend"><div class="lbl">Energy flows</div><div id="lrows"></div></div>
+  <div class="ov" id="hint">Drag to orbit · scroll to zoom<br>Hover any structure</div>
+
+  <div id="tip"><div class="tname"></div><div class="ttag"></div><div class="tdesc"></div></div>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var stage = document.getElementById("stage");
+  var tip = document.getElementById("tip");
+  var tipName = tip.querySelector(".tname"),
+      tipTag  = tip.querySelector(".ttag"),
+      tipDesc = tip.querySelector(".tdesc");
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function fail(msg){
+    var el = document.getElementById("hint");
+    if(!el) return;
+    el.style.cssText += "display:block;color:#f5a524;text-transform:none;letter-spacing:0;font-size:12px;max-width:280px;text-align:right";
+    el.textContent = msg;
+  }
+  window.addEventListener("error", function(e){
+    var w = e.filename ? (" @ " + String(e.filename).split("/").pop() + ":" + e.lineno) : "";
+    fail("Render error: " + (e.message || "unknown") + w);
+  });
+  if(typeof THREE === "undefined"){
+    fail("The 3D library did not load. Reload, or check that cdnjs.cloudflare.com is reachable.");
+    return;
+  }
+
+  try{
+
+  var TONE = {power:"#f5a524", heat:"#ff6f4d", steam:"#9fc6e8",
+              h2:"#2fd4c8", oxy:"#a98cf0", chem:"#c8d94e"};
+  var HEX  = {power:0xf5a524, heat:0xff6f4d, steam:0x9fc6e8,
+              h2:0x2fd4c8, oxy:0xa98cf0, chem:0xc8d94e};
+  var C = {concrete:0xdfe6ea, panel:0xc2cdd5, steel:0x8d9aa4, dark:0x495760,
+           ground:0x0d1419, sea:0x102733, bg:0x070b0f};
+
+  var scene = new THREE.Scene();
+  scene.background = new THREE.Color(C.bg);
+
+  var camera = new THREE.PerspectiveCamera(45, 1, 0.5, 2000);
+  var renderer = new THREE.WebGLRenderer({antialias:true});
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
+  stage.appendChild(renderer.domElement);
+
+  scene.add(new THREE.HemisphereLight(0xdce9f2, 0x1a2730, 0.9));
+  var key = new THREE.DirectionalLight(0xffffff, 0.8);
+  key.position.set(-60, 90, 50); scene.add(key);
+  var fill = new THREE.DirectionalLight(0x8fb6d6, 0.35);
+  fill.position.set(60, 40, -70); scene.add(fill);
+
+  var world = new THREE.Group(); scene.add(world);
+
+  var gnd = new THREE.Mesh(new THREE.PlaneGeometry(600,440),
+            new THREE.MeshLambertMaterial({color:C.ground}));
+  gnd.rotation.x = -Math.PI/2; world.add(gnd);
+  var grid = new THREE.GridHelper(420, 60, 0x203039, 0x16222b);
+  grid.position.y = 0.03; world.add(grid);
+
+  var mConcrete = new THREE.MeshLambertMaterial({color:C.concrete});
+  var mPanel    = new THREE.MeshLambertMaterial({color:C.panel});
+  var mSteel    = new THREE.MeshLambertMaterial({color:C.steel});
+  var mDark     = new THREE.MeshLambertMaterial({color:C.dark});
+  var mSea      = new THREE.MeshLambertMaterial({color:C.sea});
+  var dotGeo    = new THREE.SphereGeometry(1, 8, 6);
+
+  function BOX(w,h,d){ return new THREE.BoxGeometry(w,h,d); }
+  function CYL(r1,r2,h,s){ return new THREE.CylinderGeometry(r1,r2,h,s||20); }
+  function SPH(r){ return new THREE.SphereGeometry(r, 20, 12); }
+  function DOME(r){ return new THREE.SphereGeometry(r, 24, 14, 0, Math.PI*2, 0, Math.PI/2); }
+
+  function Stage(meta){
+    this.meta = meta;
+    this.group = new THREE.Group();
+    this.group.visible = false;
+    world.add(this.group);
+    this.parts = [];
+    this.flows = [];
+  }
+  Stage.prototype.part = function(name, tag, desc, tone){
+    var g = new THREE.Group();
+    g.userData = {name:name, tag:tag, desc:desc, tone:tone || "h2"};
+    this.group.add(g); this.parts.push(g); return g;
+  };
+  Stage.prototype.mesh = function(gp, geo, mat, x, y, z, rot){
+    var m = new THREE.Mesh(geo, mat);
+    m.position.set(x, y, z);
+    if(rot) m.rotation.set(rot[0] || 0, rot[1] || 0, rot[2] || 0);
+    gp.add(m); return m;
+  };
+  Stage.prototype.flow = function(pts, tone, count, size, speed){
+    var curve = new THREE.CatmullRomCurve3(pts.map(function(p){
+      return new THREE.Vector3(p[0], p[1], p[2]);
+    }));
+    var line = new THREE.Line(
+      new THREE.BufferGeometry().setFromPoints(curve.getPoints(60)),
+      new THREE.LineBasicMaterial({color:HEX[tone], transparent:true, opacity:0.3})
+    );
+    this.group.add(line);
+    var mat = new THREE.MeshBasicMaterial({color:HEX[tone]});
+    var dots = [];
+    for(var i=0;i<count;i++){
+      var d = new THREE.Mesh(dotGeo, mat);
+      d.scale.setScalar(size);
+      d.userData.off = i/count;
+      this.group.add(d); dots.push(d);
+    }
+    this.flows.push({curve:curve, dots:dots, speed:speed || 0.05});
+  };
+
+  var _v = new THREE.Vector3();
+  function stepFlows(list, t){
+    for(var i=0;i<list.length;i++){
+      var f = list[i];
+      for(var k=0;k<f.dots.length;k++){
+        var d = f.dots[k];
+        f.curve.getPointAt((d.userData.off + t*f.speed) % 1, _v);
+        d.position.copy(_v);
+      }
+    }
+  }
+
+  /* ===== STAGE 1 — Barakah PWR + high-temperature steam electrolysis ===== */
+  var S1 = new Stage({
+    sub:"Stage 1 · Barakah · electrolysis",
+    badge:"Deployable today",
+    legend:[["power","Electricity"],["steam","Low-grade steam / water"],
+            ["h2","Hydrogen"],["oxy","Oxygen"]],
+    target:[14,8,0], dist:250, az:-0.62, pol:0.90
+  });
+  (function(S){
+    S.mesh(S.part("Gulf Coastline","Seawater cooling",
+      "Once-through seawater condenser cooling. Two thirds of reactor thermal output is rejected here at low temperature — too cool to drive chemistry.","steam"),
+      new THREE.PlaneGeometry(120,300), mSea, -150, -0.3, 0, [-Math.PI/2,0,0]);
+
+    var r = S.part("Reactor Containment","APR-1400 · pressurised water reactor",
+      "3,983 MW thermal, 1,337 MW net electrical per unit. Coolant leaves the core near 320 °C — firm power, not high-temperature process heat.","power");
+    [-26,26].forEach(function(z){
+      S.mesh(r, CYL(13,13,1.4,28), mDark, -78, 0.7, z);
+      S.mesh(r, CYL(11.5,11.5,24,28), mConcrete, -78, 12.7, z);
+      S.mesh(r, CYL(12.1,12.1,1.2,28), mPanel, -78, 24.3, z);
+      S.mesh(r, DOME(11.5), mConcrete, -78, 25, z);
+      S.mesh(r, CYL(1,1,4,8), mSteel, -78, 37, z);
+      S.mesh(r, BOX(15,12,18), mPanel, -61, 6, z);
+    });
+
+    var th = S.part("Turbine Hall","Steam cycle · generator",
+      "Steam turbine and generator. About one third of reactor thermal output becomes electricity.","power");
+    [-26,26].forEach(function(z){
+      S.mesh(th, BOX(40,15,22), mPanel, -40, 7.5, z);
+      S.mesh(th, CYL(11,11,40,3), mSteel, -40, 15.2, z, [0,0,Math.PI/2]);
+    });
+
+    var sw = S.part("Switchyard","Transformers · allocation point",
+      "Where power divides between the national grid and the hydrogen plant. This split is the decision the Hydrox optimiser makes.","power");
+    S.mesh(sw, BOX(28,1.2,40), mDark, -8, 0.6, 0);
+    [-14,-4,6,16].forEach(function(z){
+      S.mesh(sw, BOX(8,8,6), mSteel, -15, 4.5, z);
+      S.mesh(sw, CYL(1,1,6,10), mDark, -15, 11, z);
+    });
+    [-14,0,14].forEach(function(z){
+      S.mesh(sw, BOX(1.4,16,1.4), mSteel, -1, 8, z);
+      S.mesh(sw, BOX(1.4,16,1.4), mSteel, 4, 8, z);
+      S.mesh(sw, BOX(8,0.9,0.9), mSteel, 1.5, 16, z);
+    });
+
+    var gr = S.part("Grid Transmission","To national network",
+      "Power not allocated to hydrogen is exported. Its market value is the opportunity cost the optimiser weighs against the hydrogen margin.","power");
+    [[4,-58,30],[16,-92,30]].forEach(function(p){
+      S.mesh(gr, BOX(1.8,p[2],1.8), mSteel, p[0], p[2]/2, p[1]);
+      S.mesh(gr, BOX(20,1,1), mSteel, p[0], p[2]-4, p[1]);
+      S.mesh(gr, BOX(15,1,1), mSteel, p[0], p[2]+1, p[1]);
+    });
+
+    var st = S.part("Steam Tie-In","Secondary loop · below 200 °C",
+      "Low-grade steam vaporises feedwater for the electrolyser. An external connection only — no modification to reactor safety systems.","steam");
+    S.mesh(st, BOX(13,6,10), mPanel, -34, 3, 52);
+    S.mesh(st, CYL(2.2,2.2,12,14), mSteel, -27, 5, 52, [0,0,Math.PI/2]);
+    S.mesh(st, CYL(1.3,1.3,8,10), mDark, -38, 9, 52);
+
+    var eh = S.part("Electrolyser Hall","Solid oxide electrolysis · ~800 °C",
+      "Splits steam rather than cold water. 314 MW electrical demand at 36.8 kWh per kilogram — about a quarter less electricity than low-temperature electrolysis.","h2");
+    S.mesh(eh, BOX(54,18,34), mPanel, 36, 9, 0);
+    S.mesh(eh, BOX(56,1.4,36), mSteel, 36, 18.7, 0);
+    for(var i=0;i<6;i++) S.mesh(eh, BOX(5,4,26), mConcrete, 16+i*8, 21.5, 0);
+    for(var j=0;j<6;j++) S.mesh(eh, BOX(1.2,19,35), mSteel, 13+j*9, 9.5, 0);
+
+    var ox = S.part("Oxygen Vent","Byproduct stream",
+      "About 8 kg of oxygen for every kilogram of hydrogen. Vented, or sold to industrial users as an optional revenue line.","oxy");
+    S.mesh(ox, CYL(2.1,2.9,30,14), mConcrete, 36, 15, -34);
+    S.mesh(ox, CYL(3.1,3.1,1.8,14), mDark, 36, 30.5, -34);
+
+    var cp = S.part("Compression Skid","20–30 bar at plant gate",
+      "Hydrogen compressed to delivery pressure. This is the boundary of the modelled system — liquefaction and ammonia conversion sit downstream.","h2");
+    S.mesh(cp, BOX(20,9,14), mPanel, 76, 4.5, -14);
+    [-4,0,4].forEach(function(z){ S.mesh(cp, CYL(1.7,1.7,8,12), mSteel, 72+z*1.5, 10.5, -14+z*1.6); });
+
+    var sg = S.part("Hydrogen Storage","Production buffer",
+      "Decouples production from offtake, so the plant can make hydrogen during low-cost hours and still deliver on a steady contract schedule.","h2");
+    [12,0,-12].forEach(function(z){
+      S.mesh(sg, CYL(4.5,4.5,26,20), mConcrete, 86, 8, z, [0,0,Math.PI/2]);
+      S.mesh(sg, SPH(4.5), mConcrete, 73, 8, z);
+      S.mesh(sg, SPH(4.5), mConcrete, 99, 8, z);
+      S.mesh(sg, BOX(3.5,8,10), mDark, 77, 4, z);
+      S.mesh(sg, BOX(3.5,8,10), mDark, 95, 4, z);
+    });
+
+    var pp = S.part("Export Pipeline","To industrial offtake",
+      "Hydrogen to refining, ammonia and fertiliser customers. ADNOC's Ta'ziz ammonia plant at Ruwais alone needs roughly 177,000 tonnes a year.","h2");
+    for(var k=0;k<5;k++){
+      S.mesh(pp, BOX(1.8,10,20), mSteel, 112+k*12, 5, 30);
+      S.mesh(pp, BOX(2.6,1.2,22), mSteel, 112+k*12, 10, 30);
+    }
+    S.mesh(pp, CYL(1.7,1.7,62,14), mPanel, 140, 11.6, 30, [0,0,Math.PI/2]);
+
+    var wt = S.part("Water Treatment","Desalinated feedwater",
+      "At least 9 kg of water per kilogram of hydrogen before cooling and purification losses — about 585,000 tonnes a year at full output.","steam");
+    [0,1,2].forEach(function(i){
+      S.mesh(wt, CYL(7,7,6,20), mPanel, -8+i*17, 3, 64);
+      S.mesh(wt, CYL(7.4,7.4,0.7,20), mSteel, -8+i*17, 6.3, 64);
+    });
+
+    S.flow([[-62,14,-26],[-40,15,-26],[-18,11,-16],[-8,10,-5]], "power", 20, 1.3, 0.055);
+    S.flow([[-62,14,26],[-40,15,26],[-18,11,16],[-8,10,5]], "power", 20, 1.3, 0.055);
+    S.flow([[0,16,-3],[4,26,-58],[16,31,-92]], "power", 18, 1.2, 0.07);
+    S.flow([[4,16,3],[20,14,1],[32,12,0]], "power", 16, 1.4, 0.05);
+    S.flow([[-34,6,52],[0,7,44],[26,9,20],[34,10,6]], "steam", 18, 1.1, 0.042);
+    S.flow([[8,5,64],[26,6,44],[36,7,18]], "steam", 12, 0.9, 0.04);
+    S.flow([[60,10,-5],[74,9,-14],[82,8,-6]], "h2", 14, 1.3, 0.05);
+    S.flow([[86,8,-8],[86,8,0],[88,9,12]], "h2", 12, 1.2, 0.05);
+    S.flow([[96,9,6],[110,10,26],[168,11,30]], "h2", 22, 1.3, 0.06);
+    S.flow([[36,18,-22],[36,22,-28],[36,31,-34]], "oxy", 12, 1.0, 0.055);
+  })(S1);
+
+  /* ===== STAGE 2 — HTGR (Xe-100 class) + electrolysis with process heat ===== */
+  var S2 = new Stage({
+    sub:"Stage 2 · high-temperature reactor",
+    badge:"ENEC ADVANCE · in evaluation",
+    legend:[["heat","High-temperature helium"],["power","Electricity"],
+            ["steam","Water / steam"],["h2","Hydrogen"],["oxy","Oxygen"]],
+    target:[6,8,0], dist:215, az:-0.66, pol:0.90
+  });
+  (function(S){
+    var rm = S.part("Modular HTGR Units","Xe-100 class · pebble bed",
+      "Four 200 MW thermal modules. Helium leaves the core near 750 °C — genuine process heat, not only electricity. ENEC's ADVANCE programme is evaluating this reactor class for the UAE.","heat");
+    [-33,-11,11,33].forEach(function(z){
+      S.mesh(rm, BOX(22,4,16), mDark, -62, 2, z);
+      S.mesh(rm, BOX(18,22,13), mConcrete, -62, 15, z);
+      S.mesh(rm, BOX(19,1.4,14), mPanel, -62, 26.5, z);
+      S.mesh(rm, CYL(3.4,3.4,9,16), mSteel, -56, 30, z);
+      S.mesh(rm, CYL(1.2,1.2,5,10), mDark, -68, 29, z);
+    });
+
+    var hx = S.part("Intermediate Heat Exchanger","Helium loop isolation",
+      "Transfers reactor heat to a secondary loop without carrying activity across. The barrier that lets a nuclear plant supply an industrial process safely.","heat");
+    S.mesh(hx, BOX(18,6,44), mDark, -26, 3, 0);
+    [-15,0,15].forEach(function(z){
+      S.mesh(hx, CYL(4.6,4.6,22,18), mSteel, -26, 17, z);
+      S.mesh(hx, DOME(4.6), mPanel, -26, 28, z);
+    });
+
+    var tb = S.part("Power Block","Steam generator · turbine",
+      "A share of the helium heat still makes electricity for the electrolyser and the grid. The rest goes to the process as heat, which is the point of this stage.","power");
+    S.mesh(tb, BOX(30,13,18), mPanel, -22, 6.5, -46);
+    S.mesh(tb, CYL(9,9,30,3), mSteel, -22, 13.5, -46, [0,0,Math.PI/2]);
+    S.mesh(tb, BOX(10,9,9), mSteel, -2, 4.5, -46);
+
+    var eh = S.part("Electrolyser Hall","SOEC with process heat",
+      "The same solid oxide stacks as Stage 1, but the 800 °C operating temperature now comes largely from reactor heat rather than electricity — so electricity per kilogram falls further.","h2");
+    S.mesh(eh, BOX(46,17,34), mPanel, 24, 8.5, 0);
+    S.mesh(eh, BOX(48,1.4,36), mSteel, 24, 17.7, 0);
+    for(var i=0;i<5;i++) S.mesh(eh, BOX(5,4,26), mConcrete, 8+i*8, 20.5, 0);
+    for(var j=0;j<5;j++) S.mesh(eh, BOX(1.2,18,35), mSteel, 6+j*9, 9, 0);
+
+    var ox = S.part("Oxygen Vent","Byproduct stream",
+      "About 8 kg of oxygen per kilogram of hydrogen, as in Stage 1.","oxy");
+    S.mesh(ox, CYL(2,2.7,26,14), mConcrete, 24, 13, -32);
+    S.mesh(ox, CYL(2.9,2.9,1.6,14), mDark, 24, 26.5, -32);
+
+    var sg = S.part("Hydrogen Storage","Buffer and offtake",
+      "Higher output per megawatt of electricity than Stage 1, because heat has displaced part of the electrical demand.","h2");
+    [10,-10].forEach(function(z){
+      S.mesh(sg, CYL(4.2,4.2,24,20), mConcrete, 68, 7.5, z, [0,0,Math.PI/2]);
+      S.mesh(sg, SPH(4.2), mConcrete, 56, 7.5, z);
+      S.mesh(sg, SPH(4.2), mConcrete, 80, 7.5, z);
+      S.mesh(sg, BOX(3.2,7.5,9), mDark, 60, 3.8, z);
+      S.mesh(sg, BOX(3.2,7.5,9), mDark, 76, 3.8, z);
+    });
+
+    var wt = S.part("Feedwater Plant","Desalination and polishing",
+      "Same stoichiometry as Stage 1 — about 9 kg of water per kilogram of hydrogen, before losses.","steam");
+    [0,1].forEach(function(i){
+      S.mesh(wt, CYL(6,6,5.5,20), mPanel, 4+i*15, 2.8, 52);
+      S.mesh(wt, CYL(6.4,6.4,0.7,20), mSteel, 4+i*15, 5.9, 52);
+    });
+
+    [-33,-11,11,33].forEach(function(z){
+      S.flow([[-56,30,z],[-40,26,z*0.6],[-26,22,0]], "heat", 12, 1.2, 0.06);
+    });
+    S.flow([[-26,22,-8],[-24,18,-30],[-22,14,-44]], "heat", 14, 1.1, 0.05);
+    S.flow([[-26,22,6],[0,20,4],[20,19,0]], "heat", 20, 1.4, 0.05);
+    S.flow([[-6,10,-46],[8,12,-20],[20,13,-4]], "power", 16, 1.2, 0.055);
+    S.flow([[8,5,52],[18,6,32],[24,7,16]], "steam", 12, 0.9, 0.04);
+    S.flow([[48,9,-4],[56,8,-10],[62,8,-10]], "h2", 14, 1.2, 0.05);
+    S.flow([[78,8,-10],[84,9,2],[88,10,10]], "h2", 12, 1.2, 0.055);
+    S.flow([[24,17,-20],[24,21,-26],[24,27,-32]], "oxy", 10, 0.9, 0.055);
+  })(S2);
+
+  /* ===== STAGE 3 — VHTR + sulfur–iodine thermochemical cycle ===== */
+  var S3 = new Stage({
+    sub:"Stage 3 · thermochemical cycle",
+    badge:"Laboratory scale · research",
+    legend:[["heat","Process heat 850–950 °C"],["chem","Sulfur / iodine recycle"],
+            ["steam","Water feed"],["h2","Hydrogen"],["oxy","Oxygen"]],
+    target:[6,10,0], dist:205, az:-0.70, pol:0.88
+  });
+  (function(S){
+    var vr = S.part("Very-High-Temperature Reactor","Helium outlet 850–950 °C",
+      "The only reactor class hot enough to drive sulfur–iodine chemistry directly. No commercial VHTR exists yet — this stage is a research horizon, not a buildable plant.","heat");
+    S.mesh(vr, CYL(17,17,2.4,28), mDark, -62, 1.2, 0);
+    S.mesh(vr, CYL(15,15,26,28), mConcrete, -62, 14, 0);
+    S.mesh(vr, CYL(15.6,15.6,1.4,28), mPanel, -62, 27.4, 0);
+    S.mesh(vr, DOME(15), mConcrete, -62, 28, 0);
+    [-9,9].forEach(function(z){
+      S.mesh(vr, CYL(3.6,3.6,20,16), mSteel, -48, 20, z, [0,0,Math.PI/2]);
+    });
+
+    var hx = S.part("Intermediate Heat Exchanger","Nuclear / chemical barrier",
+      "Separates reactor helium from the chemical plant. Materials that survive 900 °C helium on one side and corrosive acid on the other are an unsolved engineering problem.","heat");
+    S.mesh(hx, BOX(16,7,34), mDark, -32, 3.5, 0);
+    [-11,0,11].forEach(function(z){
+      S.mesh(hx, CYL(4.2,4.2,24,18), mSteel, -32, 18, z);
+      S.mesh(hx, DOME(4.2), mPanel, -32, 30, z);
+    });
+
+    var bu = S.part("Bunsen Reaction Section","~120 °C · water enters here",
+      "Water, sulfur dioxide and iodine combine to form two acids that separate into layers. This is the only point where new material enters the cycle.","chem");
+    S.mesh(bu, BOX(26,5,22), mDark, 2, 2.5, -34);
+    [-7,7].forEach(function(z){
+      S.mesh(bu, CYL(4,4,16,18), mPanel, 2, 13, -34+z);
+      S.mesh(bu, DOME(4), mSteel, 2, 21, -34+z);
+    });
+    S.mesh(bu, BOX(7,8,7), mSteel, 14, 4, -34);
+
+    var sa = S.part("Sulfuric Acid Decomposition","Above 800 °C · the hot step",
+      "Sulfuric acid splits back into sulfur dioxide, water and oxygen. This step sets the temperature the whole cycle demands, and is exactly why a PWR cannot run it.","heat");
+    S.mesh(sa, BOX(30,6,26), mDark, 2, 3, 0);
+    [-8,8].forEach(function(z){
+      S.mesh(sa, CYL(4.6,4.6,22,18), mPanel, -2, 17, z);
+      S.mesh(sa, DOME(4.6), mSteel, -2, 28, z);
+    });
+    S.mesh(sa, CYL(2.6,2.6,30,16), mSteel, 12, 16, 0);
+    S.mesh(sa, BOX(9,9,9), mSteel, 12, 4.5, 0);
+
+    var hi = S.part("Hydrogen Iodide Decomposition","~350 °C · hydrogen out",
+      "Hydrogen iodide splits into hydrogen and iodine. The hydrogen leaves the cycle; the iodine returns to the Bunsen section.","h2");
+    S.mesh(hi, BOX(26,5,22), mDark, 2, 2.5, 34);
+    [-7,7].forEach(function(z){
+      S.mesh(hi, CYL(3.8,3.8,18,18), mPanel, 2, 14, 34+z);
+      S.mesh(hi, DOME(3.8), mSteel, 2, 23, 34+z);
+    });
+    S.mesh(hi, BOX(7,8,7), mSteel, 14, 4, 34);
+
+    var pu = S.part("Separation and Purification","Membranes · corrosion service",
+      "Keeping iodine from precipitating and clogging the plant, and finding materials that survive hot acid, are the live research problems in this cycle.","chem");
+    S.mesh(pu, BOX(20,12,16), mPanel, 40, 6, 16);
+    S.mesh(pu, BOX(21,1.2,17), mSteel, 40, 12.6, 16);
+    [-5,0,5].forEach(function(z){ S.mesh(pu, CYL(2.2,2.2,10,14), mSteel, 36+z*1.3, 17, 16+z*1.4); });
+
+    var sg = S.part("Hydrogen Storage","Product buffer",
+      "Thermochemical routes target 40–50% thermal efficiency, against roughly a third for the electrolysis pathway at a conventional reactor.","h2");
+    [8,-8].forEach(function(z){
+      S.mesh(sg, CYL(4,4,22,20), mConcrete, 72, 7, z, [0,0,Math.PI/2]);
+      S.mesh(sg, SPH(4), mConcrete, 61, 7, z);
+      S.mesh(sg, SPH(4), mConcrete, 83, 7, z);
+      S.mesh(sg, BOX(3,7,8.5), mDark, 65, 3.5, z);
+      S.mesh(sg, BOX(3,7,8.5), mDark, 79, 3.5, z);
+    });
+
+    var ox = S.part("Oxygen Vent","From the acid decomposition step",
+      "Oxygen is released where sulfuric acid breaks down, not at an electrolyser — a structural difference from Stages 1 and 2.","oxy");
+    S.mesh(ox, CYL(2,2.7,28,14), mConcrete, -14, 14, -16);
+    S.mesh(ox, CYL(2.9,2.9,1.6,14), mDark, -14, 28.5, -16);
+
+    var wf = S.part("Water Feed","The only consumed input",
+      "Apart from water, the sulfur and iodine reagents are regenerated within the loop — though a real plant needs make-up for leakage, purge and corrosion losses.","steam");
+    S.mesh(wf, CYL(6,6,6,20), mPanel, 26, 3, -52);
+    S.mesh(wf, CYL(6.4,6.4,0.7,20), mSteel, 26, 6.3, -52);
+
+    S.flow([[-48,20,-9],[-40,19,-5],[-32,18,0]], "heat", 10, 1.2, 0.055);
+    S.flow([[-48,20,9],[-40,19,5],[-32,18,0]], "heat", 10, 1.2, 0.055);
+    S.flow([[-32,22,0],[-16,20,0],[-6,18,0]], "heat", 18, 1.5, 0.05);
+    S.flow([[-32,20,6],[-14,16,22],[0,14,32]], "heat", 12, 1.0, 0.045);
+    S.flow([[2,12,-26],[2,12,-12],[0,13,-4]], "chem", 12, 1.2, 0.05);
+    S.flow([[6,12,4],[6,12,-16],[4,12,-28]], "chem", 12, 1.2, 0.05);
+    S.flow([[6,12,26],[6,12,10],[6,12,4]], "chem", 10, 1.2, 0.05);
+    S.flow([[-2,11,30],[-2,11,0],[-2,11,-30]], "chem", 16, 1.1, 0.04);
+    S.flow([[26,5,-52],[16,6,-44],[6,8,-36]], "steam", 10, 0.9, 0.042);
+    S.flow([[8,12,34],[30,11,24],[38,11,18]], "h2", 14, 1.3, 0.05);
+    S.flow([[48,12,16],[58,9,8],[64,8,8]], "h2", 12, 1.3, 0.055);
+    S.flow([[-6,16,-6],[-12,20,-12],[-14,28,-16]], "oxy", 10, 1.0, 0.055);
+  })(S3);
+
+  /* ---------- stage switching ---------- */
+  var STAGES = [S1, S2, S3];
+  var active = S1;
+  var lrows  = document.getElementById("lrows");
+  var bsub   = document.getElementById("bsub");
+  var bbadge = document.getElementById("bbadge");
+  var tabBtns = document.querySelectorAll("#tabs button");
+
+  var az = S1.meta.az, pol = S1.meta.pol, dist = S1.meta.dist;
+  var target = new THREE.Vector3(14, 8, 0);
+
+  function place(){
+    camera.position.set(
+      target.x + dist*Math.sin(pol)*Math.cos(az),
+      target.y + dist*Math.cos(pol),
+      target.z + dist*Math.sin(pol)*Math.sin(az)
+    );
+    camera.lookAt(target);
+  }
+
+  function show(n){
+    clearHover();
+    for(var i=0;i<STAGES.length;i++) STAGES[i].group.visible = (i === n);
+    active = STAGES[n];
+    var m = active.meta;
+    bsub.textContent = m.sub;
+    bbadge.textContent = m.badge;
+    bbadge.setAttribute("data-b", String(n+1));
+    lrows.innerHTML = "";
+    for(var q=0;q<m.legend.length;q++){
+      var row = m.legend[q];
+      var d = document.createElement("div");
+      d.className = "lrow";
+      var dot = document.createElement("span");
+      dot.className = "dot";
+      dot.style.background = TONE[row[0]];
+      d.appendChild(dot);
+      d.appendChild(document.createTextNode(row[1]));
+      lrows.appendChild(d);
+    }
+    target.set(m.target[0], m.target[1], m.target[2]);
+    az = m.az; pol = m.pol; dist = m.dist;
+    place();
+    for(var k=0;k<tabBtns.length;k++)
+      tabBtns[k].setAttribute("aria-pressed", k === n ? "true" : "false");
+  }
+
+  for(var b=0;b<tabBtns.length;b++){
+    (function(idx){
+      tabBtns[idx].addEventListener("click", function(){ show(idx); });
+    })(b);
+  }
+
+  /* ---------- hover ---------- */
+  var ray = new THREE.Raycaster(), ndc = new THREE.Vector2(), hovered = null;
+
+  function setHot(g, on){
+    if(!g) return;
+    g.traverse(function(o){
+      if(!o.isMesh) return;
+      if(on){
+        if(!o.userData._m) o.userData._m = o.material;
+        if(!o.userData._hl){
+          var c = o.userData._m.clone();
+          c.emissive = new THREE.Color(TONE[g.userData.tone] || "#2fd4c8");
+          o.userData._hl = c;
+        }
+        o.material = o.userData._hl;
+      } else if(o.userData._m){
+        o.material = o.userData._m;
+      }
+    });
+  }
+  function clearHover(){ setHot(hovered, false); hovered = null; tip.classList.remove("on"); }
+
+  function pick(cx, cy){
+    var r = renderer.domElement.getBoundingClientRect();
+    ndc.x = ((cx - r.left)/r.width)*2 - 1;
+    ndc.y = -((cy - r.top)/r.height)*2 + 1;
+    ray.setFromCamera(ndc, camera);
+    var hits = ray.intersectObjects(active.parts, true), grp = null;
+    if(hits.length){
+      var o = hits[0].object;
+      while(o && active.parts.indexOf(o) === -1) o = o.parent;
+      grp = o;
+    }
+    if(grp !== hovered){
+      setHot(hovered, false);
+      hovered = grp;
+      setHot(hovered, true);
+      if(grp){
+        var d = grp.userData;
+        tipName.textContent = d.name;
+        tipTag.textContent  = d.tag;
+        tipDesc.textContent = d.desc;
+        tip.style.borderLeftColor = TONE[d.tone] || "#2fd4c8";
+        tip.classList.add("on");
+      } else tip.classList.remove("on");
+    }
+    if(grp){
+      var sr = stage.getBoundingClientRect();
+      var tx = cx - sr.left + 18, ty = cy - sr.top + 16;
+      if(tx + 305 > sr.width)  tx = cx - sr.left - 305;
+      if(ty + 160 > sr.height) ty = cy - sr.top - 160;
+      tip.style.left = Math.max(8, tx) + "px";
+      tip.style.top  = Math.max(8, ty) + "px";
+    }
+    renderer.domElement.style.cursor = grp ? "pointer" : "grab";
+  }
+
+  /* ---------- interaction ---------- */
+  var drag = null, idle = 0;
+  renderer.domElement.addEventListener("pointerdown", function(e){
+    drag = {x:e.clientX, y:e.clientY}; idle = 0; clearHover();
+  });
+  window.addEventListener("pointerup", function(){ drag = null; });
+  window.addEventListener("pointermove", function(e){
+    if(drag){
+      az += (e.clientX - drag.x)*0.0055;
+      pol = Math.max(0.2, Math.min(1.4, pol + (e.clientY - drag.y)*0.0045));
+      drag = {x:e.clientX, y:e.clientY}; idle = 0; place();
+      return;
+    }
+    idle = 0;
+    if(e.target === renderer.domElement) pick(e.clientX, e.clientY);
+    else clearHover();
+  });
+  renderer.domElement.addEventListener("wheel", function(e){
+    e.preventDefault(); idle = 0;
+    dist = Math.max(80, Math.min(520, dist + e.deltaY*0.3));
+    place();
+  }, {passive:false});
+
+  function resize(){
+    var w = stage.clientWidth, h = stage.clientHeight;
+    if(!w || !h) return;
+    camera.aspect = w/h; camera.updateProjectionMatrix();
+    renderer.setSize(w, h, false);
+  }
+  window.addEventListener("resize", resize);
+
+  var t0 = performance.now(), last = t0, loopErr = false;
+  function frame(now){
+    try{
+      var dt = (now - last)/1000; last = now;
+      var t = reduced ? 0 : (now - t0)/1000;
+      stepFlows(active.flows, t);
+      if(!reduced && !drag){
+        idle += dt;
+        if(idle > 6){ az += dt*0.026; place(); }
+      }
+      renderer.render(scene, camera);
+    }catch(err){
+      if(!loopErr){ loopErr = true; fail("Frame error: " + ((err && err.message) || err)); }
+    }
+    requestAnimationFrame(frame);
+  }
+
+  show(0);
+  resize();
+  requestAnimationFrame(frame);
+  setTimeout(resize, 80);
+
+  }catch(e){
+    fail("Init failed: " + ((e && e.message) || e));
+  }
+})();
+</script>
+
+</body></html>

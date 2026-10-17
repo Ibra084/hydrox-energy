@@ -7,6 +7,7 @@ export default function Nav() {
           <a href="#problem">Problem</a>
           <a href="#solution">Solution</a>
           <a href="#how">How it works</a>
+          <a href="#model">3D model</a>
           <a href="#economics">Economics</a>
           <a href="#proof">Proof</a>
           <a href="#invitation">Get involved</a>

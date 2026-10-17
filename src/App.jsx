@@ -3,6 +3,7 @@ import Hero from './components/Hero'
 import Problem from './components/Problem'
 import Solution from './components/Solution'
 import HowItWorks from './components/HowItWorks'
+import SiteModel from './components/SiteModel'
 import AiEngine from './components/AiEngine'
 import Economics from './components/Economics'
 import Proof from './components/Proof'
@@ -20,6 +21,7 @@ export default function App() {
         <Problem />
         <Solution />
         <HowItWorks />
+        <SiteModel />
         <AiEngine />
         <Economics />
         <Proof />
