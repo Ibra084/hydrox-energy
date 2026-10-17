@@ -3,7 +3,7 @@ import barakahPhoto from '../assets/barakah.jpg'
 const items = [
   {
     title: 'No new plants required',
-    body: 'Hydrox attaches to reactors your country already operates or is already building.',
+    body: 'Hydrox attaches to reactors the UAE already operates at Barakah.',
   },
   {
     title: 'Sovereign clean fuel supply',
@@ -21,7 +21,7 @@ export default function NationalBenefits() {
       <div className="section-inner grid-2 align-center">
         <div>
           <span className="eyebrow accent">NATIONAL BENEFITS</span>
-          <h2>What this unlocks for your country.</h2>
+          <h2>What this unlocks for the UAE.</h2>
           <ol className="numbered-list">
             {items.map((it, i) => (
               <li key={it.title}>
@@ -35,7 +35,7 @@ export default function NationalBenefits() {
           </ol>
         </div>
         <div className="card highlight">
-          <span className="tag">EXAMPLE · UAE</span>
+          <span className="tag">BARAKAH · UAE</span>
           <h3>One Barakah reactor could out-produce the UAE's entire hydrogen demand.</h3>
           <p className="muted">50,000&ndash;80,000 tonnes per year — from heat currently vented into the Gulf.</p>
           <img className="photo-frame" src={barakahPhoto} alt="Barakah nuclear power plant, UAE" />
