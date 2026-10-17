@@ -2,7 +2,7 @@ const cards = [
   {
     tag: 'HOST',
     title: 'Pilot partnership',
-    body: 'Co-locate the first demonstration unit with ENEC, the UAE's national nuclear operator.',
+    body: "Co-locate the first demonstration unit with ENEC, the UAE's national nuclear operator.",
   },
   {
     tag: 'ENABLE',
