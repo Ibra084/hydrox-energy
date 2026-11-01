@@ -1,27 +1,16 @@
 # Hydrox
 
-Marketing site for Hydrox — AI-optimised thermochemical hydrogen from nuclear waste heat.
-
-Built from the Hydrox conference presentation deck (nuclear × AI × hydrogen), covering the
-problem, the reactor/chemistry/AI solution, how it works, the AI control layer, economics vs.
-grey/blue/green hydrogen, proof points, national benefits (UAE/Barakah example), and the
-partnership/investment invitation.
+Marketing site for Hydrox — a staged AI dispatch and control layer for nuclear hydrogen.
 
 ## Stack
 
-React + Vite.
+Static HTML (`index.html` + `assets/`). No build step — deploy the repo root as-is
+(on Vercel, choose the "Other" framework preset with no build command).
 
-## Development
-
-```bash
-npm install
-npm run dev
-```
-
-## Build
+## Local preview
 
 ```bash
-npm run build
+npx serve .
 ```
 
 Suleiman Khan · Ibrahim Rahman — Abu Dhabi, UAE

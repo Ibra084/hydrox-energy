@@ -1,18 +1,1745 @@
 <!doctype html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚛️</text></svg>" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Hydrox — Nuclear × AI × Hydrogen</title>
-    <meta name="description" content="AI-optimised thermochemical hydrogen from the waste heat nuclear plants already throw away." />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Archivo:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  </head>
-  <body>
-    <!-- Brand: dark ground + signal green, matching the source deck's own palette and Archivo/JetBrains Mono type. -->
-    <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
-  </body>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="icon" type="image/png" href="assets/hydrox-logo.png">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}</style>
+</head>
+<body>
+<title>Hydrox</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="A staged AI dispatch and control layer for nuclear hydrogen, from Barakah today to high-temperature reactors next.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: a blueprint grid on black; every section is a drafting sheet with corner brackets, mono annotations and live 3D at the centre. */
+:root{
+  --bg:#050705;            /* page black, faint green bias */
+  --panel:#0b0e0b;         /* cards — matches the rendered images */
+  --panel-2:#0f130f;
+  --line:#1b2318;          /* hairlines */
+  --grid:rgba(160,230,60,.055);
+  --fg:#ECF2E8;
+  --muted:#8C998A;
+  --dim:#56614f;
+  --neon:#BFF34E;          /* sampled from the Hydrox shield */
+  --neon-hot:#DAFF86;
+  --neon-deep:#6FB51D;
+  --heat:#FF9B3D;          /* used only for heat in the 3D legend */
+  --font-display:"Geist","Helvetica Neue",Arial,sans-serif;
+  --font-body:"Geist","Helvetica Neue",Arial,sans-serif;
+  --font-mono:"Geist Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  --gutter:max(16px, env(safe-area-inset-left, 0px));
+  --gutter-r:max(16px, env(safe-area-inset-right, 0px));
+  --maxw:1240px;
+  --step--1:clamp(12px, .78rem, 13px);
+  --step-0:clamp(15px, 1rem, 17px);
+  --step-1:clamp(18px, 1.35rem, 22px);
+  --step-2:clamp(26px, 3.2vw, 40px);
+  --step-3:clamp(34px, 5vw, 64px);
+  --step-4:clamp(44px, 7.4vw, 104px);
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;background:var(--bg)}
+body{background:var(--bg);color:var(--fg);font-family:var(--font-body);font-size:var(--step-0);line-height:1.55;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+a{color:inherit}
+img{max-width:100%;display:block}
+::selection{background:var(--neon);color:#000}
+:focus-visible{outline:2px solid var(--neon);outline-offset:3px}
+
+/* fixed drafting grid */
+.grid-bg{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);
+  background-size:88px 88px;background-position:center top;
+  mask-image:radial-gradient(ellipse 90% 80% at 50% 40%,#000 30%,transparent 100%);
+  -webkit-mask-image:radial-gradient(ellipse 90% 80% at 50% 40%,#000 30%,transparent 100%)}
+main,footer{position:relative;z-index:1}
+
+.wrap{max-width:var(--maxw);margin:0 auto;padding-left:var(--gutter);padding-right:var(--gutter-r)}
+.mono{font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase}
+.eyebrow{display:inline-flex;align-items:center;gap:10px;color:var(--muted)}
+.eyebrow::before{content:"";width:6px;height:6px;background:var(--neon);box-shadow:0 0 12px var(--neon)}
+h1,h2,h3{font-family:var(--font-display);font-weight:400;letter-spacing:-.035em;line-height:1.02;margin:0;text-wrap:balance}
+h2{font-size:var(--step-3)}
+h3{font-size:var(--step-1);letter-spacing:-.02em;line-height:1.2;font-weight:500}
+p{margin:0;text-wrap:pretty}
+.accent{color:var(--neon)}
+.muted{color:var(--muted)}
+
+/* buttons */
+.btn{display:inline-flex;align-items:center;gap:10px;padding:13px 18px;border-radius:2px;text-decoration:none;
+  font-family:var(--font-mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;border:1px solid var(--line);
+  background:rgba(11,14,11,.7);color:var(--fg);cursor:pointer;transition:background .2s,color .2s,border-color .2s,box-shadow .2s}
+.btn:hover{border-color:var(--neon);color:var(--neon)}
+.btn-primary{background:var(--neon);color:#071004;border-color:var(--neon);font-weight:500}
+.btn-primary:hover{background:var(--neon-hot);color:#071004;box-shadow:0 0 28px rgba(191,243,78,.45)}
+.btn .arr{transition:transform .2s}
+.btn:hover .arr{transform:translateX(3px)}
+
+/* corner brackets: one background, four corners */
+.bracket{position:relative}
+.bracket::after{content:"";position:absolute;inset:-7px;pointer-events:none;
+  background:
+   linear-gradient(var(--neon),var(--neon)) top left/12px 1px no-repeat,
+   linear-gradient(var(--neon),var(--neon)) top left/1px 12px no-repeat,
+   linear-gradient(var(--neon),var(--neon)) top right/12px 1px no-repeat,
+   linear-gradient(var(--neon),var(--neon)) top right/1px 12px no-repeat,
+   linear-gradient(var(--neon),var(--neon)) bottom left/12px 1px no-repeat,
+   linear-gradient(var(--neon),var(--neon)) bottom left/1px 12px no-repeat,
+   linear-gradient(var(--neon),var(--neon)) bottom right/12px 1px no-repeat,
+   linear-gradient(var(--neon),var(--neon)) bottom right/1px 12px no-repeat;opacity:.75}
+
+/* ---------- NAV ---------- */
+.nav{position:fixed;top:env(safe-area-inset-top,0px);left:0;right:0;z-index:50;transition:transform .35s ease, background .3s}
+.nav.hide{transform:translateY(-110%)}
+.nav.solid{background:rgba(5,7,5,.82);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav-in{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:14px;max-width:none}
+.brand{display:flex;align-items:center;gap:12px;text-decoration:none}
+.brand img{width:26px;height:auto;filter:drop-shadow(0 0 10px rgba(191,243,78,.35))}
+.brand span{font-family:var(--font-mono);font-size:13px;letter-spacing:.32em;font-weight:500}
+.nav-links{display:flex;align-items:center;gap:2px;padding:4px;border:1px solid var(--line);background:rgba(11,14,11,.75);border-radius:3px}
+.nav-links a{padding:8px 12px;text-decoration:none;color:var(--muted);border-radius:2px;transition:color .2s,background .2s}
+.nav-links a:hover{color:var(--fg);background:var(--panel-2)}
+.nav-cta{padding:10px 14px}
+.menu-btn{display:none}
+@media (max-width:980px){
+  .nav-links{display:none;position:absolute;top:calc(100% + 4px);left:var(--gutter);right:var(--gutter-r);flex-direction:column;align-items:stretch;padding:8px}
+  .nav-links.open{display:flex}
+  .nav-links a{padding:12px}
+  .menu-btn{display:inline-flex}
+  .nav-cta{display:none}
+}
+
+/* ---------- HERO / 3D SITE MODEL ---------- */
+.hero{position:relative;height:clamp(640px, 94svh, 1020px);overflow:hidden;border-bottom:1px solid var(--line)}
+.hero-canvas{position:absolute;inset:0}
+.hero-canvas canvas{display:block;width:100%;height:100%;cursor:grab}
+.hero-canvas canvas:active{cursor:grabbing}
+.hero-shade{position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(90deg,rgba(5,7,5,.92) 0%,rgba(5,7,5,.55) 34%,transparent 58%),linear-gradient(0deg,rgba(5,7,5,.9) 0%,transparent 26%)}
+.hero-copy{position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;display:flex;flex-direction:column;justify-content:center}
+.hero-copy .wrap{width:100%;max-width:none;padding-left:max(24px, 4.5vw, env(safe-area-inset-left,0px))}
+.hero-copy .inner{max-width:620px;display:flex;flex-direction:column;gap:26px;pointer-events:auto}
+.hero h1{font-size:var(--step-4);letter-spacing:-.05em;line-height:.95;font-weight:400}
+.hero h1 .accent{text-shadow:0 0 40px rgba(191,243,78,.35)}
+.hero .lede{font-size:var(--step-1);color:#c5cec2;max-width:30ch;line-height:1.4;font-weight:300}
+.hero-actions{display:flex;flex-wrap:wrap;gap:10px}
+.hero-tags{display:flex;gap:18px;flex-wrap:wrap}
+.hud{position:absolute;z-index:3;pointer-events:none}
+.hud-stage{top:calc(env(safe-area-inset-top,0px) + 86px);right:max(24px, 4vw, env(safe-area-inset-right,0px));display:flex;flex-direction:column;align-items:flex-end;gap:10px;text-align:right}
+.stage-tabs{display:flex;gap:4px;pointer-events:auto}
+.stage-tabs button{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;padding:9px 12px;border-radius:2px;
+  background:rgba(11,14,11,.85);color:var(--muted);border:1px solid var(--line);cursor:pointer;transition:color .2s,border-color .2s,background .2s}
+.stage-tabs button:hover{color:var(--fg)}
+.stage-tabs button[aria-pressed="true"]{color:#071004;background:var(--neon);border-color:var(--neon)}
+.stage-sub{color:var(--fg)}
+.badge{display:inline-block;border:1px solid rgba(191,243,78,.45);color:var(--neon);padding:4px 8px;border-radius:2px;font-size:10px}
+.badge[data-b="2"]{border-color:rgba(255,155,61,.5);color:var(--heat)}
+.badge[data-b="3"]{border-color:rgba(61,255,197,.45);color:#3DFFC5}
+.hud-legend{right:max(24px, 4vw, env(safe-area-inset-right,0px));bottom:28px;display:flex;flex-direction:column;align-items:flex-end;gap:12px}
+.legend{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:6px 16px;max-width:420px}
+.legend .row{display:flex;align-items:center;gap:7px;font-size:12px;color:var(--muted)}
+.legend .dot{width:7px;height:7px;border-radius:50%;box-shadow:0 0 8px currentColor}
+.zoom{display:flex;gap:4px;pointer-events:auto}
+.zoom button{width:34px;height:34px;display:grid;place-items:center;font-family:var(--font-mono);font-size:15px;background:rgba(11,14,11,.85);color:var(--fg);border:1px solid var(--line);border-radius:2px;cursor:pointer}
+.zoom button:hover{border-color:var(--neon);color:var(--neon)}
+.hint{color:var(--dim)}
+.scroll-cue{position:absolute;left:50%;bottom:24px;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:10px;color:var(--muted);pointer-events:none}
+.scroll-cue i{display:block;width:1px;height:34px;background:linear-gradient(var(--neon),transparent);animation:cue 2.2s ease-in-out infinite}
+@keyframes cue{0%{transform:scaleY(0);transform-origin:top}50%{transform:scaleY(1);transform-origin:top}51%{transform-origin:bottom}100%{transform:scaleY(0);transform-origin:bottom}}
+.tip{position:absolute;z-index:6;pointer-events:none;max-width:300px;min-width:200px;background:rgba(8,11,8,.96);border:1px solid var(--line);
+  border-left:2px solid var(--neon);padding:12px 14px 13px;opacity:0;transform:translateY(5px);transition:opacity .14s,transform .14s;box-shadow:0 16px 40px rgba(0,0,0,.7)}
+.tip.on{opacity:1;transform:none}
+.tip .tname{font-size:15px;font-weight:500;letter-spacing:-.01em}
+.tip .ttag{margin-top:4px;color:var(--muted);font-size:10px}
+.tip .tdesc{margin-top:8px;font-size:12.5px;line-height:1.5;color:#c3cdc0}
+.gl-fail{position:absolute;right:24px;bottom:90px;max-width:300px;color:var(--heat);font-size:12px;text-align:right}
+
+.stats{border-bottom:1px solid var(--line);background:rgba(5,7,5,.6)}
+.stats .wrap{display:grid;grid-template-columns:repeat(3,1fr)}
+.stat{padding:30px 28px 28px 0;display:flex;flex-direction:column;gap:6px;border-right:1px solid var(--line);min-width:0}
+.stat + .stat{padding-left:28px}
+.stat:last-child{border-right:0}
+.stat .num{font-family:var(--font-mono);font-size:clamp(28px,3.4vw,44px);color:var(--neon);letter-spacing:-.04em;font-variant-numeric:tabular-nums}
+.stat .lbl{color:var(--muted);font-size:14px;max-width:26ch}
+
+@media (max-width:820px){
+  .hero{height:auto;min-height:0;display:flex;flex-direction:column}
+  .hero-copy{position:relative;order:1;padding-top:calc(env(safe-area-inset-top,0px) + 96px)}
+  .hero-copy .wrap{padding-left:var(--gutter)}
+  .hero-canvas{position:relative;order:2;height:min(118vw,560px);inset:auto}
+  .hero-shade{background:linear-gradient(180deg,var(--bg) 0%,transparent 40%)}
+  .hud-stage{top:auto;bottom:auto;position:relative;order:3;right:auto;align-items:flex-start;text-align:left;padding:16px var(--gutter-r) 0 var(--gutter)}
+  .hud-legend{position:relative;order:4;right:auto;bottom:auto;align-items:flex-start;padding:14px var(--gutter-r) 26px var(--gutter)}
+  .legend{justify-content:flex-start}
+  .hero .lede{max-width:none}
+  .scroll-cue,.hint{display:none}
+  .stats .wrap{grid-template-columns:1fr}
+  .stat,.stat + .stat{padding:20px 0;border-right:0;border-bottom:1px solid var(--line)}
+  .stat:last-child{border-bottom:0}
+}
+
+/* ---------- SECTIONS ---------- */
+.section{padding-block:clamp(88px,12vw,160px);position:relative}
+.sec-head{display:flex;flex-direction:column;gap:20px;margin-bottom:clamp(40px,6vw,72px);max-width:880px}
+.sec-head.split{max-width:none;flex-direction:row;justify-content:space-between;align-items:flex-end;gap:32px;flex-wrap:wrap}
+.sec-head p{color:var(--muted);max-width:56ch}
+.sheet-id{position:absolute;top:28px;right:max(16px, env(safe-area-inset-right,0px));color:var(--dim)}
+
+/* ---------- STORY (scroll-driven particles) ---------- */
+.story{height:520svh;position:relative;border-top:1px solid var(--line)}
+.story-stage{position:sticky;top:0;height:100svh;overflow:hidden}
+.story-stage canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
+.dial{position:absolute;pointer-events:none;opacity:.5}
+.story .dial-a{width:min(90vw,980px);left:50%;top:50%;transform:translate(-50%,-50%)}
+.chapter{position:absolute;top:50%;transform:translateY(-50%);max-width:440px;display:flex;flex-direction:column;gap:16px;transition:opacity .25s linear;pointer-events:none}
+.chapter h2{font-size:var(--step-3)}
+.chapter h2,.chapter p,.chapter span{text-shadow:0 0 18px #050705,0 0 4px #050705}
+.chapter p{color:#c0cabd;max-width:38ch}
+.chapter .k{color:var(--neon)}
+.chapter.left{left:max(150px,10vw)}
+.chapter.right{right:max(24px,6vw)}
+.chapter.center{left:50%;transform:translate(-50%,0);top:auto;bottom:12vh;text-align:center;align-items:center;max-width:620px}
+.chapter.center.top{bottom:auto;top:13vh}
+.rail{position:absolute;left:max(16px,2.2vw);top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:18px;align-items:flex-start}
+.rail span{display:flex;align-items:center;gap:10px;color:var(--dim);transition:color .3s}
+.rail span::before{content:"";width:14px;height:1px;background:currentColor;transition:width .3s}
+.rail span.on{color:var(--neon)}
+.rail span.on::before{width:28px}
+.readout{position:absolute;right:max(16px,2.2vw);bottom:28px;text-align:right;color:var(--muted);display:flex;flex-direction:column;gap:6px}
+.readout b{font-weight:500;color:var(--neon);font-size:13px}
+.story-top{position:absolute;top:calc(env(safe-area-inset-top,0px) + 92px);left:50%;transform:translateX(-50%);color:var(--muted);display:flex;flex-direction:column;align-items:center;gap:10px;transition:opacity .3s}
+.story-top i{display:block;width:1px;height:26px;background:var(--neon);opacity:.6}
+@media (max-width:820px){
+  .chapter,.chapter.left,.chapter.right,.chapter.center,.chapter.center.top{left:var(--gutter);right:var(--gutter-r);top:auto;bottom:max(22px,5svh);transform:none;max-width:none;text-align:left;align-items:flex-start;background:linear-gradient(0deg,rgba(5,7,5,.92) 60%,transparent);padding-top:40px}
+  .rail{display:none}
+  .readout{top:calc(env(safe-area-inset-top,0px) + 76px);bottom:auto;right:var(--gutter-r)}
+  .story-top{display:none}
+}
+
+/* ---------- PROBLEM ---------- */
+.two{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.panel{background:var(--panel);border:1px solid var(--line);padding:clamp(22px,3vw,36px);display:flex;flex-direction:column;gap:22px;min-width:0}
+.panel .top{display:flex;justify-content:space-between;gap:16px;color:var(--muted)}
+.big{font-family:var(--font-mono);font-size:clamp(56px,8vw,112px);letter-spacing:-.06em;line-height:.9;color:var(--neon);font-variant-numeric:tabular-nums}
+.big small{font-size:.32em;letter-spacing:0;color:var(--muted);margin-left:8px}
+.ticks{display:grid;grid-template-columns:repeat(50,1fr);gap:3px;height:38px}
+.ticks i{background:var(--neon);opacity:.95;box-shadow:0 0 6px rgba(191,243,78,.5)}
+.ticks i.off{background:var(--line);box-shadow:none}
+.scale{position:relative;height:56px;margin-top:6px}
+.scale .track{position:absolute;left:0;right:0;top:20px;height:1px;background:var(--line)}
+.scale .band{position:absolute;top:12px;height:17px;border:1px solid var(--muted);background:repeating-linear-gradient(45deg,rgba(140,153,138,.25) 0 2px,transparent 2px 6px)}
+.scale .band.go{border-color:var(--neon);background:rgba(191,243,78,.2);box-shadow:0 0 18px rgba(191,243,78,.25)}
+.scale .band span{position:absolute;bottom:calc(100% + 5px);left:0;white-space:nowrap;font-size:10px;color:var(--muted)}
+.scale .band.go span{color:var(--neon)}
+.scale .tk{position:absolute;top:34px;transform:translateX(-50%);font-size:10px;color:var(--dim)}
+.panel p{color:#c0cabd}
+.panel p strong{color:var(--fg);font-weight:500}
+.source{margin-top:22px;color:var(--dim)}
+@media (max-width:820px){.two{grid-template-columns:1fr}}
+
+/* ---------- SOLUTION ---------- */
+.tri{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;gap:14px;align-items:stretch}
+.card{background:var(--panel);border:1px solid var(--line);display:flex;flex-direction:column;min-width:0;transition:border-color .3s}
+.card:hover{border-color:#2c3a24}
+.card .ct{display:flex;justify-content:space-between;align-items:center;padding:18px 20px 0;color:var(--muted)}
+.card .img{aspect-ratio:1/0.82;overflow:hidden;max-width:100%}
+.card .img img{width:100%;height:100%;object-fit:cover;transition:transform .8s cubic-bezier(.2,.7,.2,1)}
+.card:hover .img img{transform:scale(1.05)}
+.card .cb{padding:0 20px 22px;display:flex;flex-direction:column;gap:10px}
+.card .cb p{color:var(--muted);font-size:15px}
+.join{display:grid;place-items:center;color:var(--neon);font-family:var(--font-mono)}
+.equation{margin-top:36px;display:flex;flex-wrap:wrap;justify-content:center;gap:10px 22px;padding:18px;border:1px dashed #263220;color:var(--fg)}
+.equation b{color:var(--neon);font-weight:500}
+@media (max-width:900px){.tri{grid-template-columns:1fr}.join{transform:rotate(90deg);height:18px}}
+
+/* ---------- STATEMENT ---------- */
+.statement{position:relative;min-height:min(100svh,920px);display:grid;place-items:center;text-align:center;overflow:hidden;border-block:1px solid var(--line)}
+.statement .dial{width:min(130vw,1200px);left:50%;top:50%;transform:translate(-50%,-50%);opacity:.6}
+.statement .inner{position:relative;max-width:900px;display:flex;flex-direction:column;align-items:center;gap:26px}
+.statement h2{font-size:clamp(30px,4.6vw,62px)}
+.statement p{color:var(--muted);max-width:46ch}
+
+/* ---------- AI ENGINE ---------- */
+.engine{display:grid;grid-template-columns:1fr minmax(260px,1.15fr) 1fr;gap:24px;align-items:center}
+.engine .col{display:flex;flex-direction:column;gap:clamp(40px,8vw,120px)}
+.feat{display:flex;flex-direction:column;gap:10px;max-width:300px}
+.feat .ix{color:var(--neon)}
+.feat p{color:var(--muted);font-size:15px}
+.col.r{align-items:flex-end;text-align:left}
+.core{position:relative;aspect-ratio:1/1;max-width:100%}
+.core canvas{position:absolute;inset:0;width:100%;height:100%}
+.core .ring-lbl{position:absolute;left:50%;bottom:4%;transform:translateX(-50%);color:var(--muted);white-space:nowrap}
+.failsafe{margin:48px auto 0;max-width:720px;display:flex;gap:14px;align-items:flex-start;padding:18px 20px;border:1px solid var(--line);background:var(--panel);color:#c0cabd}
+.failsafe .mono{color:var(--neon);white-space:nowrap;padding-top:3px}
+@media (max-width:900px){
+  .engine{grid-template-columns:1fr}
+  .engine .core{order:-1;width:min(100%,420px);margin:0 auto}
+  .engine .col{gap:28px}
+  .col.r{align-items:flex-start}
+  .failsafe{flex-direction:column}
+}
+
+.control{display:grid;grid-template-columns:1.2fr 1fr;gap:20px;margin-top:clamp(56px,8vw,96px)}
+.console{background:var(--panel);border:1px solid var(--line);padding:24px;display:flex;flex-direction:column;gap:20px;min-width:0}
+.console .hdr{display:flex;justify-content:space-between;align-items:center;gap:12px;color:var(--muted)}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:5px 10px;border:1px solid rgba(191,243,78,.5);color:var(--neon);border-radius:20px}
+.pill::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--neon);box-shadow:0 0 8px var(--neon);animation:blink 1.6s infinite}
+@keyframes blink{50%{opacity:.25}}
+.readings{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line)}
+.readings div{background:var(--panel);padding:14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.readings .v{font-family:var(--font-mono);font-size:clamp(20px,2.2vw,28px);color:var(--fg);font-variant-numeric:tabular-nums;letter-spacing:-.03em}
+.readings .v.big2{font-size:clamp(34px,4vw,52px);color:var(--neon)}
+.readings .l{color:var(--muted);font-size:10px}
+.spark{width:100%;height:150px;display:block}
+.cap{color:var(--muted);font-size:13px}
+.bars{display:flex;flex-direction:column;gap:16px}
+.bar{display:grid;grid-template-columns:120px 1fr 56px;gap:12px;align-items:center}
+.bar .n{color:var(--muted);font-size:13px}
+.bar .t{height:22px;background:repeating-linear-gradient(90deg,#141a12 0 1px,transparent 1px 16.66%);border:1px solid var(--line);position:relative}
+.bar .f{position:absolute;inset:0;background:#2a3326;transform-origin:left;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
+.bar.us .f{background:var(--neon);box-shadow:0 0 18px rgba(191,243,78,.4)}
+.bar .p{font-family:var(--font-mono);text-align:right;font-variant-numeric:tabular-nums}
+.bar.us .p,.bar.us .n{color:var(--neon)}
+.axis{display:grid;grid-template-columns:120px 1fr 56px;gap:12px}
+.axis div{display:flex;justify-content:space-between;color:var(--dim);font-size:10px}
+@media (max-width:900px){.control{grid-template-columns:1fr}.readings{grid-template-columns:1fr 1fr}.bar,.axis{grid-template-columns:92px 1fr 48px}}
+
+/* ---------- ECONOMICS ---------- */
+.ecards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.ecard{background:var(--panel);border:1px solid var(--line);display:flex;flex-direction:column;min-width:0;overflow:hidden}
+.ecard .img{aspect-ratio:4/3;overflow:hidden}
+.ecard .img img{width:100%;height:100%;object-fit:cover}
+.ecard .tx{padding:4px 22px 24px;display:flex;flex-direction:column;gap:6px}
+.ecard .v{font-family:var(--font-mono);font-size:clamp(34px,4vw,52px);letter-spacing:-.05em;color:var(--neon);font-variant-numeric:tabular-nums}
+.ecard .tx p{color:var(--muted)}
+@media (max-width:820px){.ecards{grid-template-columns:1fr}}
+
+/* ---------- PROOF CAROUSEL ---------- */
+.carousel{position:relative}
+.track{display:flex;gap:22px;overflow-x:auto;scroll-snap-type:x mandatory;padding:12px calc(50% - min(300px,41vw)) 18px;scrollbar-width:none;-ms-overflow-style:none}
+.track::-webkit-scrollbar{display:none}
+.slide{flex:0 0 min(600px,82vw);scroll-snap-align:center;background:var(--panel);border:1px solid var(--line);display:flex;flex-direction:column;
+  opacity:.32;transform:scale(.94);transition:opacity .45s,transform .45s}
+.slide.on{opacity:1;transform:none}
+.slide .st{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:22px 24px 0}
+.slide .st h3{font-size:clamp(20px,2.2vw,26px)}
+.slide .st .mono{color:var(--neon)}
+.slide .img{aspect-ratio:16/10;overflow:hidden}
+.slide .img img{width:100%;height:100%;object-fit:cover}
+.slide .meta{display:grid;grid-template-columns:1fr 1fr;gap:18px;padding:0 24px 24px}
+.slide .meta div{display:flex;flex-direction:column;gap:6px;min-width:0}
+.slide .meta .k{color:var(--muted)}
+.slide .meta p{font-size:14px;color:#c0cabd}
+.slide .org{padding:6px 24px 0;color:var(--muted)}
+.cnav{display:flex;justify-content:center;margin-top:24px}
+.cnav .bar-in{display:flex;gap:4px;padding:5px;border:1px solid var(--line);background:var(--panel)}
+.cnav button{width:44px;height:40px;display:grid;place-items:center;background:transparent;border:1px solid transparent;color:var(--muted);cursor:pointer;border-radius:2px;font-family:var(--font-mono);font-size:11px;letter-spacing:.08em}
+.cnav button:hover{color:var(--fg);border-color:var(--line)}
+.cnav button[aria-current="true"]{background:var(--neon);color:#071004}
+@media (max-width:600px){.slide .meta{grid-template-columns:1fr}}
+
+/* ---------- UAE ---------- */
+.ucards{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.ucard{background:var(--panel);border:1px solid var(--line);padding:24px;display:flex;flex-direction:column;gap:14px;min-height:260px;min-width:0}
+.ucard .ic{width:40px;height:40px;border:1px solid var(--line);display:grid;place-items:center;color:var(--neon)}
+.ucard .ic svg{width:20px;height:20px}
+.ucard h3{margin-top:auto}
+.ucard p{color:var(--muted);font-size:15px}
+.barakah{margin-top:20px;position:relative;border:1px solid var(--line);overflow:hidden;min-height:520px;display:flex;align-items:flex-end;background:var(--panel)}
+.barakah img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.9}
+.barakah::before{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(5,7,5,.96) 10%,rgba(5,7,5,.35) 55%,transparent);z-index:1}
+.barakah .tx{position:relative;z-index:2;padding:clamp(24px,4vw,48px);display:grid;grid-template-columns:1.4fr 1fr;gap:28px;align-items:end;width:100%}
+.barakah h3{font-size:clamp(26px,3.4vw,46px);letter-spacing:-.035em;line-height:1.05;font-weight:400}
+.barakah .figure{display:flex;flex-direction:column;gap:8px}
+.barakah .figure .v{font-family:var(--font-mono);font-size:clamp(26px,3vw,40px);color:var(--neon);letter-spacing:-.04em}
+.barakah .figure p{color:#c0cabd}
+.globe-row{display:grid;grid-template-columns:1fr 280px;gap:24px;align-items:end}
+.globe-row img{width:280px;aspect-ratio:1;object-fit:cover;border:1px solid var(--line)}
+@media (max-width:900px){.ucards{grid-template-columns:1fr}.ucard{min-height:0}.barakah .tx{grid-template-columns:1fr}.globe-row{grid-template-columns:1fr}.globe-row img{display:none}}
+
+/* ---------- INVITATION ---------- */
+.icards{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.icard{background:var(--panel);padding:28px 24px 30px;display:flex;flex-direction:column;gap:14px;min-width:0;transition:background .3s}
+.icard:hover{background:var(--panel-2)}
+.icard .verb{color:var(--neon)}
+.icard p{color:var(--muted);font-size:15px}
+@media (max-width:820px){.icards{grid-template-columns:1fr}}
+.cta{position:relative;margin-top:clamp(80px,10vw,140px);padding-block:clamp(70px,10vw,120px);text-align:center;overflow:hidden;border:1px solid var(--line);background:
+  linear-gradient(rgba(160,230,60,.07) 1px,transparent 1px) 0 0/44px 44px,linear-gradient(90deg,rgba(160,230,60,.07) 1px,transparent 1px) 0 0/44px 44px,var(--panel)}
+.cta .dial{width:900px;left:50%;top:50%;transform:translate(-50%,-50%);opacity:.5}
+.cta img{width:220px;margin:0 auto -10px;position:relative;mix-blend-mode:screen}
+.cta .inner{position:relative;display:flex;flex-direction:column;align-items:center;gap:20px;padding-inline:var(--gutter)}
+.cta h2{font-size:clamp(34px,5.4vw,72px)}
+.cta p{color:var(--muted);max-width:46ch}
+
+/* ---------- UTILISATION ROWS ---------- */
+.util{display:flex;flex-direction:column;gap:14px}
+.urow{display:grid;grid-template-columns:150px 1fr 54px;gap:14px;align-items:center}
+.urow > span{color:var(--muted);font-size:10px}
+.urow > b{font-weight:500;text-align:right;color:var(--muted);font-variant-numeric:tabular-nums}
+.urow.hi > b,.urow.hi > span{color:var(--neon)}
+.urow .ticks{grid-template-columns:repeat(40,1fr);height:22px;gap:2px}
+.urow:not(.hi) .ticks i:not(.off){background:#7d8a79;box-shadow:none}
+@media (max-width:520px){.urow{grid-template-columns:1fr 46px}.urow > span{grid-column:1/-1}}
+
+/* ---------- STAGE TABLE ---------- */
+.stages-scroll{overflow-x:auto;margin-inline:calc(-1 * var(--gutter)) calc(-1 * var(--gutter-r));padding-inline:var(--gutter) var(--gutter-r);scrollbar-width:thin}
+.stages{min-width:860px;display:flex;flex-direction:column}
+.sg-h,.sg-r{display:grid;grid-template-columns:190px repeat(3,1fr);gap:0 14px}
+.sg-top{border-top:2px solid var(--line);background:var(--panel);padding:0 20px 18px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.sg-top .img{aspect-ratio:16/9;margin:0 -20px 10px;overflow:hidden}
+.sg-top .img img{width:100%;height:100%;object-fit:cover}
+.sg-top.s1{border-top-color:var(--neon)}.sg-top.s1 .st{color:var(--neon)}
+.sg-top.s2{border-top-color:var(--heat)}.sg-top.s2 .st{color:var(--heat)}
+.sg-top.s3{border-top-color:#3DFFC5}.sg-top.s3 .st{color:#3DFFC5}
+.sg-top h3{font-size:clamp(20px,2vw,26px)}
+.sg-r > *{padding:14px 20px;border-top:1px solid var(--line);font-size:15px;min-width:0}
+.sg-r > [role="rowheader"]{padding-left:0;color:var(--muted);font-size:10.5px;display:flex;align-items:center}
+.sg-r > .s1,.sg-r > .s2,.sg-r > .s3{background:var(--panel)}
+.sg-r > .s1{background:linear-gradient(90deg,rgba(191,243,78,.06),rgba(191,243,78,.02)),var(--panel)}
+.sg-r > .s3{color:#a9b5a6}
+.sg-r.last > *{border-bottom:1px solid var(--line)}
+.sol-foot{display:grid;grid-template-columns:1.2fr 1fr;gap:28px;align-items:center;margin-top:36px}
+.sol-foot .equation{margin:0;justify-content:center;border-style:solid;border-color:rgba(191,243,78,.35);background:rgba(191,243,78,.04)}
+@media (max-width:900px){.sol-foot{grid-template-columns:1fr}}
+
+/* ---------- CONTROL CONSOLE ---------- */
+.console.ctl{margin-top:clamp(56px,8vw,96px)}
+.console .note{align-self:stretch;text-align:center;padding:10px;border:1px dashed #2c3a24;color:var(--muted)}
+.ctl-grid{display:grid;grid-template-columns:auto 1fr 1.3fr;gap:32px;align-items:center}
+.ring-wrap{position:relative;width:200px;aspect-ratio:1;max-width:100%}
+.ring{width:100%;height:100%;display:block;filter:drop-shadow(0 0 14px rgba(191,243,78,.25))}
+.ring-tx{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;text-align:center}
+.ring-tx .v{font-family:var(--font-mono);font-size:40px;color:var(--neon);letter-spacing:-.04em}
+.ring-tx .mono{font-size:9.5px;color:var(--muted);max-width:110px;line-height:1.4}
+.readings2{display:flex;flex-direction:column;gap:18px;min-width:0}
+.rd{display:grid;grid-template-columns:1fr auto;gap:8px 12px;align-items:baseline;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.rd span{color:var(--muted);font-size:10.5px}
+.rd b{font-family:var(--font-mono);font-weight:400;font-size:22px;letter-spacing:-.02em;font-variant-numeric:tabular-nums}
+.rd .meter{grid-column:1/-1;height:4px;background:var(--line)}
+.rd .meter i{display:block;height:100%;background:var(--neon);box-shadow:0 0 10px rgba(191,243,78,.5)}
+.disp{display:flex;flex-direction:column;gap:14px;min-width:0}
+.dbars{position:relative;height:170px;display:flex;align-items:flex-end;gap:6px;padding-top:28px}
+.dbars i{flex:1;background:#232d20}
+.dbars i.opt{background:linear-gradient(180deg,var(--neon),var(--neon-deep));box-shadow:0 0 12px rgba(191,243,78,.25)}
+.dleg{position:absolute;top:0;left:0;display:flex;gap:16px;font-size:10px;color:var(--muted)}
+.dleg span{display:inline-flex;align-items:center;gap:7px}
+.dleg span::before{content:"";width:10px;height:10px;background:#232d20}
+.dleg .o::before{background:var(--neon)}
+@media (max-width:1000px){.ctl-grid{grid-template-columns:auto 1fr}.disp{grid-column:1/-1}}
+@media (max-width:600px){.ctl-grid{grid-template-columns:1fr}.ring-wrap{margin:0 auto}}
+
+/* ---------- ECONOMICS ---------- */
+.econ{margin-bottom:20px}
+.econ .bar{grid-template-columns:170px 1fr 84px}
+.econ .axis{grid-template-columns:170px 1fr 84px}
+.bar .rng{position:absolute;top:0;bottom:0;background:repeating-linear-gradient(45deg,rgba(191,243,78,.55) 0 3px,rgba(191,243,78,.15) 3px 7px);border:1px solid var(--neon);border-left:0}
+.assume{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.assume div{background:var(--panel);padding:14px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.assume span{color:var(--muted);font-size:10px}
+.assume b{font-family:var(--font-mono);font-weight:400;font-size:20px;font-variant-numeric:tabular-nums}
+.assume .anchor b,.assume .anchor span{color:var(--neon)}
+@media (max-width:820px){.assume{grid-template-columns:1fr 1fr}.econ .bar,.econ .axis{grid-template-columns:110px 1fr 70px}}
+
+/* ---------- STATUS NOTE ---------- */
+.status{margin-top:20px;display:grid;grid-template-columns:200px 1fr;gap:24px;padding:24px;border:1px solid var(--line);background:var(--panel)}
+.status p{color:#c0cabd;max-width:80ch}
+@media (max-width:820px){.status{grid-template-columns:1fr;gap:10px}}
+
+/* ---------- FOOTER ---------- */
+footer{padding-block:clamp(60px,8vw,110px) 40px}
+.fcard{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:32px;background:var(--panel);border:1px solid var(--line);padding:clamp(24px,3.5vw,44px)}
+.fbrand{display:flex;flex-direction:column;gap:18px}
+.fbrand .brand img{width:44px}
+.fbrand .brand span{font-size:18px}
+.fbrand p{color:var(--muted);font-size:14px;max-width:36ch}
+.fcol{display:flex;flex-direction:column;gap:10px;min-width:0}
+.fcol .h{color:var(--neon);margin-bottom:6px}
+.fcol a,.fcol button{color:var(--muted);text-decoration:none;font-size:14px;background:none;border:0;padding:0;text-align:left;cursor:pointer;font-family:inherit}
+.fcol a:hover,.fcol button:hover{color:var(--fg)}
+.fbase{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;margin-top:22px;color:var(--dim)}
+@media (max-width:900px){.fcard{grid-template-columns:1fr 1fr}.fbrand{grid-column:1/-1}}
+@media (max-width:520px){.fcard{grid-template-columns:1fr}}
+
+/* cursor */
+.cur{position:fixed;left:0;top:0;z-index:100;pointer-events:none;border-radius:50%;opacity:0;transition:opacity .3s}
+.cur.dot{width:6px;height:6px;margin:-3px 0 0 -3px;background:var(--neon);box-shadow:0 0 10px var(--neon)}
+.cur.ring{width:34px;height:34px;margin:-17px 0 0 -17px;border:1px solid rgba(191,243,78,.55);transition:opacity .3s,width .25s,height .25s,margin .25s}
+.cur.ring.big{width:58px;height:58px;margin:-29px 0 0 -29px;border-color:var(--neon)}
+@media (pointer:fine){body.has-cur .cur{opacity:1}}
+
+.scramble .g{color:var(--neon)}
+@media (prefers-reduced-motion:reduce){
+  html{scroll-behavior:auto}
+  .scroll-cue i,.pill::before{animation:none}
+  .slide,.card .img img,.bar .f{transition:none}
+}
+</style>
+
+<div class="grid-bg" aria-hidden="true"></div>
+<div class="cur ring" aria-hidden="true"></div><div class="cur dot" aria-hidden="true"></div>
+
+<header class="nav" id="nav">
+  <div class="wrap nav-in">
+    <a class="brand" href="#model" aria-label="Hydrox home"><img src="assets/hydrox-logo.png" alt=""><span>HYDROX</span></a>
+    <nav class="nav-links mono" id="navLinks" aria-label="Sections">
+      <a href="#model">Site model</a>
+      <a href="#how">Stage 1</a>
+      <a href="#problem">Problem</a>
+      <a href="#solution">Three stages</a>
+      <a href="#ai">AI layer</a>
+      <a href="#economics">Economics</a>
+      <a href="#proof">Proof</a>
+      <a href="#uae">UAE</a>
+    </nav>
+    <div style="display:flex;gap:8px">
+      <a class="btn btn-primary nav-cta" href="#invitation">Partner with us <span class="arr">→</span></a>
+      <button class="btn menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks">Menu</button>
+    </div>
+  </div>
+</header>
+
+<main>
+<!-- ===== HERO: 3D SITE MODEL ===== -->
+<section class="hero" id="model" aria-label="Hydrox 3D site model">
+  <div class="hero-canvas" id="plantHost"></div>
+  <div class="hero-shade"></div>
+  <div class="hero-copy">
+    <div class="wrap"><div class="inner">
+      <div class="hero-tags mono"><span class="eyebrow" style="color:var(--neon)">Hydrox</span><span class="muted">Nuclear × AI × Hydrogen</span></div>
+      <h1 data-scramble>Firm nuclear power. <span class="accent">Clean fuel.</span></h1>
+      <p class="lede">A staged AI dispatch and control layer for nuclear hydrogen, from Barakah today to high-temperature reactors next.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#solution">See the three stages <span class="arr">→</span></a>
+        <a class="btn" href="#invitation">What we are asking for</a>
+      </div>
+    </div></div>
+  </div>
+  <div class="hud hud-stage">
+    <div class="stage-tabs" role="group" aria-label="Plant stage">
+      <button type="button" data-s="0" aria-pressed="true">Stage 1</button>
+      <button type="button" data-s="1" aria-pressed="false">Stage 2</button>
+      <button type="button" data-s="2" aria-pressed="false">Stage 3</button>
+    </div>
+    <div class="mono stage-sub" id="stageSub">Stage 1 · Barakah · electrolysis</div>
+    <span class="mono badge" id="stageBadge" data-b="1">Deployable today</span>
+  </div>
+  <div class="hud hud-legend">
+    <div class="legend" id="legend"></div>
+    <div style="display:flex;gap:14px;align-items:center">
+      <span class="mono hint">Drag to orbit · hover a structure</span>
+      <div class="zoom"><button type="button" id="zIn" aria-label="Zoom in">+</button><button type="button" id="zOut" aria-label="Zoom out">−</button></div>
+    </div>
+  </div>
+  <div class="scroll-cue mono" aria-hidden="true">Scroll to begin<i></i></div>
+  <div class="tip" id="tip" role="status" aria-live="polite"><div class="tname"></div><div class="ttag mono"></div><div class="tdesc"></div></div>
+</section>
+
+<div class="stats">
+  <div class="wrap">
+    <div class="stat"><span class="num">1 Mtpa</span><span class="lbl">hydrogen potential ENEC has stated for Barakah</span></div>
+    <div class="stat"><span class="num" data-count="90" data-fmt="~{}%">~90%</span><span class="lbl">Barakah capacity factor: firm, round-the-clock</span></div>
+    <div class="stat"><span class="num">3 stages</span><span class="lbl">one control layer, three reactor generations</span></div>
+  </div>
+</div>
+
+<!-- ===== STORY: STAGE 1 TODAY (scroll-driven particles) ===== -->
+<section class="story" id="how" aria-label="How Stage 1 works">
+  <div class="story-stage" id="storyStage">
+    <svg class="dial dial-a" data-dial="1" viewBox="0 0 1000 1000" aria-hidden="true"></svg>
+    <canvas id="particles" aria-hidden="true"></canvas>
+    <div class="story-top mono" id="storyTop">Scroll to begin<i></i></div>
+    <div class="rail mono" aria-hidden="true">
+      <span class="on">Firm power</span><span>Step 1 Allocate</span><span>Step 2 Split</span><span>Step 3 Deliver</span><span>Next stages</span>
+    </div>
+    <div class="chapter center top" data-ch="0">
+      <span class="eyebrow mono">How it works</span>
+      <h2 data-scramble>Stage 1 today: firm power in, hydrogen out.</h2>
+      <p>Barakah runs at about 90% capacity factor, day and night. Hydrox decides how much of that firm output becomes hydrogen.</p>
+    </div>
+    <div class="chapter left" data-ch="1" style="opacity:0">
+      <span class="mono k">Step 1 · 1,337 MWe</span>
+      <h2>Firm power is allocated</h2>
+      <p>Nuclear electricity plus low-grade steam (&lt;200°C) from the secondary loop. Hydrox proposes an allocation; the reactor is untouched and operates normally with Hydrox disconnected.</p>
+    </div>
+    <div class="chapter right" data-ch="2" style="opacity:0">
+      <span class="mono k">Step 2 · ~800 °C</span>
+      <h2>Steam is split</h2>
+      <p>Solid-oxide electrolysis. The stack's operating temperature is reached electrically with heat recuperation, not drawn from reactor coolant. Running hot is what cuts the electricity bill per kilogram.</p>
+    </div>
+    <div class="chapter left" data-ch="3" style="opacity:0">
+      <span class="mono k">Step 3 · H₂</span>
+      <h2>Hydrogen is delivered</h2>
+      <p>Product boundary: hydrogen at ~20–30 bar at the plant gate. Compression, storage and conversion to ammonia are modelled as optional downstream modules.</p>
+    </div>
+    <div class="chapter center" data-ch="4" style="opacity:0">
+      <span class="mono k">Next · Stages 2 and 3</span>
+      <h2>Same Hydrox layer throughout.</h2>
+      <p>Stage 2: an HTGR supplies genuine 750°C process heat, so heat replaces more of the electricity. Stage 3: above 850°C, thermochemical cycles remove most of the electrical demand entirely.</p>
+    </div>
+    <div class="readout mono" aria-hidden="true"><span id="roLbl">Capacity factor</span><b id="roVal">~90%</b></div>
+  </div>
+</section>
+
+<!-- ===== PROBLEM ===== -->
+<section class="section" id="problem">
+  <span class="sheet-id mono" aria-hidden="true">SHEET 02 / PROBLEM</span>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow mono">The problem</span>
+      <h2 data-scramble>Cheap electricity is not cheap hydrogen.</h2>
+    </div>
+    <div class="two">
+      <article class="panel bracket">
+        <div class="top mono"><span>01 · The utilisation problem</span><span>Capacity factor</span></div>
+        <div class="big" data-count="25" data-fmt="~{}%">~25%<small>utilised</small></div>
+        <div class="util" role="img" aria-label="Typical electrolysis capacity factor about 25 percent, against about 90 percent for Barakah">
+          <div class="urow"><span class="mono">Typical electrolyser</span><div class="ticks" data-fill="25"></div><b class="mono">~25%</b></div>
+          <div class="urow hi"><span class="mono">Barakah, firm power</span><div class="ticks" data-fill="90"></div><b class="mono">~90%</b></div>
+        </div>
+        <p><strong>~25% is a typical electrolysis capacity factor.</strong> Cheap electricity doesn't make cheap hydrogen. An electrolyser is capital-heavy; running it a quarter of the year means every kilogram carries four times the capital burden.</p>
+      </article>
+      <article class="panel bracket">
+        <div class="top mono"><span>02 · The cost problem</span><span>$ / kg H₂</span></div>
+        <div class="big">$4–8<small>/kg</small></div>
+        <div class="scale" role="img" aria-label="Cost scale from 0 to 8 dollars per kilogram: grey hydrogen 1 to 2, current green hydrogen 4 to 8">
+          <div class="track"></div>
+          <div class="band" style="left:12.5%;width:12.5%"><span class="mono">Grey H₂</span></div>
+          <div class="band go" style="left:50%;width:50%"><span class="mono">Green H₂ today</span></div>
+          <span class="tk mono" style="left:0%;transform:none">$0</span><span class="tk mono" style="left:25%">$2</span><span class="tk mono" style="left:50%">$4</span><span class="tk mono" style="left:75%">$6</span><span class="tk mono" style="left:100%;transform:translateX(-100%)">$8</span>
+        </div>
+        <p><strong>Current green hydrogen, against $1–2/kg grey.</strong> Too expensive to decarbonise heavy industry.</p>
+        <p>Refining, ammonia and fertiliser already consume hydrogen and run continuously. They are the credible first market, and they need supply that doesn't stop at sunset.</p>
+      </article>
+    </div>
+    <p class="source mono">Source: IEA Global Hydrogen Review 2025 · UAE National Hydrogen Strategy 2050</p>
+  </div>
+</section>
+
+<!-- ===== SOLUTION: THREE STAGES ===== -->
+<section class="section" id="solution" style="padding-top:0">
+  <span class="sheet-id mono" aria-hidden="true">SHEET 03 / SOLUTION</span>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow mono">The solution</span>
+      <h2 data-scramble>One control layer. Three reactor generations.</h2>
+    </div>
+    <div class="stages-scroll" tabindex="0" aria-label="Stage comparison table, scroll sideways on small screens">
+      <div class="stages" role="table" aria-label="Hydrox stages compared">
+        <div class="sg-h" role="row">
+          <span role="columnheader" class="lbl-col"></span>
+          <div role="columnheader" class="sg-top s1"><div class="img"><img src="assets/reactor.jpg" alt="Rendered pressurised water reactor containment" loading="lazy"></div><span class="mono st">Deployable</span><h3>Stage 1 · Now</h3></div>
+          <div role="columnheader" class="sg-top s2"><div class="img"><img src="assets/pebble.jpg" alt="Rendered pebble-bed reactor fuel" loading="lazy"></div><span class="mono st">In evaluation</span><h3>Stage 2 · Next</h3></div>
+          <div role="columnheader" class="sg-top s3"><div class="img"><img src="assets/loop.jpg" alt="Rendered closed sulfur–iodine loop" loading="lazy"></div><span class="mono st">Research</span><h3>Stage 3 · Later</h3></div>
+        </div>
+        <div class="sg-r" role="row"><span role="rowheader" class="mono">Reactor</span><span role="cell" class="s1">APR-1400 PWR (Barakah)</span><span role="cell" class="s2">HTGR (Xe-100 class)</span><span role="cell" class="s3">VHTR</span></div>
+        <div class="sg-r" role="row"><span role="rowheader" class="mono">Temperature available</span><span role="cell" class="s1">~320°C coolant, &lt;200°C usable steam</span><span role="cell" class="s2">~750°C helium</span><span role="cell" class="s3">850–950°C</span></div>
+        <div class="sg-r" role="row"><span role="rowheader" class="mono">Hydrogen process</span><span role="cell" class="s1">High-temp steam electrolysis</span><span role="cell" class="s2">Electrolysis with real process heat</span><span role="cell" class="s3">Thermochemical (sulfur–iodine)</span></div>
+        <div class="sg-r" role="row"><span role="rowheader" class="mono">Electricity share</span><span role="cell" class="s1">~85%</span><span role="cell" class="s2">Lower: heat does more</span><span role="cell" class="s3">Lowest</span></div>
+        <div class="sg-r" role="row"><span role="rowheader" class="mono">Maturity</span><span role="cell" class="s1">Commercial (Nine Mile Point, 2023)</span><span role="cell" class="s2">Reactor commercial (HTR-PM, 2023)</span><span role="cell" class="s3">Lab / pilot (JAEA)</span></div>
+        <div class="sg-r" role="row"><span role="rowheader" class="mono">UAE status</span><span role="cell" class="s1">Operating today</span><span role="cell" class="s2">ENEC ADVANCE MoUs signed</span><span role="cell" class="s3">Research horizon</span></div>
+        <div class="sg-r last" role="row"><span role="rowheader" class="mono">Hydrox role</span><span role="cell" class="s1">Power vs. hydrogen dispatch</span><span role="cell" class="s2">Heat and power allocation</span><span role="cell" class="s3">Chemical loop optimisation</span></div>
+      </div>
+    </div>
+    <div class="sol-foot">
+      <div class="equation mono"><span>H₂O + firm nuclear power + heat</span><b>→</b><span class="accent">H₂ + O₂</span><span class="muted">· zero carbon</span></div>
+      <p class="muted">One optimisation layer. Three reactor generations. Each stage unlocks better chemistry as available temperature rises.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ===== STATEMENT: SAFETY BOUNDARY ===== -->
+<section class="statement" id="ai-layer">
+  <svg class="dial" data-dial="2" viewBox="0 0 1000 1000" aria-hidden="true"></svg>
+  <div class="inner wrap">
+    <span class="eyebrow mono">The safety boundary</span>
+    <h2 data-scramble>Read-only reactor data in. Bounded setpoints to the hydrogen plant only.</h2>
+    <p>Reactor protection remains fully independent. Deterministic PLC limits override the AI, and the reactor runs normally with Hydrox offline.</p>
+    <a class="btn" href="#ai">Inside the AI layer <span class="arr">↓</span></a>
+  </div>
+</section>
+
+<!-- ===== AI ENGINE ===== -->
+<section class="section" id="ai">
+  <span class="sheet-id mono" aria-hidden="true">SHEET 04 / CONTROL</span>
+  <div class="wrap">
+    <div class="sec-head" style="margin-inline:auto;text-align:center;align-items:center">
+      <span class="eyebrow mono">The AI engine</span>
+      <h2 data-scramble>The layer we have actually built.</h2>
+    </div>
+    <div class="engine">
+      <div class="col">
+        <div class="feat"><span class="mono ix">01 · Digital twin</span><h3>A physics model of the hydrogen plant, driven by reactor output and offtake demand.</h3></div>
+        <div class="feat"><span class="mono ix">02 · Prediction</span><h3>Forecasts electricity price and demand across the control horizon.</h3></div>
+      </div>
+      <div class="core" id="coreHost"><span class="ring-lbl mono">Hydrox control layer</span></div>
+      <div class="col r">
+        <div class="feat"><span class="mono ix">03 · Optimisation</span><h3>Schedules production against opportunity cost, ramp limits and degradation penalties.</h3></div>
+        <div class="feat"><span class="mono ix">04 · Validation</span><h3>Every proposed setpoint is checked against hard engineering limits before it reaches equipment.</h3></div>
+      </div>
+    </div>
+
+    <div class="console bracket ctl" aria-label="Hydrox control interface, illustrative and modelled">
+      <div class="note mono">Illustrative interface: modelled, not measured</div>
+      <div class="hdr mono"><span>Hydrox control · modelled</span><span class="pill">Optimised</span></div>
+      <div class="ctl-grid">
+        <div class="ring-wrap">
+          <svg class="ring" viewBox="0 0 120 120" role="img" aria-label="System efficiency about 56 percent, higher heating value">
+            <circle cx="60" cy="60" r="50" fill="none" stroke="#1b2318" stroke-width="10"/>
+            <circle cx="60" cy="60" r="50" fill="none" stroke="#BFF34E" stroke-width="10" stroke-dasharray="175.9 314.2" transform="rotate(-90 60 60)" stroke-linecap="butt"/>
+          </svg>
+          <div class="ring-tx"><span class="v">~56%</span><span class="mono">System eff. (HHV)</span></div>
+        </div>
+        <div class="readings2">
+          <div class="rd"><span class="mono">Stack temperature</span><b>~800°C</b></div>
+          <div class="rd"><span class="mono">H₂ yield (design case)</span><b>7.4 t/hr</b></div>
+          <div class="rd"><span class="mono">Capacity factor</span><b>~90%</b><div class="meter"><i style="width:90%"></i></div></div>
+        </div>
+        <div class="disp">
+          <div class="dbars" id="dbars" role="img" aria-label="Illustrative modelled dispatch, fixed-load baseline against optimised"></div>
+          <p class="cap">Modelled dispatch · fixed-load baseline vs. optimised (illustrative). The optimiser also answers the carbon question: it schedules production so diverted nuclear power is not simply replaced by gas on the grid.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== ECONOMICS ===== -->
+<section class="section" id="economics" style="padding-top:0">
+  <span class="sheet-id mono" aria-hidden="true">SHEET 05 / ECONOMICS</span>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow mono">The economics</span>
+      <h2 data-scramble>Where the cost lands, under stated assumptions.</h2>
+    </div>
+    <div class="econ">
+      <div class="console">
+        <div class="hdr mono"><span>H₂ production cost</span><span>$ / kg</span></div>
+        <div class="bars" id="bars">
+          <div class="bar"><span class="n">Grey fossil gas</span><div class="t"><div class="f" style="transform:scaleX(.3333)"></div></div><span class="p">$2</span></div>
+          <div class="bar"><span class="n">Blue gas + CCS</span><div class="t"><div class="f" style="transform:scaleX(.5)"></div></div><span class="p">$3</span></div>
+          <div class="bar"><span class="n">Green electrolysis</span><div class="t"><div class="f" style="transform:scaleX(1)"></div></div><span class="p">$6</span></div>
+          <div class="bar us"><span class="n">Hydrox modelled range</span><div class="t"><div class="f" style="transform:scaleX(.3167)"></div><div class="rng" style="left:31.67%;width:11.67%"></div></div><span class="p">$1.9–2.6</span></div>
+          <div class="axis mono" aria-hidden="true"><span></span><div><span>$0</span><span>$2</span><span>$4</span><span>$6</span></div><span></span></div>
+        </div>
+        <p class="cap">The Hydrox bar is model output under stated assumptions, not a quotation. Excludes compression above 30 bar, storage and transport. Sensitivity analysis in the technical brief.</p>
+        <div class="assume">
+          <div><span class="mono">Electricity</span><b>$30/MWh</b></div>
+          <div><span class="mono">Capacity factor</span><b>90%</b></div>
+          <div><span class="mono">SOEC stack life</span><b>4 yrs</b></div>
+          <div class="anchor"><span class="mono">External anchor · INL</span><b>~$1.86/kg</b></div>
+        </div>
+      </div>
+    </div>
+    <div class="ecards">
+      <article class="ecard"><div class="img"><img src="assets/tanks.jpg" alt="Rendered hydrogen storage tanks" loading="lazy"></div>
+        <div class="tx"><span class="v" data-count="65000" data-fmt="{} t">65,000 t</span><p>per year at ~310 MWe allocated. Derived, not per-reactor.</p></div></article>
+      <article class="ecard"><div class="img"><img src="assets/barakah.jpg" alt="Rendered Barakah site with a Hydrox electrolysis plant" loading="lazy"></div>
+        <div class="tx"><span class="v" data-count="23" data-fmt="~{}%">~23%</span><p>of one Barakah unit's output for a 65,000 t/yr facility</p></div></article>
+      <article class="ecard"><div class="img"><img src="assets/stack.jpg" alt="Rendered solid-oxide electrolysis stack" loading="lazy"></div>
+        <div class="tx"><span class="v">4–7 yrs</span><p>SOEC stack replacement interval: the cost driver</p></div></article>
+    </div>
+  </div>
+</section>
+
+<!-- ===== PROOF ===== -->
+<section class="section" id="proof" style="padding-top:0">
+  <span class="sheet-id mono" aria-hidden="true">SHEET 06 / EVIDENCE</span>
+  <div class="wrap">
+    <div class="sec-head" style="margin-inline:auto;text-align:center;align-items:center">
+      <span class="eyebrow mono">Proven foundations</span>
+      <h2 data-scramble>Every stage is proven, at its own scale.</h2>
+    </div>
+  </div>
+  <div class="carousel">
+    <div class="track" id="track" tabindex="0" aria-label="Evidence, scroll sideways">
+      <article class="slide bracket on" data-i="0">
+        <div class="st"><h3>Nuclear hydrogen is already commercial</h3><span class="mono">001</span></div>
+        <div class="org mono">Stage 1 · Nine Mile Point · USA · 2023</div>
+        <div class="img"><img src="assets/h2.jpg" alt="Rendered hydrogen molecule" loading="lazy"></div>
+        <div class="meta"><div><span class="k mono">Evidence</span><p>Constellation has produced hydrogen from nuclear electricity since March 2023: a 1.25 MW electrolyser making 560 kg/day at an existing reactor.</p></div><div><span class="k mono">Scale</span><p>Commercial, with no plant modification.</p></div></div>
+      </article>
+      <article class="slide bracket" data-i="1">
+        <div class="st"><h3>The pathway is modelled and tested</h3><span class="mono">002</span></div>
+        <div class="org mono">Stage 1 · Idaho National Laboratory</div>
+        <div class="img"><img src="assets/stack.jpg" alt="Rendered solid-oxide electrolysis stack" loading="lazy"></div>
+        <div class="meta"><div><span class="k mono">Evidence</span><p>DOE's lead nuclear lab develops high-temperature steam electrolysis and supplied the dynamic controller for the Nine Mile Point demonstration.</p></div><div><span class="k mono">HTSE model</span><p>36.8 kWh electricity + 6.4 kWh heat per kg, against ~50 kWh/kg for PEM.</p></div></div>
+      </article>
+      <article class="slide bracket" data-i="2">
+        <div class="st"><h3>High-temperature reactors are commercial</h3><span class="mono">003</span></div>
+        <div class="org mono">Stage 2 · HTR-PM · China · 2023</div>
+        <div class="img"><img src="assets/pebble.jpg" alt="Rendered pebble-bed reactor fuel" loading="lazy"></div>
+        <div class="meta"><div><span class="k mono">Evidence</span><p>The first modular high-temperature gas-cooled plant entered commercial operation in December 2023, at ~750°C helium outlet.</p></div><div><span class="k mono">UAE link</span><p>ENEC's ADVANCE programme is evaluating this reactor class for the UAE.</p></div></div>
+      </article>
+      <article class="slide bracket" data-i="3">
+        <div class="st"><h3>Thermochemical chemistry, at lab scale</h3><span class="mono">004</span></div>
+        <div class="org mono">Stage 3 · JAEA · Japan · 2004</div>
+        <div class="img"><img src="assets/columns.jpg" alt="Rendered sulfur–iodine process columns" loading="lazy"></div>
+        <div class="meta"><div><span class="k mono">Evidence</span><p>Japan's atomic agency ran continuous closed-loop sulfur–iodine production in 2004 at ~30 L/h.</p></div><div><span class="k mono">Open problems</span><p>Corrosion, separation and integration remain active research problems.</p></div></div>
+      </article>
+    </div>
+    <div class="cnav"><div class="bar-in" role="group" aria-label="Choose evidence card">
+      <button type="button" id="cPrev" aria-label="Previous">←</button>
+      <button type="button" data-go="0" aria-current="true" aria-label="Nine Mile Point">001</button>
+      <button type="button" data-go="1" aria-label="Idaho National Laboratory">002</button>
+      <button type="button" data-go="2" aria-label="HTR-PM">003</button>
+      <button type="button" data-go="3" aria-label="JAEA">004</button>
+      <button type="button" id="cNext" aria-label="Next">→</button>
+    </div></div>
+  </div>
+</section>
+
+<!-- ===== UAE ===== -->
+<section class="section" id="uae" style="padding-top:0">
+  <span class="sheet-id mono" aria-hidden="true">SHEET 07 / UAE</span>
+  <div class="wrap">
+    <div class="globe-row sec-head" style="max-width:none">
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <span class="eyebrow mono">National benefits</span>
+        <h2 data-scramble>Why this matters for the UAE.</h2>
+      </div>
+      <img src="assets/globe.jpg" alt="Rendered globe marking the UAE" loading="lazy">
+    </div>
+    <div class="ucards">
+      <article class="ucard"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 20h16M6 20V11a6 6 0 0 1 12 0v9"/><path d="M12 5V2"/></svg></div>
+        <span class="mono muted">01 · Stage 1</span><h3>No new reactors required</h3><p>Hydrox attaches to reactors the UAE already operates. Nuclear-powered electrolysis is proven commercially at existing plants.</p></article>
+      <article class="ucard"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 21V10l5 3V10l5 3V7l8 4v10z"/><path d="M7 17h2M12 17h2M17 17h2"/></svg></div>
+        <span class="mono muted">02</span><h3>A named customer</h3><p>ADNOC's Ta'ziz ammonia facility at Ruwais: 1 Mtpa capacity, roughly 177,000 t/yr of hydrogen demand. A 65,000 t/yr facility covers about a third of one domestic customer.</p></article>
+      <article class="ucard"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg></div>
+        <span class="mono muted">03</span><h3>Aligned with national targets</h3><p>65,000 t/yr ≈ 4.6% of the UAE's 2031 low-carbon hydrogen production target (1.4 Mtpa), drawing ~23% of one Barakah unit's output.</p></article>
+    </div>
+    <div class="barakah bracket">
+      <img src="assets/barakah.jpg" alt="Rendered model of the Barakah site with a Hydrox electrolysis plant attached" loading="lazy">
+      <div class="tx">
+        <div style="display:flex;flex-direction:column;gap:16px"><span class="mono" style="color:var(--neon)">Example · UAE</span>
+          <h3>ENEC has stated Barakah's potential at around 1 Mtpa of hydrogen, and its ADVANCE programme is already evaluating high-temperature reactors for steam, heat and hydrogen.</h3></div>
+        <div class="figure"><span class="v">~1 Mtpa</span><p>Hydrox is the layer that makes those decisions economic.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== INVITATION ===== -->
+<section class="section" id="invitation" style="padding-top:0">
+  <span class="sheet-id mono" aria-hidden="true">SHEET 08 / PARTNERS</span>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow mono">The invitation</span>
+      <h2 data-scramble>What we are asking for.</h2>
+    </div>
+    <div class="icards">
+      <article class="icard"><span class="mono verb">Review</span><h3>Technical validation</h3><p>Independent review of our process model and assumptions by nuclear, process and controls engineers.</p></article>
+      <article class="icard"><span class="mono verb">Data</span><h3>Realistic operating envelopes</h3><p>Non-sensitive operating-data ranges to ground the digital twin in real plant behaviour.</p></article>
+      <article class="icard"><span class="mono verb">Mentor</span><h3>12-week pre-feasibility study</h3><p>A 12-week pre-feasibility study taking Hydrox from simulation to a defensible case.</p></article>
+    </div>
+    <div class="status bracket">
+      <span class="mono" style="color:var(--neon)">Where we are</span>
+      <p>Concept and simulation stage. We have built a digital twin, an MPC controller and a heat-integration analysis, not a plant. ENEC's ADVANCE programme is evaluating advanced reactors for steam, heat and hydrogen; Hydrox is the optimisation layer those decisions will need, validated first on Barakah's existing output, then extended to the reactors ADVANCE selects.</p>
+    </div>
+    <div class="cta">
+      <svg class="dial" data-dial="3" viewBox="0 0 1000 1000" aria-hidden="true"></svg>
+      <div class="inner">
+        <img src="assets/h2.jpg" alt="" aria-hidden="true">
+        <span class="eyebrow mono">Get in touch</span>
+        <h2 data-scramble>From simulation to a defensible case.</h2>
+        <p>Review the model, share an operating envelope, or mentor the pre-feasibility study.</p>
+        <a class="btn btn-primary" id="ctaBtn" href="#model">Start a conversation <span class="arr">→</span></a>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="fcard">
+      <div class="fbrand">
+        <a class="brand" href="#model"><img src="assets/hydrox-logo.png" alt=""><span>HYDROX</span></a>
+        <p>A staged AI dispatch and control layer for nuclear hydrogen, from Barakah today to high-temperature reactors next.</p>
+      </div>
+      <div class="fcol"><span class="h mono">[Navigation]</span>
+        <a href="#how">Stage 1 today</a><a href="#problem">Problem</a><a href="#solution">Three stages</a><a href="#ai">AI layer</a><a href="#economics">Economics</a></div>
+      <div class="fcol"><span class="h mono">[Site model]</span>
+        <button type="button" data-jump="0">Stage 1 · Barakah</button><button type="button" data-jump="1">Stage 2 · HTGR</button><button type="button" data-jump="2">Stage 3 · S–I cycle</button></div>
+      <div class="fcol"><span class="h mono">[Sources]</span>
+        <span class="muted" style="font-size:14px">IEA Global Hydrogen Review 2025</span><span class="muted" style="font-size:14px">UAE National Hydrogen Strategy 2050</span><span class="muted" style="font-size:14px">Idaho National Laboratory (HTSE)</span></div>
+    </div>
+    <div class="fbase mono"><span>© 2026 Hydrox</span><span>Concept and simulation stage</span></div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js" crossorigin="anonymous"></script>
+<script>
+/* Hydrox site model — three stages of a nuclear-hydrogen site, restyled black / neon.
+   Usage: var p = HydroxPlant(hostEl, {interactive:true, onStage:fn, onHover:fn}); p.show(0..2) */
+(function(global){
+  "use strict";
+
+  var TONE = {power:"#EAFF6A", heat:"#FF9B3D", steam:"#CFF5E4", h2:"#8CFF3F", oxy:"#FFFFFF", chem:"#3DFFC5"};
+  var HEX = {}; Object.keys(TONE).forEach(function(k){ HEX[k] = parseInt(TONE[k].slice(1),16); });
+
+  var STAGE_META = [
+    {sub:"Stage 1 · Barakah · electrolysis", badge:"Deployable today",
+     legend:[["power","Electricity"],["steam","Low-grade steam / water"],["h2","Hydrogen"],["oxy","Oxygen"]],
+     target:[14,8,0], dist:250, az:-0.62, pol:0.90},
+    {sub:"Stage 2 · high-temperature reactor", badge:"ENEC ADVANCE · in evaluation",
+     legend:[["heat","High-temperature helium"],["power","Electricity"],["steam","Water / steam"],["h2","Hydrogen"],["oxy","Oxygen"]],
+     target:[6,8,0], dist:215, az:-0.66, pol:0.90},
+    {sub:"Stage 3 · thermochemical cycle", badge:"Laboratory scale · research",
+     legend:[["heat","Process heat 850–950 °C"],["chem","Sulfur / iodine recycle"],["steam","Water feed"],["h2","Hydrogen"],["oxy","Oxygen"]],
+     target:[6,10,0], dist:205, az:-0.70, pol:0.88}
+  ];
+
+  function HydroxPlant(host, opts){
+    opts = opts || {};
+    var reduced = global.matchMedia && global.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    var C = {concrete:0x262a27, panel:0x1a1e1b, steel:0x353b36, dark:0x0d0f0d, ground:0x070907, sea:0x041210, bg:0x050705};
+
+    var scene = new THREE.Scene();
+    scene.background = new THREE.Color(opts.background != null ? opts.background : C.bg);
+    scene.fog = new THREE.Fog(scene.background, 260, 620);
+
+    var camera = new THREE.PerspectiveCamera(42, 1, 0.5, 2000);
+    var renderer = opts.renderer || new THREE.WebGLRenderer({antialias:true, preserveDrawingBuffer:!!opts.preserve});
+    renderer.setPixelRatio(Math.min(global.devicePixelRatio || 1, opts.maxDpr || 1.75));
+    host.appendChild(renderer.domElement);
+    renderer.domElement.style.touchAction = "pan-y";
+
+    scene.add(new THREE.HemisphereLight(0xf2f7f0, 0x0b100b, 0.8));
+    var key = new THREE.DirectionalLight(0xffffff, 0.7); key.position.set(-60, 90, 50); scene.add(key);
+    var rim = new THREE.DirectionalLight(0xbff34e, 0.55); rim.position.set(80, 40, -90); scene.add(rim);
+
+    var world = new THREE.Group(); scene.add(world);
+
+    var gnd = new THREE.Mesh(new THREE.PlaneGeometry(900,700), new THREE.MeshLambertMaterial({color:C.ground}));
+    gnd.rotation.x = -Math.PI/2; world.add(gnd);
+    var grid = new THREE.GridHelper(480, 48, 0x1f3a14, 0x111c0e);
+    grid.position.y = 0.04; world.add(grid);
+    // survey rings on the ground
+    [70,140,210].forEach(function(r, i){
+      var ring = new THREE.Mesh(new THREE.RingGeometry(r, r+0.35, 128),
+        new THREE.MeshBasicMaterial({color:0x2a4a18, transparent:true, opacity:0.55 - i*0.12, side:THREE.DoubleSide}));
+      ring.rotation.x = -Math.PI/2; ring.position.y = 0.06; world.add(ring);
+    });
+
+    var mConcrete = new THREE.MeshLambertMaterial({color:C.concrete});
+    var mPanel = new THREE.MeshLambertMaterial({color:C.panel});
+    var mSteel = new THREE.MeshLambertMaterial({color:C.steel});
+    var mDark = new THREE.MeshLambertMaterial({color:C.dark});
+    var mSea = new THREE.MeshLambertMaterial({color:C.sea});
+    var mEdge = new THREE.LineBasicMaterial({color:0xa8ec3c, transparent:true, opacity:0.42});
+    var dotGeo = new THREE.SphereGeometry(1, 8, 6);
+
+    function BOX(w,h,d){ return new THREE.BoxGeometry(w,h,d); }
+    function CYL(r1,r2,h,s){ return new THREE.CylinderGeometry(r1,r2,h,s||20); }
+    function SPH(r){ return new THREE.SphereGeometry(r, 20, 12); }
+    function DOME(r){ return new THREE.SphereGeometry(r, 24, 14, 0, Math.PI*2, 0, Math.PI/2); }
+
+    function Stage(meta){
+      this.meta = meta; this.group = new THREE.Group(); this.group.visible = false;
+      world.add(this.group); this.parts = []; this.flows = [];
+    }
+    Stage.prototype.part = function(name, tag, desc, tone){
+      var g = new THREE.Group();
+      g.userData = {name:name, tag:tag, desc:desc, tone:tone || "h2"};
+      this.group.add(g); this.parts.push(g); return g;
+    };
+    Stage.prototype.mesh = function(gp, geo, mat, x, y, z, rot){
+      var m = new THREE.Mesh(geo, mat);
+      m.position.set(x, y, z);
+      if(rot) m.rotation.set(rot[0]||0, rot[1]||0, rot[2]||0);
+      gp.add(m);
+      if(mat !== mSea){
+        var e = new THREE.LineSegments(new THREE.EdgesGeometry(geo, 28), mEdge);
+        e.position.copy(m.position); e.rotation.copy(m.rotation); e.raycast = function(){};
+        gp.add(e);
+      }
+      return m;
+    };
+    Stage.prototype.flow = function(pts, tone, count, size, speed){
+      var curve = new THREE.CatmullRomCurve3(pts.map(function(p){ return new THREE.Vector3(p[0],p[1],p[2]); }));
+      var line = new THREE.Line(new THREE.BufferGeometry().setFromPoints(curve.getPoints(60)),
+        new THREE.LineBasicMaterial({color:HEX[tone], transparent:true, opacity:0.35}));
+      this.group.add(line);
+      var mat = new THREE.MeshBasicMaterial({color:HEX[tone]});
+      var dots = [];
+      for(var i=0;i<count;i++){
+        var d = new THREE.Mesh(dotGeo, mat); d.scale.setScalar(size); d.userData.off = i/count;
+        this.group.add(d); dots.push(d);
+      }
+      this.flows.push({curve:curve, dots:dots, speed:speed || 0.05});
+    };
+
+    var _v = new THREE.Vector3();
+    function stepFlows(list, t){
+      for(var i=0;i<list.length;i++){
+        var f = list[i];
+        for(var k=0;k<f.dots.length;k++){
+          var d = f.dots[k];
+          var u = (d.userData.off + t*f.speed) % 1; if(!(u >= 0)) u = 0;
+          f.curve.getPointAt(u, _v); d.position.copy(_v);
+        }
+      }
+    }
+
+    /* ===== STAGE 1 — Barakah PWR + high-temperature steam electrolysis ===== */
+    var S1 = new Stage(STAGE_META[0]);
+    (function(S){
+      S.mesh(S.part("Gulf Coastline","Seawater cooling",
+        "Once-through seawater condenser cooling. Two thirds of reactor thermal output is rejected here at low temperature — too cool to drive chemistry.","steam"),
+        new THREE.PlaneGeometry(120,300), mSea, -150, -0.3, 0, [-Math.PI/2,0,0]);
+
+      var r = S.part("Reactor Containment","APR-1400 · pressurised water reactor",
+        "3,983 MW thermal, 1,337 MW net electrical per unit. Coolant leaves the core near 320 °C — firm power, not high-temperature process heat.","power");
+      [-26,26].forEach(function(z){
+        S.mesh(r, CYL(13,13,1.4,28), mDark, -78, 0.7, z);
+        S.mesh(r, CYL(11.5,11.5,24,28), mConcrete, -78, 12.7, z);
+        S.mesh(r, CYL(12.1,12.1,1.2,28), mPanel, -78, 24.3, z);
+        S.mesh(r, DOME(11.5), mConcrete, -78, 25, z);
+        S.mesh(r, CYL(1,1,4,8), mSteel, -78, 37, z);
+        S.mesh(r, BOX(15,12,18), mPanel, -61, 6, z);
+      });
+
+      var th = S.part("Turbine Hall","Steam cycle · generator",
+        "Steam turbine and generator. About one third of reactor thermal output becomes electricity.","power");
+      [-26,26].forEach(function(z){
+        S.mesh(th, BOX(40,15,22), mPanel, -40, 7.5, z);
+        S.mesh(th, CYL(11,11,40,3), mSteel, -40, 15.2, z, [0,0,Math.PI/2]);
+      });
+
+      var sw = S.part("Switchyard","Transformers · allocation point",
+        "Where power divides between the national grid and the hydrogen plant. This split is the decision the Hydrox optimiser makes.","power");
+      S.mesh(sw, BOX(28,1.2,40), mDark, -8, 0.6, 0);
+      [-14,-4,6,16].forEach(function(z){
+        S.mesh(sw, BOX(8,8,6), mSteel, -15, 4.5, z);
+        S.mesh(sw, CYL(1,1,6,10), mDark, -15, 11, z);
+      });
+      [-14,0,14].forEach(function(z){
+        S.mesh(sw, BOX(1.4,16,1.4), mSteel, -1, 8, z);
+        S.mesh(sw, BOX(1.4,16,1.4), mSteel, 4, 8, z);
+        S.mesh(sw, BOX(8,0.9,0.9), mSteel, 1.5, 16, z);
+      });
+
+      var gr = S.part("Grid Transmission","To national network",
+        "Power not allocated to hydrogen is exported. Its market value is the opportunity cost the optimiser weighs against the hydrogen margin.","power");
+      [[4,-58,30],[16,-92,30]].forEach(function(p){
+        S.mesh(gr, BOX(1.8,p[2],1.8), mSteel, p[0], p[2]/2, p[1]);
+        S.mesh(gr, BOX(20,1,1), mSteel, p[0], p[2]-4, p[1]);
+        S.mesh(gr, BOX(15,1,1), mSteel, p[0], p[2]+1, p[1]);
+      });
+
+      var st = S.part("Steam Tie-In","Secondary loop · below 200 °C",
+        "Low-grade steam vaporises feedwater for the electrolyser. An external connection only — no modification to reactor safety systems.","steam");
+      S.mesh(st, BOX(13,6,10), mPanel, -34, 3, 52);
+      S.mesh(st, CYL(2.2,2.2,12,14), mSteel, -27, 5, 52, [0,0,Math.PI/2]);
+      S.mesh(st, CYL(1.3,1.3,8,10), mDark, -38, 9, 52);
+
+      var eh = S.part("Electrolyser Hall","Solid oxide electrolysis · ~800 °C",
+        "Splits steam rather than cold water. 314 MW electrical demand at 36.8 kWh per kilogram — about a quarter less electricity than low-temperature electrolysis.","h2");
+      S.mesh(eh, BOX(54,18,34), mPanel, 36, 9, 0);
+      S.mesh(eh, BOX(56,1.4,36), mSteel, 36, 18.7, 0);
+      for(var i=0;i<6;i++) S.mesh(eh, BOX(5,4,26), mConcrete, 16+i*8, 21.5, 0);
+      for(var j=0;j<6;j++) S.mesh(eh, BOX(1.2,19,35), mSteel, 13+j*9, 9.5, 0);
+
+      var ox = S.part("Oxygen Vent","Byproduct stream",
+        "About 8 kg of oxygen for every kilogram of hydrogen. Vented, or sold to industrial users as an optional revenue line.","oxy");
+      S.mesh(ox, CYL(2.1,2.9,30,14), mConcrete, 36, 15, -34);
+      S.mesh(ox, CYL(3.1,3.1,1.8,14), mDark, 36, 30.5, -34);
+
+      var cp = S.part("Compression Skid","20–30 bar at plant gate",
+        "Hydrogen compressed to delivery pressure. This is the boundary of the modelled system — liquefaction and ammonia conversion sit downstream.","h2");
+      S.mesh(cp, BOX(20,9,14), mPanel, 76, 4.5, -14);
+      [-4,0,4].forEach(function(z){ S.mesh(cp, CYL(1.7,1.7,8,12), mSteel, 72+z*1.5, 10.5, -14+z*1.6); });
+
+      var sg = S.part("Hydrogen Storage","Production buffer",
+        "Decouples production from offtake, so the plant can make hydrogen during low-cost hours and still deliver on a steady contract schedule.","h2");
+      [12,0,-12].forEach(function(z){
+        S.mesh(sg, CYL(4.5,4.5,26,20), mConcrete, 86, 8, z, [0,0,Math.PI/2]);
+        S.mesh(sg, SPH(4.5), mConcrete, 73, 8, z);
+        S.mesh(sg, SPH(4.5), mConcrete, 99, 8, z);
+        S.mesh(sg, BOX(3.5,8,10), mDark, 77, 4, z);
+        S.mesh(sg, BOX(3.5,8,10), mDark, 95, 4, z);
+      });
+
+      var pp = S.part("Export Pipeline","To industrial offtake",
+        "Hydrogen to refining, ammonia and fertiliser customers. ADNOC's Ta'ziz ammonia plant at Ruwais alone needs roughly 177,000 tonnes a year.","h2");
+      for(var k=0;k<5;k++){
+        S.mesh(pp, BOX(1.8,10,20), mSteel, 112+k*12, 5, 30);
+        S.mesh(pp, BOX(2.6,1.2,22), mSteel, 112+k*12, 10, 30);
+      }
+      S.mesh(pp, CYL(1.7,1.7,62,14), mPanel, 140, 11.6, 30, [0,0,Math.PI/2]);
+
+      var wt = S.part("Water Treatment","Desalinated feedwater",
+        "At least 9 kg of water per kilogram of hydrogen before cooling and purification losses — about 585,000 tonnes a year at full output.","steam");
+      [0,1,2].forEach(function(i){
+        S.mesh(wt, CYL(7,7,6,20), mPanel, -8+i*17, 3, 64);
+        S.mesh(wt, CYL(7.4,7.4,0.7,20), mSteel, -8+i*17, 6.3, 64);
+      });
+
+      S.flow([[-62,14,-26],[-40,15,-26],[-18,11,-16],[-8,10,-5]], "power", 20, 1.3, 0.055);
+      S.flow([[-62,14,26],[-40,15,26],[-18,11,16],[-8,10,5]], "power", 20, 1.3, 0.055);
+      S.flow([[0,16,-3],[4,26,-58],[16,31,-92]], "power", 18, 1.2, 0.07);
+      S.flow([[4,16,3],[20,14,1],[32,12,0]], "power", 16, 1.4, 0.05);
+      S.flow([[-34,6,52],[0,7,44],[26,9,20],[34,10,6]], "steam", 18, 1.1, 0.042);
+      S.flow([[8,5,64],[26,6,44],[36,7,18]], "steam", 12, 0.9, 0.04);
+      S.flow([[60,10,-5],[74,9,-14],[82,8,-6]], "h2", 14, 1.3, 0.05);
+      S.flow([[86,8,-8],[86,8,0],[88,9,12]], "h2", 12, 1.2, 0.05);
+      S.flow([[96,9,6],[110,10,26],[168,11,30]], "h2", 22, 1.3, 0.06);
+      S.flow([[36,18,-22],[36,22,-28],[36,31,-34]], "oxy", 12, 1.0, 0.055);
+    })(S1);
+
+    /* ===== STAGE 2 — HTGR (Xe-100 class) + electrolysis with process heat ===== */
+    var S2 = new Stage(STAGE_META[1]);
+    (function(S){
+      var rm = S.part("Modular HTGR Units","Xe-100 class · pebble bed",
+        "Four 200 MW thermal modules. Helium leaves the core near 750 °C — genuine process heat, not only electricity. ENEC's ADVANCE programme is evaluating this reactor class for the UAE.","heat");
+      [-33,-11,11,33].forEach(function(z){
+        S.mesh(rm, BOX(22,4,16), mDark, -62, 2, z);
+        S.mesh(rm, BOX(18,22,13), mConcrete, -62, 15, z);
+        S.mesh(rm, BOX(19,1.4,14), mPanel, -62, 26.5, z);
+        S.mesh(rm, CYL(3.4,3.4,9,16), mSteel, -56, 30, z);
+        S.mesh(rm, CYL(1.2,1.2,5,10), mDark, -68, 29, z);
+      });
+
+      var hx = S.part("Intermediate Heat Exchanger","Helium loop isolation",
+        "Transfers reactor heat to a secondary loop without carrying activity across. The barrier that lets a nuclear plant supply an industrial process safely.","heat");
+      S.mesh(hx, BOX(18,6,44), mDark, -26, 3, 0);
+      [-15,0,15].forEach(function(z){
+        S.mesh(hx, CYL(4.6,4.6,22,18), mSteel, -26, 17, z);
+        S.mesh(hx, DOME(4.6), mPanel, -26, 28, z);
+      });
+
+      var tb = S.part("Power Block","Steam generator · turbine",
+        "A share of the helium heat still makes electricity for the electrolyser and the grid. The rest goes to the process as heat, which is the point of this stage.","power");
+      S.mesh(tb, BOX(30,13,18), mPanel, -22, 6.5, -46);
+      S.mesh(tb, CYL(9,9,30,3), mSteel, -22, 13.5, -46, [0,0,Math.PI/2]);
+      S.mesh(tb, BOX(10,9,9), mSteel, -2, 4.5, -46);
+
+      var eh = S.part("Electrolyser Hall","SOEC with process heat",
+        "The same solid oxide stacks as Stage 1, but the 800 °C operating temperature now comes largely from reactor heat rather than electricity — so electricity per kilogram falls further.","h2");
+      S.mesh(eh, BOX(46,17,34), mPanel, 24, 8.5, 0);
+      S.mesh(eh, BOX(48,1.4,36), mSteel, 24, 17.7, 0);
+      for(var i=0;i<5;i++) S.mesh(eh, BOX(5,4,26), mConcrete, 8+i*8, 20.5, 0);
+      for(var j=0;j<5;j++) S.mesh(eh, BOX(1.2,18,35), mSteel, 6+j*9, 9, 0);
+
+      var ox = S.part("Oxygen Vent","Byproduct stream",
+        "About 8 kg of oxygen per kilogram of hydrogen, as in Stage 1.","oxy");
+      S.mesh(ox, CYL(2,2.7,26,14), mConcrete, 24, 13, -32);
+      S.mesh(ox, CYL(2.9,2.9,1.6,14), mDark, 24, 26.5, -32);
+
+      var sg = S.part("Hydrogen Storage","Buffer and offtake",
+        "Higher output per megawatt of electricity than Stage 1, because heat has displaced part of the electrical demand.","h2");
+      [10,-10].forEach(function(z){
+        S.mesh(sg, CYL(4.2,4.2,24,20), mConcrete, 68, 7.5, z, [0,0,Math.PI/2]);
+        S.mesh(sg, SPH(4.2), mConcrete, 56, 7.5, z);
+        S.mesh(sg, SPH(4.2), mConcrete, 80, 7.5, z);
+        S.mesh(sg, BOX(3.2,7.5,9), mDark, 60, 3.8, z);
+        S.mesh(sg, BOX(3.2,7.5,9), mDark, 76, 3.8, z);
+      });
+
+      var wt = S.part("Feedwater Plant","Desalination and polishing",
+        "Same stoichiometry as Stage 1 — about 9 kg of water per kilogram of hydrogen, before losses.","steam");
+      [0,1].forEach(function(i){
+        S.mesh(wt, CYL(6,6,5.5,20), mPanel, 4+i*15, 2.8, 52);
+        S.mesh(wt, CYL(6.4,6.4,0.7,20), mSteel, 4+i*15, 5.9, 52);
+      });
+
+      [-33,-11,11,33].forEach(function(z){
+        S.flow([[-56,30,z],[-40,26,z*0.6],[-26,22,0]], "heat", 12, 1.2, 0.06);
+      });
+      S.flow([[-26,22,-8],[-24,18,-30],[-22,14,-44]], "heat", 14, 1.1, 0.05);
+      S.flow([[-26,22,6],[0,20,4],[20,19,0]], "heat", 20, 1.4, 0.05);
+      S.flow([[-6,10,-46],[8,12,-20],[20,13,-4]], "power", 16, 1.2, 0.055);
+      S.flow([[8,5,52],[18,6,32],[24,7,16]], "steam", 12, 0.9, 0.04);
+      S.flow([[48,9,-4],[56,8,-10],[62,8,-10]], "h2", 14, 1.2, 0.05);
+      S.flow([[78,8,-10],[84,9,2],[88,10,10]], "h2", 12, 1.2, 0.055);
+      S.flow([[24,17,-20],[24,21,-26],[24,27,-32]], "oxy", 10, 0.9, 0.055);
+    })(S2);
+
+    /* ===== STAGE 3 — VHTR + sulfur–iodine thermochemical cycle ===== */
+    var S3 = new Stage(STAGE_META[2]);
+    (function(S){
+      var vr = S.part("Very-High-Temperature Reactor","Helium outlet 850–950 °C",
+        "The only reactor class hot enough to drive sulfur–iodine chemistry directly. No commercial VHTR exists yet — this stage is a research horizon, not a buildable plant.","heat");
+      S.mesh(vr, CYL(17,17,2.4,28), mDark, -62, 1.2, 0);
+      S.mesh(vr, CYL(15,15,26,28), mConcrete, -62, 14, 0);
+      S.mesh(vr, CYL(15.6,15.6,1.4,28), mPanel, -62, 27.4, 0);
+      S.mesh(vr, DOME(15), mConcrete, -62, 28, 0);
+      [-9,9].forEach(function(z){ S.mesh(vr, CYL(3.6,3.6,20,16), mSteel, -48, 20, z, [0,0,Math.PI/2]); });
+
+      var hx = S.part("Intermediate Heat Exchanger","Nuclear / chemical barrier",
+        "Separates reactor helium from the chemical plant. Materials that survive 900 °C helium on one side and corrosive acid on the other are an unsolved engineering problem.","heat");
+      S.mesh(hx, BOX(16,7,34), mDark, -32, 3.5, 0);
+      [-11,0,11].forEach(function(z){
+        S.mesh(hx, CYL(4.2,4.2,24,18), mSteel, -32, 18, z);
+        S.mesh(hx, DOME(4.2), mPanel, -32, 30, z);
+      });
+
+      var bu = S.part("Bunsen Reaction Section","~120 °C · water enters here",
+        "Water, sulfur dioxide and iodine combine to form two acids that separate into layers. This is the only point where new material enters the cycle.","chem");
+      S.mesh(bu, BOX(26,5,22), mDark, 2, 2.5, -34);
+      [-7,7].forEach(function(z){
+        S.mesh(bu, CYL(4,4,16,18), mPanel, 2, 13, -34+z);
+        S.mesh(bu, DOME(4), mSteel, 2, 21, -34+z);
+      });
+      S.mesh(bu, BOX(7,8,7), mSteel, 14, 4, -34);
+
+      var sa = S.part("Sulfuric Acid Decomposition","Above 800 °C · the hot step",
+        "Sulfuric acid splits back into sulfur dioxide, water and oxygen. This step sets the temperature the whole cycle demands, and is exactly why a PWR cannot run it.","heat");
+      S.mesh(sa, BOX(30,6,26), mDark, 2, 3, 0);
+      [-8,8].forEach(function(z){
+        S.mesh(sa, CYL(4.6,4.6,22,18), mPanel, -2, 17, z);
+        S.mesh(sa, DOME(4.6), mSteel, -2, 28, z);
+      });
+      S.mesh(sa, CYL(2.6,2.6,30,16), mSteel, 12, 16, 0);
+      S.mesh(sa, BOX(9,9,9), mSteel, 12, 4.5, 0);
+
+      var hi = S.part("Hydrogen Iodide Decomposition","~350 °C · hydrogen out",
+        "Hydrogen iodide splits into hydrogen and iodine. The hydrogen leaves the cycle; the iodine returns to the Bunsen section.","h2");
+      S.mesh(hi, BOX(26,5,22), mDark, 2, 2.5, 34);
+      [-7,7].forEach(function(z){
+        S.mesh(hi, CYL(3.8,3.8,18,18), mPanel, 2, 14, 34+z);
+        S.mesh(hi, DOME(3.8), mSteel, 2, 23, 34+z);
+      });
+      S.mesh(hi, BOX(7,8,7), mSteel, 14, 4, 34);
+
+      var pu = S.part("Separation and Purification","Membranes · corrosion service",
+        "Keeping iodine from precipitating and clogging the plant, and finding materials that survive hot acid, are the live research problems in this cycle.","chem");
+      S.mesh(pu, BOX(20,12,16), mPanel, 40, 6, 16);
+      S.mesh(pu, BOX(21,1.2,17), mSteel, 40, 12.6, 16);
+      [-5,0,5].forEach(function(z){ S.mesh(pu, CYL(2.2,2.2,10,14), mSteel, 36+z*1.3, 17, 16+z*1.4); });
+
+      var sg = S.part("Hydrogen Storage","Product buffer",
+        "Thermochemical routes target 40–50% thermal efficiency, against roughly a third for the electrolysis pathway at a conventional reactor.","h2");
+      [8,-8].forEach(function(z){
+        S.mesh(sg, CYL(4,4,22,20), mConcrete, 72, 7, z, [0,0,Math.PI/2]);
+        S.mesh(sg, SPH(4), mConcrete, 61, 7, z);
+        S.mesh(sg, SPH(4), mConcrete, 83, 7, z);
+        S.mesh(sg, BOX(3,7,8.5), mDark, 65, 3.5, z);
+        S.mesh(sg, BOX(3,7,8.5), mDark, 79, 3.5, z);
+      });
+
+      var ox = S.part("Oxygen Vent","From the acid decomposition step",
+        "Oxygen is released where sulfuric acid breaks down, not at an electrolyser — a structural difference from Stages 1 and 2.","oxy");
+      S.mesh(ox, CYL(2,2.7,28,14), mConcrete, -14, 14, -16);
+      S.mesh(ox, CYL(2.9,2.9,1.6,14), mDark, -14, 28.5, -16);
+
+      var wf = S.part("Water Feed","The only consumed input",
+        "Apart from water, the sulfur and iodine reagents are regenerated within the loop — though a real plant needs make-up for leakage, purge and corrosion losses.","steam");
+      S.mesh(wf, CYL(6,6,6,20), mPanel, 26, 3, -52);
+      S.mesh(wf, CYL(6.4,6.4,0.7,20), mSteel, 26, 6.3, -52);
+
+      S.flow([[-48,20,-9],[-40,19,-5],[-32,18,0]], "heat", 10, 1.2, 0.055);
+      S.flow([[-48,20,9],[-40,19,5],[-32,18,0]], "heat", 10, 1.2, 0.055);
+      S.flow([[-32,22,0],[-16,20,0],[-6,18,0]], "heat", 18, 1.5, 0.05);
+      S.flow([[-32,20,6],[-14,16,22],[0,14,32]], "heat", 12, 1.0, 0.045);
+      S.flow([[2,12,-26],[2,12,-12],[0,13,-4]], "chem", 12, 1.2, 0.05);
+      S.flow([[6,12,4],[6,12,-16],[4,12,-28]], "chem", 12, 1.2, 0.05);
+      S.flow([[6,12,26],[6,12,10],[6,12,4]], "chem", 10, 1.2, 0.05);
+      S.flow([[-2,11,30],[-2,11,0],[-2,11,-30]], "chem", 16, 1.1, 0.04);
+      S.flow([[26,5,-52],[16,6,-44],[6,8,-36]], "steam", 10, 0.9, 0.042);
+      S.flow([[8,12,34],[30,11,24],[38,11,18]], "h2", 14, 1.3, 0.05);
+      S.flow([[48,12,16],[58,9,8],[64,8,8]], "h2", 12, 1.3, 0.055);
+      S.flow([[-6,16,-6],[-12,20,-12],[-14,28,-16]], "oxy", 10, 1.0, 0.055);
+    })(S3);
+
+    var STAGES = [S1, S2, S3], active = S1, activeIndex = 0;
+    var az = S1.meta.az, pol = S1.meta.pol, dist = S1.meta.dist, zoom = 1;
+    var target = new THREE.Vector3(14, 8, 0);
+    var shift = {x:0, y:0}; // view offset as fraction of width/height
+    var W = 1, H = 1;
+
+    function place(){
+      var d = dist * zoom;
+      camera.position.set(
+        target.x + d*Math.sin(pol)*Math.cos(az),
+        target.y + d*Math.cos(pol),
+        target.z + d*Math.sin(pol)*Math.sin(az));
+      camera.lookAt(target);
+    }
+    function applyOffset(){
+      if(shift.x || shift.y) camera.setViewOffset(W, H, -shift.x*W, -shift.y*H, W, H);
+      else camera.clearViewOffset();
+    }
+
+    // hover
+    var ray = new THREE.Raycaster(), ndc = new THREE.Vector2(), hovered = null;
+    function setHot(g, on){
+      if(!g) return;
+      g.traverse(function(o){
+        if(!o.isMesh) return;
+        if(on){
+          if(!o.userData._m) o.userData._m = o.material;
+          if(!o.userData._hl){
+            var c = o.userData._m.clone();
+            c.emissive = new THREE.Color(TONE[g.userData.tone] || TONE.h2).multiplyScalar(0.42);
+            o.userData._hl = c;
+          }
+          o.material = o.userData._hl;
+        } else if(o.userData._m){ o.material = o.userData._m; }
+      });
+    }
+    function clearHover(){ setHot(hovered, false); hovered = null; if(opts.onHover) opts.onHover(null); }
+    function pick(cx, cy){
+      var r = renderer.domElement.getBoundingClientRect();
+      ndc.x = ((cx - r.left)/r.width)*2 - 1;
+      ndc.y = -((cy - r.top)/r.height)*2 + 1;
+      ray.setFromCamera(ndc, camera);
+      var hits = ray.intersectObjects(active.parts, true), grp = null;
+      if(hits.length){
+        var o = hits[0].object;
+        while(o && active.parts.indexOf(o) === -1) o = o.parent;
+        grp = o;
+      }
+      if(grp !== hovered){
+        setHot(hovered, false); hovered = grp; setHot(hovered, true);
+        if(opts.onHover) opts.onHover(grp ? grp.userData : null, cx, cy);
+      } else if(grp && opts.onHover) opts.onHover(grp.userData, cx, cy, true);
+      renderer.domElement.style.cursor = grp ? "pointer" : "grab";
+    }
+
+    function show(n){
+      clearHover();
+      for(var i=0;i<STAGES.length;i++) STAGES[i].group.visible = (i === n);
+      active = STAGES[n]; activeIndex = n;
+      var m = active.meta;
+      target.set(m.target[0], m.target[1], m.target[2]);
+      az = m.az; pol = m.pol; dist = m.dist; place();
+      if(opts.onStage) opts.onStage(n, m);
+    }
+
+    var drag = null, idle = 0, running = true;
+    if(opts.interactive){
+      var el = renderer.domElement;
+      el.addEventListener("pointerdown", function(e){ drag = {x:e.clientX, y:e.clientY, id:e.pointerId}; idle = 0; clearHover(); });
+      global.addEventListener("pointerup", function(){ drag = null; });
+      el.addEventListener("pointercancel", function(){ drag = null; });
+      global.addEventListener("pointermove", function(e){
+        if(drag){
+          az += (e.clientX - drag.x)*0.0055;
+          if(e.pointerType === "mouse") pol = Math.max(0.25, Math.min(1.38, pol + (e.clientY - drag.y)*0.0045));
+          drag.x = e.clientX; drag.y = e.clientY; idle = 0; place(); return;
+        }
+        if(e.pointerType !== "mouse") return;
+        if(e.target === el) pick(e.clientX, e.clientY);
+        else if(hovered) clearHover();
+      });
+      el.addEventListener("mouseleave", function(){ if(hovered) clearHover(); });
+    }
+
+    function resize(){
+      W = host.clientWidth; H = host.clientHeight;
+      if(!W || !H) return;
+      camera.aspect = W/H;
+      applyOffset();
+      camera.updateProjectionMatrix();
+      renderer.setSize(W, H, false);
+    }
+    if(!opts.renderer) global.addEventListener("resize", resize);
+
+    var t0 = performance.now(), last = t0;
+    function render(now){
+      now = now || performance.now();
+      var dt = Math.min(0.1, Math.max(0, (now - last)/1000)); last = now;
+      var t = reduced ? 0 : (now - t0)/1000;
+      stepFlows(active.flows, t);
+      if(!reduced && !drag && opts.interactive){
+        idle += dt; if(idle > 4){ az += dt*0.03; place(); }
+      }
+      renderer.render(scene, camera);
+    }
+    function loop(now){ if(running){ render(now); } requestAnimationFrame(loop); }
+
+    show(opts.stage || 0);
+    resize();
+    if(opts.autoLoop !== false) requestAnimationFrame(loop);
+
+    return {
+      show:show, render:render, resize:resize,
+      setRunning:function(v){ running = v; last = performance.now(); },
+      setShift:function(x, y){ shift.x = x; shift.y = y; resize(); },
+      zoomBy:function(f){ zoom = Math.max(0.45, Math.min(1.8, zoom*f)); idle = 0; place(); },
+      orbit:function(a){ az += a; place(); },
+      get stage(){ return activeIndex; },
+      TONE:TONE, META:STAGE_META, camera:camera, renderer:renderer, scene:scene,
+      setCam:function(a, p, d, tx, ty, tz){ az = a; pol = p; dist = d; zoom = 1; if(tx != null) target.set(tx, ty, tz); place(); },
+      stepFlows:function(t){ stepFlows(active.flows, t); }
+    };
+  }
+  HydroxPlant.TONE = TONE;
+  global.HydroxPlant = HydroxPlant;
+})(window);
+
+</script>
+<script>
+(function(){
+"use strict";
+/* Add your partnership email here to turn the CTA into an email link. */
+var CONTACT_EMAIL = "";
+
+var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+var fine = matchMedia("(pointer:fine)").matches;
+var isNarrow = function(){ return innerWidth <= 820; };
+var clamp = function(v,a,b){ return Math.max(a, Math.min(b, v)); };
+var lerp = function(a,b,x){ return a + (b-a)*x; };
+
+if(CONTACT_EMAIL){ var cb = document.getElementById("ctaBtn"); cb.href = "mailto:" + CONTACT_EMAIL; }
+
+/* ---------- nav ---------- */
+var nav = document.getElementById("nav"), lastY = scrollY;
+addEventListener("scroll", function(){
+  var y = scrollY;
+  nav.classList.toggle("solid", y > 40);
+  nav.classList.toggle("hide", y > lastY && y > 400 && !document.getElementById("navLinks").classList.contains("open"));
+  lastY = y;
+}, {passive:true});
+var menuBtn = document.getElementById("menuBtn"), links = document.getElementById("navLinks");
+menuBtn.addEventListener("click", function(){ var o = links.classList.toggle("open"); menuBtn.setAttribute("aria-expanded", o); });
+links.addEventListener("click", function(e){ if(e.target.tagName === "A"){ links.classList.remove("open"); menuBtn.setAttribute("aria-expanded", false); } });
+
+/* ---------- cursor ---------- */
+if(fine && !reduced){
+  var dot = document.querySelector(".cur.dot"), ring = document.querySelector(".cur.ring");
+  var mx = -100, my = -100, rx = -100, ry = -100;
+  addEventListener("pointermove", function(e){ if(e.pointerType !== "mouse") return; mx = e.clientX; my = e.clientY; document.body.classList.add("has-cur"); }, {passive:true});
+  document.addEventListener("mouseleave", function(){ document.body.classList.remove("has-cur"); });
+  document.addEventListener("mouseover", function(e){ ring.classList.toggle("big", !!e.target.closest("a,button")); });
+  (function tick(){ rx += (mx-rx)*0.18; ry += (my-ry)*0.18;
+    dot.style.transform = "translate("+mx+"px,"+my+"px)"; ring.style.transform = "translate("+rx+"px,"+ry+"px)";
+    requestAnimationFrame(tick); })();
+}
+
+/* ---------- dials (technical circle drawings) ---------- */
+function dial(svg, seed){
+  var NS = "http://www.w3.org/2000/svg", c = 500, s = "";
+  var col = "rgba(191,243,78,", R = [470, 400, 330, 210];
+  R.forEach(function(r, i){ s += '<circle cx="500" cy="500" r="'+r+'" fill="none" stroke="'+col+(i===1?'.22':'.12')+')" stroke-width="1"'+(i===2?' stroke-dasharray="2 6"':'')+'/>'; });
+  for(var i=0;i<180;i++){ var a = i/180*Math.PI*2, L = i%15===0 ? 18 : (i%5===0 ? 10 : 5);
+    s += '<line x1="'+(c+Math.cos(a)*400)+'" y1="'+(c+Math.sin(a)*400)+'" x2="'+(c+Math.cos(a)*(400-L))+'" y2="'+(c+Math.sin(a)*(400-L))+'" stroke="'+col+(i%15===0?'.45':'.2')+')"/>'; }
+  var off = seed*0.7;
+  s += '<line x1="30" y1="500" x2="970" y2="500" stroke="'+col+'.08)"/><line x1="500" y1="30" x2="500" y2="970" stroke="'+col+'.08)"/>';
+  s += '<path d="M '+(c+Math.cos(off)*470)+' '+(c+Math.sin(off)*470)+' A 470 470 0 0 1 '+(c+Math.cos(off+1.1)*470)+' '+(c+Math.sin(off+1.1)*470)+'" fill="none" stroke="'+col+'.6)" stroke-width="1.5"/>';
+  [[off+2.3,330],[off+4.1,210]].forEach(function(p){ var x = c+Math.cos(p[0])*p[1], y = c+Math.sin(p[0])*p[1];
+    s += '<circle cx="'+x+'" cy="'+y+'" r="4" fill="#BFF34E"/><circle cx="'+x+'" cy="'+y+'" r="12" fill="none" stroke="'+col+'.4)"/>'; });
+  s += '<g class="spin"><circle cx="500" cy="500" r="330" fill="none" stroke="'+col+'.35)" stroke-width="1.2" stroke-dasharray="60 940" /></g>';
+  svg.innerHTML = s;
+  if(!reduced){ var g = svg.querySelector(".spin"), t0 = performance.now();
+    (function rot(now){ g.setAttribute("transform","rotate("+(((now-t0)/90)%360)+" 500 500)"); requestAnimationFrame(rot); })(t0); }
+}
+document.querySelectorAll("[data-dial]").forEach(function(s){ dial(s, +s.dataset.dial); });
+
+/* ---------- scramble reveal ---------- */
+var GLYPHS = "H2O<>/\\_-+=*#01▪︎°";
+function scramble(el){
+  if(el._done || reduced) return; el._done = true;
+  var walker = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), nodes = [], n;
+  while((n = walker.nextNode())) if(n.nodeValue.trim()) nodes.push({node:n, text:n.nodeValue});
+  var total = nodes.reduce(function(a,b){ return a + b.text.length; }, 0), start = performance.now(), dur = Math.min(1100, 380 + total*16);
+  nodes.forEach(function(o){ o.order = o.text.split("").map(function(){ return Math.random(); }); });
+  (function frame(now){
+    var p = clamp((now-start)/dur, 0, 1);
+    nodes.forEach(function(o){
+      var out = "";
+      for(var i=0;i<o.text.length;i++){
+        var ch = o.text[i];
+        if(ch === " " || o.order[i] < p) out += ch;
+        else out += GLYPHS[(Math.random()*GLYPHS.length)|0];
+      }
+      o.node.nodeValue = out;
+    });
+    if(p < 1) requestAnimationFrame(frame); else nodes.forEach(function(o){ o.node.nodeValue = o.text; });
+  })(start);
+}
+var sio = new IntersectionObserver(function(es){ es.forEach(function(e){ if(e.isIntersecting){ scramble(e.target); sio.unobserve(e.target); } }); }, {threshold:.4});
+document.querySelectorAll("[data-scramble]").forEach(function(el){ sio.observe(el); });
+
+/* ---------- counters ---------- */
+var cio = new IntersectionObserver(function(es){ es.forEach(function(e){
+  if(!e.isIntersecting) return; cio.unobserve(e.target);
+  var el = e.target, to = +el.dataset.count, fmt = el.dataset.fmt, small = el.querySelector("small");
+  var smallHTML = small ? small.outerHTML : "";
+  if(reduced) return;
+  var t0 = performance.now(), d = 1300;
+  (function f(now){ var p = clamp((now-t0)/d,0,1), v = Math.round(to*(1-Math.pow(1-p,3)));
+    el.innerHTML = fmt.replace("{}", v.toLocaleString("en-US")) + smallHTML; if(p<1) requestAnimationFrame(f); })(t0);
+}); }, {threshold:.6});
+document.querySelectorAll("[data-count]").forEach(function(el){ cio.observe(el); });
+
+/* ---------- utilisation tick rows (drawn to scale: 40 ticks = 100%) ---------- */
+document.querySelectorAll(".util .ticks").forEach(function(t){
+  var lit = Math.round(+t.dataset.fill / 100 * 40), h = "";
+  for(var i=0;i<40;i++) h += '<i class="' + (i < lit ? "" : "off") + '"></i>';
+  t.innerHTML = h;
+});
+
+/* ---------- illustrative dispatch bars ---------- */
+(function(){
+  var el = document.getElementById("dbars"); if(!el) return;
+  var v = [24,27,25,30,33,38,37,47,53,60,66,72], h = "";
+  v.forEach(function(x, i){ h += '<i class="' + (i < 6 ? "base" : "opt") + '" style="height:' + x + '%"></i>'; });
+  el.innerHTML = h + '<div class="dleg mono"><span class="b">Fixed-load baseline</span><span class="o">Optimised</span></div>';
+})();
+
+/* ---------- carousel ---------- */
+(function(){
+  var track = document.getElementById("track"), slides = [].slice.call(track.querySelectorAll(".slide"));
+  var dots = [].slice.call(document.querySelectorAll("[data-go]")), cur = 0;
+  function go(i){ i = (i + slides.length) % slides.length; var s = slides[i];
+    track.scrollTo({left: s.offsetLeft - (track.clientWidth - s.clientWidth)/2, behavior: reduced ? "auto" : "smooth"}); }
+  function mark(){
+    var mid = track.scrollLeft + track.clientWidth/2, best = 0, bd = 1e9;
+    slides.forEach(function(s, i){ var d = Math.abs(s.offsetLeft + s.clientWidth/2 - mid); if(d < bd){ bd = d; best = i; } });
+    cur = best;
+    slides.forEach(function(s, i){ s.classList.toggle("on", i === best); });
+    dots.forEach(function(d, i){ d.setAttribute("aria-current", i === best ? "true" : "false"); });
+  }
+  track.addEventListener("scroll", function(){ requestAnimationFrame(mark); }, {passive:true});
+  dots.forEach(function(d){ d.addEventListener("click", function(){ go(+d.dataset.go); }); });
+  document.getElementById("cPrev").addEventListener("click", function(){ go(cur-1); });
+  document.getElementById("cNext").addEventListener("click", function(){ go(cur+1); });
+  slides.forEach(function(s, i){ s.addEventListener("click", function(){ if(i !== cur) go(i); }); });
+  track.addEventListener("keydown", function(e){ if(e.key === "ArrowRight"){ go(cur+1); e.preventDefault(); } if(e.key === "ArrowLeft"){ go(cur-1); e.preventDefault(); } });
+  addEventListener("load", function(){ go(0); mark(); });
+})();
+
+/* run a render loop only while its element is on screen */
+function visibility(el, cb){
+  var io = new IntersectionObserver(function(es){ es.forEach(function(e){ cb(e.isIntersecting); }); }, {rootMargin:"120px"});
+  io.observe(el);
+}
+
+if(typeof THREE === "undefined"){
+  var f = document.createElement("p"); f.className = "gl-fail mono";
+  f.textContent = "The 3D library did not load. Reload the page, or check that cdnjs.cloudflare.com is reachable.";
+  document.getElementById("model").appendChild(f);
+  return;
+}
+
+/* ---------- HERO: plant model ---------- */
+(function(){
+  var host = document.getElementById("plantHost"), tip = document.getElementById("tip");
+  var tName = tip.querySelector(".tname"), tTag = tip.querySelector(".ttag"), tDesc = tip.querySelector(".tdesc");
+  var legend = document.getElementById("legend"), sub = document.getElementById("stageSub"), badge = document.getElementById("stageBadge");
+  var tabs = [].slice.call(document.querySelectorAll(".stage-tabs button"));
+  var plant_TONE = HydroxPlant.TONE;
+  var plant;
+  try {
+    plant = HydroxPlant(host, {
+      interactive:true,
+      onStage:function(n, m){
+        sub.textContent = m.sub; badge.textContent = m.badge; badge.setAttribute("data-b", String(n+1));
+        legend.innerHTML = m.legend.map(function(r){ return '<span class="row"><span class="dot" style="background:'+plant_TONE[r[0]]+';color:'+plant_TONE[r[0]]+'"></span>'+r[1]+'</span>'; }).join("");
+        tabs.forEach(function(b, i){ b.setAttribute("aria-pressed", i === n ? "true" : "false"); });
+      },
+      onHover:function(d, cx, cy){
+        if(!d){ tip.classList.remove("on"); return; }
+        tName.textContent = d.name; tTag.textContent = d.tag; tDesc.textContent = d.desc;
+        tip.style.borderLeftColor = plant_TONE[d.tone] || "#BFF34E"; tip.classList.add("on");
+        var r = host.parentNode.getBoundingClientRect(), x = cx - r.left + 18, y = cy - r.top + 16;
+        if(x + 310 > r.width) x = cx - r.left - 314; if(y + 170 > r.height) y = cy - r.top - 170;
+        tip.style.left = Math.max(8, x) + "px"; tip.style.top = Math.max(8, y) + "px";
+      }
+    });
+  } catch(err){
+    var f = document.createElement("p"); f.className = "gl-fail mono"; f.textContent = "3D view unavailable: " + (err && err.message || err);
+    document.getElementById("model").appendChild(f); return;
+  }
+  function layout(){ if(isNarrow()) plant.setShift(0, 0.02); else plant.setShift(0.17, -0.02); }
+  layout(); addEventListener("resize", layout);
+  tabs.forEach(function(b){ b.addEventListener("click", function(){ plant.show(+b.dataset.s); }); });
+  document.getElementById("zIn").addEventListener("click", function(){ plant.zoomBy(0.85); });
+  document.getElementById("zOut").addEventListener("click", function(){ plant.zoomBy(1.18); });
+  document.querySelectorAll("[data-jump]").forEach(function(b){ b.addEventListener("click", function(){
+    plant.show(+b.dataset.jump); document.getElementById("model").scrollIntoView({behavior: reduced ? "auto" : "smooth"}); }); });
+  visibility(host, function(v){ plant.setRunning(v); });
+})();
+})();
+</script>
+<script>
+/* ---------- STORY: particle morph ---------- */
+(function(){
+"use strict";
+if(typeof THREE === "undefined") return;
+var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+var clamp = function(v,a,b){ return Math.max(a, Math.min(b, v)); };
+var section = document.getElementById("how"), canvas = document.getElementById("particles");
+var chapters = [].slice.call(document.querySelectorAll(".chapter")), railItems = [].slice.call(document.querySelectorAll(".rail span"));
+var roLbl = document.getElementById("roLbl"), roVal = document.getElementById("roVal"), storyTop = document.getElementById("storyTop");
+var READ = [["Capacity factor","~90%"],["Allocated","1,337 MWe"],["Stack temperature","~800 °C"],["Plant gate","20–30 bar"],["Stage 3","850–950 °C"]];
+var narrow = innerWidth <= 820, N = narrow ? 3600 : 7000;
+
+var renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:false, alpha:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 1.75));
+var scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(40, 1, 0.1, 100);
+camera.position.set(0, 0.35, 6.4); camera.lookAt(0,0,0);
+
+function rnd(){ return Math.random(); }
+function onSphere(c, r, shell){ var u = rnd()*2-1, t = rnd()*Math.PI*2, s = Math.sqrt(1-u*u), rr = r*(shell ? 1 : Math.cbrt(rnd()));
+  return [c[0]+Math.cos(t)*s*rr, c[1]+u*rr, c[2]+Math.sin(t)*s*rr]; }
+function onSeg(a, b, j){ var t = rnd(); return [a[0]+(b[0]-a[0])*t+(rnd()-.5)*j, a[1]+(b[1]-a[1])*t+(rnd()-.5)*j, a[2]+(b[2]-a[2])*t+(rnd()-.5)*j]; }
+function ring(R, tilt, tw, j){ var a = rnd()*Math.PI*2, x = Math.cos(a)*R, y = 0, z = Math.sin(a)*R;
+  var cy = Math.cos(tilt), sy = Math.sin(tilt); var y2 = y*cy - z*sy, z2 = y*sy + z*cy; var ct = Math.cos(tw), st = Math.sin(tw);
+  return [x*ct - y2*st + (rnd()-.5)*j, x*st + y2*ct + (rnd()-.5)*j, z2 + (rnd()-.5)*j]; }
+
+var SH = [];
+// 0 — waste heat cloud
+SH.push(function(i){ var a = rnd()*Math.PI*2, r = 0.5 + Math.pow(rnd(),0.8)*2.3, y = (rnd()-.5)*(2.0 - r*0.4);
+  return [Math.cos(a)*r*1.2, y*0.7 + Math.sin(a*3)*0.18 - 0.55, Math.sin(a)*r*0.65]; });
+// 1 — reactor vessel
+SH.push(function(i){ var q = rnd();
+  if(q < .36){ var a = rnd()*Math.PI*2; return [Math.cos(a)*0.95, -1.05 + rnd()*1.35, Math.sin(a)*0.95]; }
+  if(q < .44){ var ab = rnd()*Math.PI*2, hb = [-0.7,-0.25,0.15][(rnd()*3)|0]; return [Math.cos(ab)*0.99, hb + (rnd()-.5)*0.03, Math.sin(ab)*0.99]; }
+  if(q < .66){ var p = onSphere([0,0.3,0], 0.95, true); if(p[1] < 0.3) p[1] = 0.6 - p[1]; return p; }
+  if(q < .78){ var a2 = rnd()*Math.PI*2, r2 = 1.05 + rnd()*0.45; return [Math.cos(a2)*r2, -1.1, Math.sin(a2)*r2]; }
+  if(q < .86){ var a3 = rnd()*Math.PI*2, r3 = Math.sqrt(rnd())*0.3; return [Math.cos(a3)*r3, -0.95 + rnd()*1.4, Math.sin(a3)*r3]; }
+  if(q < .9) return onSeg([0,1.25,0],[0,1.7,0], 0.04);
+  return onSeg([0.9,-0.3,0.3],[2.1,-0.55,0.1], 0.06); });
+// 2 — water molecule
+SH.push(function(i){ var q = rnd(), ang = 52.25*Math.PI/180, d = 1.1;
+  var hA = [Math.sin(ang)*d, 0.2 - Math.cos(ang)*d, 0], hB = [-Math.sin(ang)*d, 0.2 - Math.cos(ang)*d, 0];
+  if(q < .5) return onSphere([0,0.2,0], 0.66, rnd() < .7);
+  if(q < .7) return onSphere(hA, 0.42, rnd() < .7);
+  if(q < .9) return onSphere(hB, 0.42, rnd() < .7);
+  if(q < .95) return onSeg([0,0.2,0], hA, 0.05);
+  return onSeg([0,0.2,0], hB, 0.05); });
+// 3 — closed S–I loop
+SH.push(function(i){ var q = rnd();
+  if(q < .62){ var a = rnd()*Math.PI*2, b = rnd()*Math.PI*2, R = 1.35, r = 0.17;
+    return [(R + r*Math.cos(b))*Math.cos(a), r*Math.sin(b)*0.9, (R + r*Math.cos(b))*Math.sin(a)]; }
+  if(q < .92){ var k = (rnd()*3)|0, a2 = k*2.094 + 0.5, x = Math.cos(a2)*1.35, z = Math.sin(a2)*1.35, h = [1.0,0.8,0.9][k], t = rnd()*Math.PI*2;
+    if(rnd() < .8) return [x + Math.cos(t)*0.24, rnd()*h, z + Math.sin(t)*0.24];
+    var p = onSphere([x,h,z], 0.24, true); if(p[1] < h) p[1] = 2*h - p[1]; return p; }
+  return onSphere([0,0,0], 2.2, false); });
+// 4 — hydrogen molecule
+SH.push(function(i){ var q = rnd();
+  if(q < .36) return onSphere([-0.52,0,0], 0.62, rnd() < .75);
+  if(q < .72) return onSphere([0.52,0,0], 0.62, rnd() < .75);
+  if(q < .77) return onSeg([-0.52,0,0],[0.52,0,0], 0.08);
+  if(q < .87) return ring(1.55, 1.2, 0.3, 0.03);
+  if(q < .95) return ring(1.35, 1.9, -0.6, 0.03);
+  return onSphere([0,0,0], 3.2, true); });
+
+SH = [SH[0], SH[1], SH[2], SH[4], SH[3]]; // heat cloud, reactor, water, hydrogen, S–I loop
+var shapes = SH.map(function(fn){ var a = new Float32Array(N*3); for(var i=0;i<N;i++){ var p = fn(i); a[i*3]=p[0]; a[i*3+1]=p[1]; a[i*3+2]=p[2]; } return a; });
+var delay = new Float32Array(N), phase = new Float32Array(N);
+for(var i=0;i<N;i++){ delay[i] = rnd()*0.35; phase[i] = rnd()*Math.PI*2; }
+
+var geo = new THREE.BufferGeometry(), pos = new Float32Array(N*3), col = new Float32Array(N*3);
+pos.set(shapes[0]);
+var cA = new THREE.Color("#BFF34E"), cB = new THREE.Color("#DAFF86"), cC = new THREE.Color("#5E9A1A"), cW = new THREE.Color("#F2FFE0"), tmp = new THREE.Color();
+for(var k=0;k<N;k++){ var r = rnd(); tmp.copy(r < .55 ? cA : r < .8 ? cC : r < .96 ? cB : cW); col[k*3]=tmp.r; col[k*3+1]=tmp.g; col[k*3+2]=tmp.b; }
+geo.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+geo.setAttribute("color", new THREE.BufferAttribute(col, 3));
+var spr = document.createElement("canvas"); spr.width = spr.height = 64;
+var g2 = spr.getContext("2d"), grd = g2.createRadialGradient(32,32,0,32,32,32);
+grd.addColorStop(0,"rgba(255,255,255,1)"); grd.addColorStop(.25,"rgba(255,255,255,.8)"); grd.addColorStop(1,"rgba(255,255,255,0)");
+g2.fillStyle = grd; g2.fillRect(0,0,64,64);
+var mat = new THREE.PointsMaterial({size: narrow ? 0.05 : 0.042, map:new THREE.CanvasTexture(spr), vertexColors:true, transparent:true, depthWrite:false, blending:THREE.AdditiveBlending, sizeAttenuation:true});
+var points = new THREE.Points(geo, mat), group = new THREE.Group(); group.add(points); scene.add(group);
+
+// side the model sits on for each chapter (text sits opposite)
+var SIDE = [0, 1.25, -1.25, 1.25, 0], LIFT = [-0.15, 0, 0, 0, 0.2];
+
+function resize(){ var w = canvas.clientWidth, h = canvas.clientHeight; if(!w||!h) return; narrow = w <= 820;
+  renderer.setSize(w, h, false); camera.aspect = w/h; camera.position.z = narrow ? 8.2 : 6.4; camera.updateProjectionMatrix(); }
+addEventListener("resize", resize); resize();
+
+var p = 0, pShown = 0, running = false, t0 = performance.now();
+function progress(){ var r = section.getBoundingClientRect(), span = r.height - innerHeight; return clamp(-r.top / span, 0, 1) * 4; }
+function ease(x){ return x < .5 ? 4*x*x*x : 1 - Math.pow(-2*x+2, 3)/2; }
+
+function frame(now){
+  if(!running) return;
+  p = progress(); pShown += (p - pShown) * (reduced ? 1 : 0.12);
+  var t = (now - t0)/1000, seg = Math.min(3, Math.floor(pShown)), f = pShown - seg;
+  var A = shapes[seg], B = shapes[seg+1], chaos = seg === 0 ? (1-f) : 0;
+  for(var i=0;i<N;i++){
+    var e = ease(clamp((f - delay[i]) / 0.65, 0, 1)), j = i*3;
+    var amp = reduced ? 0 : 0.012 + chaos*0.09, ph = phase[i];
+    pos[j]   = A[j]   + (B[j]  -A[j]  )*e + Math.sin(t*0.9 + ph)*amp;
+    pos[j+1] = A[j+1] + (B[j+1]-A[j+1])*e + Math.cos(t*1.1 + ph*1.3)*amp;
+    pos[j+2] = A[j+2] + (B[j+2]-A[j+2])*e + Math.sin(t*0.7 + ph*0.7)*amp;
+  }
+  geo.attributes.position.needsUpdate = true;
+  var si = Math.min(4, Math.floor(pShown)), sf = pShown - si, nx = si < 4 ? SIDE[si+1] : SIDE[4], ny = si < 4 ? LIFT[si+1] : LIFT[4];
+  var sx = narrow ? 0 : SIDE[si] + (nx - SIDE[si]) * ease(sf);
+  group.position.x = sx; group.position.y = (narrow ? 0.55 : 0) + LIFT[si] + (ny - LIFT[si]) * ease(sf);
+  group.rotation.y = pShown*0.9 + (reduced ? 0 : t*0.08);
+  group.rotation.x = 0.22 + Math.sin(pShown*0.8)*0.12;
+  renderer.render(scene, camera);
+
+  chapters.forEach(function(c, i){ c.style.opacity = clamp(1 - Math.abs(pShown - i)*2.4, 0, 1).toFixed(3); });
+  var ci = Math.round(pShown);
+  railItems.forEach(function(r, i){ r.classList.toggle("on", i === ci); });
+  if(roLbl._ci !== ci){ roLbl._ci = ci; roLbl.textContent = READ[ci][0]; roVal.textContent = READ[ci][1]; }
+  storyTop.style.opacity = clamp(1 - pShown*3, 0, 1);
+  requestAnimationFrame(frame);
+}
+new IntersectionObserver(function(es){ es.forEach(function(e){
+  var was = running; running = e.isIntersecting; if(running && !was){ resize(); requestAnimationFrame(frame); } }); }, {rootMargin:"100px"}).observe(section);
+// draw one still frame so the section is complete before it is reached
+running = true; frame(performance.now()); running = false;
+})();
+</script>
+<script>
+/* ---------- AI control core ---------- */
+(function(){
+"use strict";
+if(typeof THREE === "undefined") return;
+var reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+var host = document.getElementById("coreHost");
+var renderer = new THREE.WebGLRenderer({antialias:true, alpha:true});
+renderer.setPixelRatio(Math.min(devicePixelRatio || 1, 2));
+host.insertBefore(renderer.domElement, host.firstChild);
+var scene = new THREE.Scene(), camera = new THREE.PerspectiveCamera(34, 1, 0.1, 50);
+camera.position.set(0, 0, 6.2);
+var g = new THREE.Group(); scene.add(g);
+var NEON = 0xBFF34E;
+var outer = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(1.55, 2)), new THREE.LineBasicMaterial({color:NEON, transparent:true, opacity:.28}));
+var mid = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(1.0, 1)), new THREE.LineBasicMaterial({color:NEON, transparent:true, opacity:.6}));
+var inner = new THREE.Mesh(new THREE.IcosahedronGeometry(0.52, 1), new THREE.MeshBasicMaterial({color:0x0b0e0b}));
+var innerW = new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.IcosahedronGeometry(0.53, 1)), new THREE.LineBasicMaterial({color:0xDAFF86}));
+g.add(outer, mid, inner, innerW);
+// sensor nodes on the outer shell
+var ico = new THREE.IcosahedronGeometry(1.55, 2), pa = ico.attributes.position, seen = {}, nodes = [];
+for(var i=0;i<pa.count;i++){ var key = [pa.getX(i),pa.getY(i),pa.getZ(i)].map(function(v){ return v.toFixed(2); }).join(); if(!seen[key]){ seen[key]=1; nodes.push(pa.getX(i),pa.getY(i),pa.getZ(i)); } }
+var ng = new THREE.BufferGeometry(); ng.setAttribute("position", new THREE.Float32BufferAttribute(nodes, 3));
+var nodeMat = new THREE.PointsMaterial({color:0xDAFF86, size:0.07, transparent:true, opacity:.95});
+g.add(new THREE.Points(ng, nodeMat));
+// orbit rings
+function ringLine(r, rx, rz, op){ var pts = []; for(var k=0;k<=128;k++){ var a = k/128*Math.PI*2; pts.push(new THREE.Vector3(Math.cos(a)*r, 0, Math.sin(a)*r)); }
+  var l = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pts), new THREE.LineBasicMaterial({color:NEON, transparent:true, opacity:op})); l.rotation.set(rx, 0, rz); scene.add(l); return l; }
+var r1 = ringLine(2.05, 1.25, 0.2, .45), r2 = ringLine(2.25, 1.9, -0.5, .22);
+// signal pulses travelling to the core
+var pulses = [], pg = new THREE.SphereGeometry(0.035, 8, 8), pm = new THREE.MeshBasicMaterial({color:0xF2FFE0});
+for(var q=0;q<14;q++){ var m = new THREE.Mesh(pg, pm); var n = (Math.random()*nodes.length/3)|0; m.userData = {from:new THREE.Vector3(nodes[n*3],nodes[n*3+1],nodes[n*3+2]), t:Math.random()}; g.add(m); pulses.push(m); }
+var mx = 0, my = 0;
+host.addEventListener("pointermove", function(e){ var r = host.getBoundingClientRect(); mx = (e.clientX - r.left)/r.width - .5; my = (e.clientY - r.top)/r.height - .5; });
+host.addEventListener("pointerleave", function(){ mx = my = 0; });
+function resize(){ var w = host.clientWidth, h = host.clientHeight; if(!w) return; renderer.setSize(w, h, false); camera.aspect = w/h; camera.updateProjectionMatrix(); }
+addEventListener("resize", resize); resize();
+var running = false, t0 = performance.now();
+function frame(now){
+  if(!running) return;
+  var t = reduced ? 0 : (now - t0)/1000;
+  g.rotation.y = t*0.25 + mx*0.8; g.rotation.x = 0.3 + my*0.5;
+  mid.rotation.y = -t*0.4; innerW.rotation.x = t*0.6; inner.rotation.x = t*0.6;
+  r1.rotation.z = 0.2 + t*0.15; r2.rotation.z = -0.5 - t*0.1;
+  pulses.forEach(function(m){ var u = m.userData; u.t += reduced ? 0 : 0.012; if(u.t > 1){ u.t = 0; var n = (Math.random()*nodes.length/3)|0; u.from.set(nodes[n*3],nodes[n*3+1],nodes[n*3+2]); }
+    m.position.copy(u.from).multiplyScalar(1 - u.t*0.68); });
+  nodeMat.opacity = 0.7 + Math.sin(t*3)*0.25;
+  renderer.render(scene, camera);
+  requestAnimationFrame(frame);
+}
+new IntersectionObserver(function(es){ es.forEach(function(e){ var was = running; running = e.isIntersecting; if(running && !was){ resize(); requestAnimationFrame(frame); } }); }, {rootMargin:"100px"}).observe(host);
+running = true; frame(performance.now()); running = false;
+})();
+</script>
+
+</body>
 </html>
