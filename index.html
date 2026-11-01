@@ -641,7 +641,7 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
       <button type="button" data-s="1" aria-pressed="false">Stage 2</button>
       <button type="button" data-s="2" aria-pressed="false">Stage 3</button>
     </div>
-    <div class="mono stage-sub" id="stageSub">Stage 1 · Existing-reactor feasibility pathway</div>
+    <div class="mono stage-sub" id="stageSub">Stage 1 · Today · Barakah</div>
     <span class="mono badge" id="stageBadge" data-b="1">Existing technologies · integration unproven</span>
   </div>
   <div class="hud hud-legend">
@@ -1169,7 +1169,7 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
   var HEX = {}; Object.keys(TONE).forEach(function(k){ HEX[k] = parseInt(TONE[k].slice(1),16); });
 
   var STAGE_META = [
-    {sub:"Stage 1 · Existing-reactor feasibility pathway", badge:"Existing technologies · integration unproven",
+    {sub:"Stage 1 · Today · Barakah", badge:"Existing technologies · integration unproven",
      legend:[["power","Electricity"],["steam","Low-grade steam / water"],["h2","Hydrogen"],["oxy","Oxygen"]],
      target:[14,8,0], dist:250, az:-0.62, pol:0.90},
     {sub:"Stage 2 · high-temperature reactor", badge:"Advanced reactors · under evaluation",
@@ -1276,11 +1276,11 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
     var S1 = new Stage(STAGE_META[0]);
     (function(S){
       S.mesh(S.part("Gulf Coastline","Seawater cooling",
-        "Once-through seawater condenser cooling. Two thirds of reactor thermal output is rejected here at low temperature — too cool to drive chemistry.","steam"),
+        "Seawater cooling carries away about two-thirds of the reactor's heat.","steam"),
         new THREE.PlaneGeometry(120,300), mSea, -150, -0.3, 0, [-Math.PI/2,0,0]);
 
       var r = S.part("Reactor Containment","APR-1400 · pressurised water reactor",
-        "3,983 MW thermal, 1,337 MW net electrical per unit. Coolant leaves the core near 320 °C — firm power, not high-temperature process heat.","power");
+        "APR-1400 reactor: 3,983 MW of heat and 1,337 MW of electricity per unit. Hydrox never touches it.","power");
       [-26,26].forEach(function(z){
         S.mesh(r, CYL(13,13,1.4,28), mDark, -78, 0.7, z);
         S.mesh(r, CYL(11.5,11.5,24,28), mConcrete, -78, 12.7, z);
@@ -1291,14 +1291,14 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
       });
 
       var th = S.part("Turbine Hall","Steam cycle · generator",
-        "Steam turbine and generator. About one third of reactor thermal output becomes electricity.","power");
+        "Steam spins the turbine and generator. About a third of the heat becomes electricity.","power");
       [-26,26].forEach(function(z){
         S.mesh(th, BOX(40,15,22), mPanel, -40, 7.5, z);
         S.mesh(th, CYL(11,11,40,3), mSteel, -40, 15.2, z, [0,0,Math.PI/2]);
       });
 
-      var sw = S.part("Switchyard","Transformers · allocation point",
-        "Where power would divide between the national grid and a hypothetical hydrogen plant. This split is the question the Hydrox model studies.","power");
+      var sw = S.part("Switchyard","Hydrox decides here",
+        "Power divides here. The AI sets how much goes to the grid and how much makes hydrogen.","power");
       S.mesh(sw, BOX(28,1.2,40), mDark, -8, 0.6, 0);
       [-14,-4,6,16].forEach(function(z){
         S.mesh(sw, BOX(8,8,6), mSteel, -15, 4.5, z);
@@ -1311,7 +1311,7 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
       });
 
       var gr = S.part("Grid Transmission","To national network",
-        "Power not allocated to hydrogen is exported. Its market value is the opportunity cost the optimiser weighs against the hydrogen margin.","power");
+        "Power not used for hydrogen goes to the national grid.","power");
       [[4,-58,30],[16,-92,30]].forEach(function(p){
         S.mesh(gr, BOX(1.8,p[2],1.8), mSteel, p[0], p[2]/2, p[1]);
         S.mesh(gr, BOX(20,1,1), mSteel, p[0], p[2]-4, p[1]);
@@ -1319,30 +1319,30 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
       });
 
       var st = S.part("Steam Tie-In","Secondary loop · below 200 °C",
-        "Optional low-grade steam integration to pre-heat electrolyser feed. Extraction conditions, hardware, hazards and the resulting loss of electrical output need engineering verification and regulatory review; this is not a simple external connection.","steam");
+        "Spare low-grade steam (under 200 °C) heats the feed water. No change to reactor safety systems.","steam");
       S.mesh(st, BOX(13,6,10), mPanel, -34, 3, 52);
       S.mesh(st, CYL(2.2,2.2,12,14), mSteel, -27, 5, 52, [0,0,Math.PI/2]);
       S.mesh(st, CYL(1.3,1.3,8,10), mDark, -38, 9, 52);
 
       var eh = S.part("Electrolyser Hall","Solid oxide electrolysis · ~800 °C",
-        "Splits steam rather than cold water. A hypothetical 310 MWe allocation; INL reference HTSE needs ~36.8 kWh electrical plus ~6.4 kWh thermal per kilogram. A PWR cannot supply ~800 °C, so electrical heating and recuperation make up the difference.","h2");
+        "Solid-oxide cells at ~800 °C split steam into hydrogen and oxygen, using ~310 MW.","h2");
       S.mesh(eh, BOX(54,18,34), mPanel, 36, 9, 0);
       S.mesh(eh, BOX(56,1.4,36), mSteel, 36, 18.7, 0);
       for(var i=0;i<6;i++) S.mesh(eh, BOX(5,4,26), mConcrete, 16+i*8, 21.5, 0);
       for(var j=0;j<6;j++) S.mesh(eh, BOX(1.2,19,35), mSteel, 13+j*9, 9.5, 0);
 
       var ox = S.part("Oxygen Vent","Byproduct stream",
-        "About 8 kg of oxygen for every kilogram of hydrogen. Vented, or sold to industrial users as an optional revenue line.","oxy");
+        "About 8 kg of oxygen per kg of hydrogen, vented or sold.","oxy");
       S.mesh(ox, CYL(2.1,2.9,30,14), mConcrete, 36, 15, -34);
       S.mesh(ox, CYL(3.1,3.1,1.8,14), mDark, 36, 30.5, -34);
 
       var cp = S.part("Compression Skid","20–30 bar at plant gate",
-        "Hydrogen compressed to delivery pressure. This is the boundary of the modelled system — liquefaction and ammonia conversion sit downstream.","h2");
+        "Hydrogen is compressed to 20–30 bar at the plant gate.","h2");
       S.mesh(cp, BOX(20,9,14), mPanel, 76, 4.5, -14);
       [-4,0,4].forEach(function(z){ S.mesh(cp, CYL(1.7,1.7,8,12), mSteel, 72+z*1.5, 10.5, -14+z*1.6); });
 
       var sg = S.part("Hydrogen Storage","Production buffer",
-        "Would decouple production from offtake, so a plant could run when hydrogen is worth more than electricity and still meet a delivery schedule.","h2");
+        "Buffer tanks keep deliveries steady while production changes.","h2");
       [12,0,-12].forEach(function(z){
         S.mesh(sg, CYL(4.5,4.5,26,20), mConcrete, 86, 8, z, [0,0,Math.PI/2]);
         S.mesh(sg, SPH(4.5), mConcrete, 73, 8, z);
@@ -1352,7 +1352,7 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
       });
 
       var pp = S.part("Export Pipeline","To industrial offtake",
-        "Illustrative route to refining, ammonia and fertiliser users. No offtake agreement exists; regional demand is shown for scale only.","h2");
+        "To ammonia, refining and fertiliser customers, such as Ta'ziz in Ruwais.","h2");
       for(var k=0;k<5;k++){
         S.mesh(pp, BOX(1.8,10,20), mSteel, 112+k*12, 5, 30);
         S.mesh(pp, BOX(2.6,1.2,22), mSteel, 112+k*12, 10, 30);
@@ -1360,7 +1360,7 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
       S.mesh(pp, CYL(1.7,1.7,62,14), mPanel, 140, 11.6, 30, [0,0,Math.PI/2]);
 
       var wt = S.part("Water Treatment","Desalinated feedwater",
-        "At least 9 kg of water per kilogram of hydrogen (stoichiometric), before cooling and purification losses: roughly 550,000–600,000 tonnes a year at the screening estimate.","steam");
+        "Desalinated feed water: about 9 kg of water for every kg of hydrogen.","steam");
       [0,1,2].forEach(function(i){
         S.mesh(wt, CYL(7,7,6,20), mPanel, -8+i*17, 3, 64);
         S.mesh(wt, CYL(7.4,7.4,0.7,20), mSteel, -8+i*17, 6.3, 64);
