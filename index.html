@@ -9,7 +9,7 @@
 <body>
 <title>Hydrox</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="A staged AI dispatch and control layer for nuclear hydrogen, from Barakah today to high-temperature reactors next.">
+<meta name="description" content="An AI-assisted, physics-constrained optimisation framework for evaluating nuclear hydrogen production. Research-stage concept and simulation; no physical deployment.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600&family=Geist+Mono:wght@400;500&display=swap">
@@ -130,10 +130,10 @@ p{margin:0;text-wrap:pretty}
   background:linear-gradient(90deg,rgba(5,7,5,.92) 0%,rgba(5,7,5,.55) 34%,transparent 58%),linear-gradient(0deg,rgba(5,7,5,.9) 0%,transparent 26%)}
 .hero-copy{position:absolute;left:0;right:0;top:0;bottom:0;pointer-events:none;display:flex;flex-direction:column;justify-content:center}
 .hero-copy .wrap{width:100%;max-width:none;padding-left:max(24px, 4.5vw, env(safe-area-inset-left,0px))}
-.hero-copy .inner{max-width:620px;display:flex;flex-direction:column;gap:26px;pointer-events:auto}
-.hero h1{font-size:var(--step-4);letter-spacing:-.05em;line-height:.95;font-weight:400}
+.hero-copy .inner{max-width:680px;display:flex;flex-direction:column;gap:24px;pointer-events:auto}
+.hero h1{font-size:clamp(40px, 5.4vw, 80px);letter-spacing:-.045em;line-height:.98;font-weight:400}
 .hero h1 .accent{text-shadow:0 0 40px rgba(191,243,78,.35)}
-.hero .lede{font-size:var(--step-1);color:#c5cec2;max-width:30ch;line-height:1.4;font-weight:300}
+.hero .lede{font-size:clamp(17px,1.25rem,20px);color:#c5cec2;max-width:40ch;line-height:1.45;font-weight:300}
 .hero-actions{display:flex;flex-wrap:wrap;gap:10px}
 .hero-tags{display:flex;gap:18px;flex-wrap:wrap}
 .hud{position:absolute;z-index:3;pointer-events:none}
@@ -309,7 +309,7 @@ p{margin:0;text-wrap:pretty}
 .bars{display:flex;flex-direction:column;gap:16px}
 .bar{display:grid;grid-template-columns:120px 1fr 56px;gap:12px;align-items:center}
 .bar .n{color:var(--muted);font-size:13px}
-.bar .t{height:22px;background:repeating-linear-gradient(90deg,#141a12 0 1px,transparent 1px 16.66%);border:1px solid var(--line);position:relative}
+.bar .t{height:22px;background:repeating-linear-gradient(90deg,#141a12 0 1px,transparent 1px 12.5%);border:1px solid var(--line);position:relative}
 .bar .f{position:absolute;inset:0;background:#2a3326;transform-origin:left;transition:transform 1.2s cubic-bezier(.2,.7,.2,1)}
 .bar.us .f{background:var(--neon);box-shadow:0 0 18px rgba(191,243,78,.4)}
 .bar .p{font-family:var(--font-mono);text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
@@ -350,6 +350,7 @@ p{margin:0;text-wrap:pretty}
 .cnav button{width:44px;height:40px;display:grid;place-items:center;background:transparent;border:1px solid transparent;color:var(--muted);cursor:pointer;border-radius:2px;font-family:var(--font-mono);font-size:11px;letter-spacing:.08em}
 .cnav button:hover{color:var(--fg);border-color:var(--line)}
 .cnav button[aria-current="true"]{background:var(--neon);color:#071004}
+@media (max-width:420px){.cnav button{width:38px}}
 @media (max-width:600px){.slide .meta{grid-template-columns:1fr}}
 
 /* ---------- UAE ---------- */
@@ -372,6 +373,41 @@ p{margin:0;text-wrap:pretty}
 @media (max-width:900px){.ucards{grid-template-columns:1fr}.ucard{min-height:0}.barakah .tx{grid-template-columns:1fr}
   .barakah{flex-direction:column;align-items:stretch;min-height:0}.barakah img{position:relative;height:240px}.barakah::before{inset:0 0 auto;height:240px;background:linear-gradient(0deg,var(--panel),transparent 45%)}
   .globe-row{grid-template-columns:1fr}.globe-row img{display:none}}
+
+/* ---------- RESEARCH QUESTION / FAQ / REFERENCES ---------- */
+.h2-q{font-size:var(--step-2);line-height:1.15;max-width:30ch}
+.ocards{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
+.ocard{background:var(--panel);padding:24px 22px 26px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.ocard .verb{color:var(--neon)}
+.ocard p{color:var(--muted);font-size:15px}
+.qline{margin-top:28px;font-size:var(--step-1);max-width:52ch}
+@media (max-width:1000px){.ocards{grid-template-columns:1fr 1fr}}
+@media (max-width:600px){.ocards{grid-template-columns:1fr}}
+.note-sm{font-size:13px;color:var(--dim) !important}
+.faq{display:flex;flex-direction:column;border-top:1px solid var(--line)}
+.faq details{border-bottom:1px solid var(--line)}
+.faq summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px 0;font-size:var(--step-1);letter-spacing:-.015em}
+.faq summary::-webkit-details-marker{display:none}
+.faq summary::after{content:"+";font-family:var(--font-mono);color:var(--neon);font-size:20px;flex:none}
+.faq details[open] summary::after{content:"−"}
+.faq details p{color:#c0cabd;max-width:72ch;padding:0 0 24px}
+.refs{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:12px 32px;counter-reset:r}
+.refs li{counter-increment:r;display:grid;grid-template-columns:32px 1fr;gap:8px;font-size:14px;color:var(--muted);min-width:0}
+.refs li::before{content:"[" counter(r) "]";font-family:var(--font-mono);font-size:12px;color:var(--neon)}
+.refs a{color:var(--fg);overflow-wrap:anywhere}
+.refs a:hover{color:var(--neon)}
+@media (max-width:820px){.refs{grid-template-columns:1fr}}
+.calc{margin-top:36px;padding:22px 24px;border:1px solid var(--line);background:var(--panel);display:flex;flex-direction:column;gap:10px}
+.calc .k{color:var(--neon)}
+.calc p{color:#c0cabd;font-family:var(--font-mono);font-size:13px;line-height:1.7}
+.stat .lbl a,.cap a,.source a,.meta a,.ucard a,.status a{color:inherit;text-decoration:underline;text-decoration-color:rgba(191,243,78,.5);text-underline-offset:2px}
+.stat .lbl a:hover,.cap a:hover,.source a:hover,.meta a:hover,.ucard a:hover,.status a:hover{color:var(--neon)}
+.pending{font-family:var(--font-mono);font-size:12px;color:var(--muted);border:1px dashed #3a4732;padding:3px 8px;white-space:nowrap}
+.clist{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,1fr);gap:8px 24px}
+.clist li{font-size:14px;color:#c0cabd;padding-left:18px;position:relative}
+.clist li::before{content:"";position:absolute;left:0;top:.6em;width:6px;height:6px;border:1px solid var(--neon)}
+@media (max-width:900px){.clist{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.clist{grid-template-columns:1fr}}
 
 /* ---------- INVITATION ---------- */
 .icards{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
@@ -499,19 +535,35 @@ p{margin:0;text-wrap:pretty}
 
 /* ---------- ECONOMICS ---------- */
 .econ{margin-bottom:20px}
-.econ .bar{grid-template-columns:170px 1fr 84px}
-.econ .axis{grid-template-columns:170px 1fr 84px}
+.econ .bar{grid-template-columns:220px 1fr 140px}
+.econ .axis{grid-template-columns:220px 1fr 140px}
+.econ .bar .pending{justify-self:end}
+.bgrp{color:var(--dim);margin:8px 0 -4px;padding-top:12px;border-top:1px dashed var(--line)}
+.bgrp:first-child{margin-top:0;padding-top:0;border-top:0}
+.cmodel{margin-top:26px;border-top:1px solid var(--line)}
+.cmodel summary{list-style:none;cursor:pointer;display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;padding-top:20px;color:var(--fg)}
+.cmodel summary::-webkit-details-marker{display:none}
+.cmodel summary .k{color:var(--neon)}
+.cmodel summary .k::after{content:" +"}
+.cmodel[open] summary .k::after{content:" −"}
+.cmodel[open] summary .k{font-size:0}.cmodel[open] summary .k::after{font-size:11.5px;content:"Hide −"}
+.cm-lede{color:var(--muted);font-size:15px;margin:14px 0 16px}
+.cmodel .note-sm{margin-top:16px}
+.ctl-foot{margin-top:18px;max-width:100ch}
+.ecard .tx a{color:inherit;text-decoration:underline;text-decoration-color:rgba(191,243,78,.5);text-underline-offset:2px}
 .bar .rng{position:absolute;top:0;bottom:0;background:repeating-linear-gradient(45deg,rgba(191,243,78,.55) 0 3px,rgba(191,243,78,.15) 3px 7px);border:1px solid var(--neon);border-left:0}
 .assume{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line);border:1px solid var(--line)}
 .assume div{background:var(--panel);padding:14px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}
 .assume span{color:var(--muted);font-size:10px}
 .assume b{font-family:var(--font-mono);font-weight:400;font-size:20px;font-variant-numeric:tabular-nums}
 .assume .anchor b,.assume .anchor span{color:var(--neon)}
-@media (max-width:820px){.assume{grid-template-columns:1fr 1fr}.econ .bar,.econ .axis{grid-template-columns:100px 1fr 76px}}
+@media (max-width:820px){.assume{grid-template-columns:1fr 1fr}.econ .bar,.econ .axis{grid-template-columns:110px 1fr 84px}.econ .bar .pending{white-space:normal;font-size:11px;text-align:center}}
 
 /* ---------- STATUS NOTE ---------- */
 .status{margin-top:20px;display:grid;grid-template-columns:200px 1fr;gap:24px;padding:24px;border:1px solid var(--line);background:var(--panel)}
 .status p{color:#c0cabd;max-width:80ch}
+.status-tx{display:flex;flex-direction:column;gap:14px}
+.status p strong{color:var(--fg);font-weight:500}
 @media (max-width:820px){.status{grid-template-columns:1fr;gap:10px}}
 
 /* ---------- FOOTER ---------- */
@@ -574,11 +626,11 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
   <div class="hero-shade"></div>
   <div class="hero-copy">
     <div class="wrap"><div class="inner">
-      <div class="hero-tags mono"><span class="eyebrow" style="color:var(--neon)">Hydrox</span><span class="muted">Nuclear × AI × Hydrogen</span></div>
-      <h1>Firm nuclear power. <span class="accent">Clean fuel.</span></h1>
-      <p class="lede">A staged AI dispatch and control layer for nuclear hydrogen, from Barakah today to high-temperature reactors next.</p>
+      <div class="hero-tags mono"><span class="eyebrow" style="color:var(--neon)">Hydrox</span><span class="muted">Research-stage concept and simulation · no physical deployment</span></div>
+      <h1>Nuclear power can make hydrogen. <span class="accent">When should it?</span></h1>
+      <p class="lede">An AI-assisted, physics-constrained optimisation framework for evaluating nuclear hydrogen production, beginning with existing pressurised-water reactors and extending toward advanced high-temperature technologies.</p>
       <div class="hero-actions">
-        <a class="btn btn-primary" href="#solution">See the three stages <span class="arr">→</span></a>
+        <a class="btn btn-primary" href="#question">The research question <span class="arr">→</span></a>
         <a class="btn" href="#invitation">What we are asking for</a>
       </div>
     </div></div>
@@ -589,8 +641,8 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
       <button type="button" data-s="1" aria-pressed="false">Stage 2</button>
       <button type="button" data-s="2" aria-pressed="false">Stage 3</button>
     </div>
-    <div class="mono stage-sub" id="stageSub">Stage 1 · Barakah · electrolysis</div>
-    <span class="mono badge" id="stageBadge" data-b="1">Deployable today</span>
+    <div class="mono stage-sub" id="stageSub">Stage 1 · Existing-reactor feasibility pathway</div>
+    <span class="mono badge" id="stageBadge" data-b="1">Existing technologies · integration unproven</span>
   </div>
   <div class="hud hud-legend">
     <div class="legend" id="legend"></div>
@@ -605,13 +657,13 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
 
 <div class="stats">
   <div class="wrap">
-    <div class="stat"><span class="num">1 Mtpa</span><span class="lbl">hydrogen potential ENEC has stated for Barakah</span></div>
-    <div class="stat"><span class="num" data-count="90" data-fmt="~{}%">~90%</span><span class="lbl">Barakah capacity factor: firm, round-the-clock</span></div>
-    <div class="stat"><span class="num">3 stages</span><span class="lbl">one control layer, three reactor generations</span></div>
+    <div class="stat"><span class="num">5,600 MW</span><span class="lbl">Barakah's four-unit generating capacity (<a href="https://enec.ae/our-subsidiaries/enec-operations/overview/" target="_blank" rel="noopener">ENEC</a>)</span></div>
+    <div class="stat"><span class="num">~1 Mt/yr</span><span class="lbl">theoretical H₂ potential cited by ENEC in 2022: not a project or plan (<a href="https://www.spglobal.com/energy/en/news-research/latest-news/energy-transition/011222-uae-can-produce-1-mil-mtyear-of-hydrogen-from-nuclear-units-at-full-capacity" target="_blank" rel="noopener">S&amp;P Global</a>)</span></div>
+    <div class="stat"><span class="num">3 pathways</span><span class="lbl">one extensible optimisation framework, pathway-specific models</span></div>
   </div>
 </div>
 
-<!-- ===== STORY: STAGE 1 TODAY (scroll-driven particles) ===== -->
+<!-- ===== STORY: STAGE 1 PATHWAY (scroll-driven particles) ===== -->
 <section class="story" id="how" aria-label="How Stage 1 works">
   <div class="story-stage" id="storyStage">
     <svg class="dial dial-a" data-dial="1" viewBox="0 0 1000 1000" aria-hidden="true"></svg>
@@ -621,98 +673,116 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
       <span class="on">Firm power</span><span>Step 1 Allocate</span><span>Step 2 Split</span><span>Step 3 Deliver</span><span>Next stages</span>
     </div>
     <div class="chapter center top" data-ch="0">
-      <span class="eyebrow mono">How it works</span>
-      <h2>Stage 1 today: firm power in, hydrogen out.</h2>
-      <p>Barakah runs at about 90% capacity factor, day and night. Hydrox decides how much of that firm output becomes hydrogen.</p>
+      <span class="eyebrow mono">How Stage 1 would work</span>
+      <h2>Stage 1: an existing-reactor feasibility pathway.</h2>
+      <p>Hydrox models a hypothetical split of one unit's electricity between the grid and a high-temperature electrolyser, and asks when that split creates more value than exporting the power.</p>
     </div>
     <div class="chapter left" data-ch="1" style="opacity:0">
-      <span class="mono k">Step 1 · 1,337 MWe</span>
-      <h2>Firm power is allocated</h2>
-      <p>Nuclear electricity plus low-grade steam (&lt;200°C) from the secondary loop. Hydrox proposes an allocation; the reactor is untouched and operates normally with Hydrox disconnected.</p>
+      <span class="mono k">Step 1 · 1,337 MWe assumed unit rating</span>
+      <h2>Electricity is allocated</h2>
+      <p>The model allocates part of one unit's output, such as 310 MWe, to hydrogen and the rest to the grid. Hydrox is designed to remain outside the reactor protection and safety-control systems; any future integration would need independently engineered interfaces, approved operating constraints and regulatory assessment.</p>
     </div>
     <div class="chapter right" data-ch="2" style="opacity:0">
-      <span class="mono k">Step 2 · ~800 °C</span>
+      <span class="mono k">Step 2 · ~800 °C inside the stack</span>
       <h2>Steam is split</h2>
-      <p>Solid-oxide electrolysis. The stack's operating temperature is reached electrically with heat recuperation, not drawn from reactor coolant. Running hot is what cuts the electricity bill per kilogram.</p>
+      <p>High-temperature steam electrolysis driven by nuclear electricity, with optional low-grade steam integration. A pressurised-water reactor does not deliver the ~800 °C used inside an SOEC stack, so electrical heating and recuperation supply the rest. The thermal integration and its electricity-generation penalty must be quantified.</p>
     </div>
     <div class="chapter left" data-ch="3" style="opacity:0">
       <span class="mono k">Step 3 · H₂</span>
       <h2>Hydrogen is delivered</h2>
-      <p>Product boundary: hydrogen at ~20–30 bar at the plant gate. Compression, storage and conversion to ammonia are modelled as optional downstream modules.</p>
+      <p>Product boundary: hydrogen at ~20–30 bar at the plant gate. Further compression, storage, transport and conversion to ammonia sit outside the modelled boundary.</p>
     </div>
     <div class="chapter center" data-ch="4" style="opacity:0">
       <span class="mono k">Next · Stages 2 and 3</span>
-      <h2>Same Hydrox layer throughout.</h2>
-      <p>Stage 2: an HTGR supplies genuine 750°C process heat, so heat replaces more of the electricity. Stage 3: above 850°C, thermochemical cycles remove most of the electrical demand entirely.</p>
+      <h2>One framework, pathway-specific models.</h2>
+      <p>Future high-temperature gas-cooled reactors may supply higher-grade heat through intermediate heat exchangers. Thermochemical water splitting is a longer-term research pathway. Each needs its own process model and constraints.</p>
     </div>
-    <div class="readout mono" aria-hidden="true"><span id="roLbl">Capacity factor</span><b id="roVal">~90%</b></div>
+    <div class="readout mono" aria-hidden="true"><span id="roLbl">Unit rating (assumed)</span><b id="roVal">1,337 MWe</b></div>
+  </div>
+</section>
+
+<!-- ===== RESEARCH QUESTION ===== -->
+<section class="section" id="question">
+  <span class="sheet-id mono" aria-hidden="true">SHEET 02 / QUESTION</span>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow mono">The research question</span>
+      <h2 class="h2-q">Under what electricity prices, hydrogen values, equipment constraints and emissions conditions does diverting nuclear-generated energy to high-temperature electrolysis outperform exporting the same energy to the grid?</h2>
+      <p>The question isn't whether nuclear power can produce hydrogen. It's when producing hydrogen creates more value than supplying electricity. Hydrox combines hydrogen process modelling, electricity opportunity-cost analysis, operating constraints and emissions accounting to find out.</p>
+    </div>
+    <div class="ocards">
+      <article class="ocard"><span class="mono verb">Outcome 1</span><h3>Hydrogen wins on both</h3><p>Producing hydrogen is economically and environmentally preferable to exporting the electricity.</p></article>
+      <article class="ocard"><span class="mono verb">Outcome 2</span><h3>Profitable, but higher emissions</h3><p>Hydrogen pays more, but the diverted electricity is replaced by fossil generation and system emissions rise.</p></article>
+      <article class="ocard"><span class="mono verb">Outcome 3</span><h3>Lower emissions, but uneconomic</h3><p>Hydrogen reduces emissions, but earns less than selling the electricity.</p></article>
+      <article class="ocard"><span class="mono verb">Outcome 4</span><h3>Export wins on both</h3><p>Sending the electricity to the grid is better on economic and emissions grounds.</p></article>
+    </div>
+    <p class="qline">Hydrox is designed to identify both the conditions under which nuclear hydrogen makes sense and the conditions under which it does not.</p>
   </div>
 </section>
 
 <!-- ===== PROBLEM ===== -->
-<section class="section" id="problem">
-  <span class="sheet-id mono" aria-hidden="true">SHEET 02 / PROBLEM</span>
+<section class="section" id="problem" style="padding-top:0">
+  <span class="sheet-id mono" aria-hidden="true">SHEET 03 / PROBLEM</span>
   <div class="wrap">
     <div class="sec-head">
       <span class="eyebrow mono">The problem</span>
-      <h2>Cheap electricity is not cheap hydrogen.</h2>
+      <h2>Firm power helps utilisation. It doesn't make hydrogen cheap on its own.</h2>
     </div>
     <div class="two">
       <article class="panel bracket">
-        <div class="top mono"><span>01 · The utilisation problem</span><span>Capacity factor</span></div>
-        <div class="big" data-count="25" data-fmt="~{}%">~25%<small>utilised</small></div>
-        <div class="util" role="img" aria-label="Typical electrolysis capacity factor about 25 percent, against about 90 percent for Barakah">
-          <div class="urow"><span class="mono">Typical electrolyser</span><div class="ticks" data-fill="25"></div><b class="mono">~25%</b></div>
-          <div class="urow hi"><span class="mono">Barakah, firm power</span><div class="ticks" data-fill="90"></div><b class="mono">~90%</b></div>
+        <div class="top mono"><span>01 · The utilisation–electricity-cost trade-off</span><span>Simplified</span></div>
+        <div class="big">~3.6×<small>capex per kg</small></div>
+        <div class="util" role="img" aria-label="Simplified comparison of 25 percent and 90 percent electrolyser utilisation">
+          <div class="urow"><span class="mono">Example: 25% utilisation</span><div class="ticks" data-fill="25"></div><b class="mono">25%</b></div>
+          <div class="urow hi"><span class="mono">Example: 90% utilisation</span><div class="ticks" data-fill="90"></div><b class="mono">90%</b></div>
         </div>
-        <p><strong>~25% is a typical electrolysis capacity factor.</strong> Cheap electricity doesn't make cheap hydrogen. An electrolyser is capital-heavy; running it a quarter of the year means every kilogram carries four times the capital burden.</p>
+        <p>Low-cost intermittent electricity may reduce an electrolyser's annual utilisation, increasing the capital cost allocated to each kilogram of hydrogen. Firm nuclear electricity can support high utilisation, but its economic advantage depends on the price and opportunity cost of that electricity.</p>
+        <p class="note-sm">The 3.6× figure is a simplified comparison of 25% and 90% utilisation with identical capital cost, financing, efficiency and operating costs. Real utilisation varies widely with electricity sourcing, contracts and dispatch strategy.</p>
       </article>
       <article class="panel bracket">
-        <div class="top mono"><span>02 · The cost problem</span><span>$ / kg H₂</span></div>
-        <div class="big">$4–8<small>/kg</small></div>
-        <div class="scale" role="img" aria-label="Cost scale from 0 to 8 dollars per kilogram: grey hydrogen 1 to 2, current green hydrogen 4 to 8">
-          <div class="track"></div>
-          <div class="band" style="left:12.5%;width:12.5%"><span class="mono">Grey H₂</span></div>
-          <div class="band go" style="left:50%;width:50%"><span class="mono">Green H₂ today</span></div>
-          <span class="tk mono" style="left:0%;transform:none">$0</span><span class="tk mono" style="left:25%">$2</span><span class="tk mono" style="left:50%">$4</span><span class="tk mono" style="left:75%">$6</span><span class="tk mono" style="left:100%;transform:translateX(-100%)">$8</span>
+        <div class="top mono"><span>02 · The low-emissions premium</span><span>IEA, 2025 data</span></div>
+        <div class="big">&gt;100<small>Mt H₂ demand</small></div>
+        <div class="util" role="img" aria-label="Low-emissions hydrogen was about 1 percent of global production">
+          <div class="urow hi"><span class="mono">Low-emissions share</span><div class="ticks" data-fill="1"></div><b class="mono">~1%</b></div>
         </div>
-        <p><strong>Current green hydrogen, against $1–2/kg grey.</strong> Too expensive to decarbonise heavy industry.</p>
-        <p>Refining, ammonia and fertiliser already consume hydrogen and run continuously. They are the credible first market, and they need supply that doesn't stop at sunset.</p>
+        <p>Global hydrogen demand exceeded 100 million tonnes in 2025, almost all in traditional industry and refining. Low-emissions production grew to almost 1 Mt, still around 1% of output.</p>
+        <p>Hydrogen is already used extensively in refining and chemical production, but low-emissions alternatives generally face an economic premium relative to conventional fossil-derived supply. Reducing that premium requires improvements in energy costs, capital expenditure, utilisation and operating strategy. Costs, uncertain offtake, infrastructure and regulation remain significant constraints.</p>
       </article>
     </div>
-    <p class="source mono">Source: IEA Global Hydrogen Review 2025 · UAE National Hydrogen Strategy 2050</p>
+    <p class="source mono">Source: <a href="https://www.iea.org/reports/global-hydrogen-review-2026/executive-summary" target="_blank" rel="noopener">IEA Global Hydrogen Review 2026</a></p>
   </div>
 </section>
 
 <!-- ===== SOLUTION: THREE STAGES ===== -->
 <section class="section" id="solution" style="padding-top:0">
-  <span class="sheet-id mono" aria-hidden="true">SHEET 03 / SOLUTION</span>
+  <span class="sheet-id mono" aria-hidden="true">SHEET 04 / PATHWAYS</span>
   <div class="wrap">
     <div class="sec-head">
-      <span class="eyebrow mono">The solution</span>
-      <h2>One control layer. Three reactor generations.</h2>
+      <span class="eyebrow mono">The approach</span>
+      <h2>One extensible optimisation framework across three proposed nuclear-hydrogen pathways.</h2>
+      <p>The three stages require different process models, operating limits and control variables. Hydrox proposes a shared economic optimisation framework, with pathway-specific physical models and constraints. It does not assume one trained model or one unchanged controller works across all three.</p>
     </div>
     <p class="swipe-hint mono" aria-hidden="true">Swipe to compare stages →</p>
     <div class="stages-scroll" tabindex="0" aria-label="Stage comparison table, scroll sideways on small screens">
       <div class="stages" role="table" aria-label="Hydrox stages compared">
         <div class="sg-h" role="row">
           <span role="columnheader" class="lbl-col"></span>
-          <div role="columnheader" class="sg-top s1"><div class="img"><img src="assets/reactor.jpg" alt="Rendered pressurised water reactor containment" loading="lazy"></div><span class="mono st">Deployable</span><h3>Stage 1 · Now</h3></div>
-          <div role="columnheader" class="sg-top s2"><div class="img"><img src="assets/pebble.jpg" alt="Rendered pebble-bed reactor fuel" loading="lazy"></div><span class="mono st">In evaluation</span><h3>Stage 2 · Next</h3></div>
-          <div role="columnheader" class="sg-top s3"><div class="img"><img src="assets/loop.jpg" alt="Rendered closed sulfur–iodine loop" loading="lazy"></div><span class="mono st">Research</span><h3>Stage 3 · Later</h3></div>
+          <div role="columnheader" class="sg-top s1"><div class="img"><img src="assets/reactor.jpg" alt="Rendered pressurised water reactor containment" loading="lazy"></div><span class="mono st">Feasibility pathway</span><h3>Stage 1 · Existing PWR</h3></div>
+          <div role="columnheader" class="sg-top s2"><div class="img"><img src="assets/pebble.jpg" alt="Rendered pebble-bed reactor fuel" loading="lazy"></div><span class="mono st">Advanced reactors</span><h3>Stage 2 · HTGR</h3></div>
+          <div role="columnheader" class="sg-top s3"><div class="img"><img src="assets/loop.jpg" alt="Rendered closed sulfur–iodine loop" loading="lazy"></div><span class="mono st">Research</span><h3>Stage 3 · Thermochemical</h3></div>
         </div>
-        <div class="sg-r" role="row"><span role="rowheader" class="mono">Reactor</span><span role="cell" class="s1">APR-1400 PWR (Barakah)</span><span role="cell" class="s2">HTGR (Xe-100 class)</span><span role="cell" class="s3">VHTR</span></div>
-        <div class="sg-r" role="row"><span role="rowheader" class="mono">Temperature available</span><span role="cell" class="s1">~320°C coolant, &lt;200°C usable steam</span><span role="cell" class="s2">~750°C helium</span><span role="cell" class="s3">850–950°C</span></div>
-        <div class="sg-r" role="row"><span role="rowheader" class="mono">Hydrogen process</span><span role="cell" class="s1">High-temp steam electrolysis</span><span role="cell" class="s2">Electrolysis with real process heat</span><span role="cell" class="s3">Thermochemical (sulfur–iodine)</span></div>
-        <div class="sg-r" role="row"><span role="rowheader" class="mono">Electricity share</span><span role="cell" class="s1">~85%</span><span role="cell" class="s2">Lower: heat does more</span><span role="cell" class="s3">Lowest</span></div>
-        <div class="sg-r" role="row"><span role="rowheader" class="mono">Maturity</span><span role="cell" class="s1">Commercial (Nine Mile Point, 2023)</span><span role="cell" class="s2">Reactor commercial (HTR-PM, 2023)</span><span role="cell" class="s3">Lab / pilot (JAEA)</span></div>
-        <div class="sg-r" role="row"><span role="rowheader" class="mono">UAE status</span><span role="cell" class="s1">Operating today</span><span role="cell" class="s2">ENEC ADVANCE MoUs signed</span><span role="cell" class="s3">Research horizon</span></div>
-        <div class="sg-r last" role="row"><span role="rowheader" class="mono">Hydrox role</span><span role="cell" class="s1">Power vs. hydrogen dispatch</span><span role="cell" class="s2">Heat and power allocation</span><span role="cell" class="s3">Chemical loop optimisation</span></div>
+        <div class="sg-r" role="row"><span role="rowheader" class="mono">Reactor</span><span role="cell" class="s1">APR-1400 PWR (Barakah type)</span><span role="cell" class="s2">HTGR (Xe-100 class)</span><span role="cell" class="s3">VHTR (no commercial unit yet)</span></div>
+        <div class="sg-r" role="row"><span role="rowheader" class="mono">Temperature available</span><span role="cell" class="s1">~320 °C coolant; low-grade secondary steam, conditions to be verified</span><span role="cell" class="s2">~750 °C reactor outlet; lower at the process after heat exchange</span><span role="cell" class="s3">850–950 °C outlet (design target)</span></div>
+        <div class="sg-r" role="row"><span role="rowheader" class="mono">Hydrogen process</span><span role="cell" class="s1">HTSE driven by electricity, optional low-grade steam</span><span role="cell" class="s2">HTSE with higher-grade heat via an intermediate loop</span><span role="cell" class="s3">Sulfur–iodine thermochemical cycle</span></div>
+        <div class="sg-r" role="row"><span role="rowheader" class="mono">Energy input</span><span role="cell" class="s1">~85% electrical (INL reference: 36.8 kWhₑ + 6.4 kWhₜₕ per kg)</span><span role="cell" class="s2">Lower electrical share, if usable heat reaches the process</span><span role="cell" class="s3">Least direct electricity; very large heat demand</span></div>
+        <div class="sg-r" role="row"><span role="rowheader" class="mono">Maturity</span><span role="cell" class="s1">Demonstration-scale nuclear-powered electrolysis; SOEC integration has separate research and pilot evidence</span><span role="cell" class="s2">Commercial HTGR electricity (HTR-PM, 2023); integrated HTGR hydrogen not yet demonstrated commercially</span><span role="cell" class="s3">Bench scale (JAEA, 2004)</span></div>
+        <div class="sg-r" role="row"><span role="rowheader" class="mono">UAE status</span><span role="cell" class="s1">Reactors operating; no hydrogen integration</span><span role="cell" class="s2">ENEC ADVANCE programme evaluating advanced reactors</span><span role="cell" class="s3">Research horizon</span></div>
+        <div class="sg-r last" role="row"><span role="rowheader" class="mono">Hydrox focus</span><span role="cell" class="s1">Electricity allocation and SOEC operation</span><span role="cell" class="s2">Integrated heat and electrical allocation</span><span role="cell" class="s3">Process-flow and heat-management optimisation</span></div>
       </div>
     </div>
     <div class="sol-foot">
-      <div class="equation mono"><span>H₂O + firm nuclear power + heat</span><b>→</b><span class="accent">H₂ + O₂</span><span class="muted">· zero carbon</span></div>
-      <p class="muted">One optimisation layer. Three reactor generations. Each stage unlocks better chemistry as available temperature rises.</p>
+      <div class="equation mono"><span>H₂O + nuclear electricity (+ heat)</span><b>→</b><span class="accent">H₂ + ½O₂</span></div>
+      <p class="muted">A low-carbon hydrogen pathway, subject to lifecycle and power-system emissions accounting. Nuclear electricity is low-carbon on a lifecycle basis, not zero-emission, and diverting it from the grid can raise system emissions if fossil generation fills the gap.</p>
     </div>
   </div>
 </section>
@@ -721,130 +791,151 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
 <section class="statement" id="ai-layer">
   <svg class="dial" data-dial="2" viewBox="0 0 1000 1000" aria-hidden="true"></svg>
   <div class="inner wrap">
-    <span class="eyebrow mono">The safety boundary</span>
-    <h2>Read-only reactor data in. Bounded setpoints to the hydrogen plant only.</h2>
-    <p>Reactor protection remains fully independent. Deterministic PLC limits override the AI, and the reactor runs normally with Hydrox offline.</p>
-    <a class="btn" href="#ai">Inside the AI layer <span class="arr">↓</span></a>
+    <span class="eyebrow mono">Proposed safety architecture</span>
+    <h2>Outside reactor safety systems. Recommendations for the hydrogen plant only.</h2>
+    <p>Hydrox would be restricted to non-safety-related hydrogen-plant operating recommendations, subject to independently implemented constraints. Reactor protection and nuclear safety systems would remain outside Hydrox's authority. Any physical implementation would require formal hazard analysis, verified interfaces, plant-operator approval and applicable regulatory review. No such system exists today.</p>
+    <a class="btn" href="#ai">Inside the framework <span class="arr">↓</span></a>
   </div>
 </section>
 
 <!-- ===== AI ENGINE ===== -->
 <section class="section" id="ai">
-  <span class="sheet-id mono" aria-hidden="true">SHEET 04 / CONTROL</span>
+  <span class="sheet-id mono" aria-hidden="true">SHEET 05 / FRAMEWORK</span>
   <div class="wrap">
     <div class="sec-head" style="margin-inline:auto;text-align:center;align-items:center">
-      <span class="eyebrow mono">The AI engine</span>
-      <h2>The layer we have actually built.</h2>
+      <span class="eyebrow mono">The optimisation framework</span>
+      <h2>What we are building, and how we will test it.</h2>
+      <p>A physics-constrained optimisation framework that evaluates when hydrogen production creates more value than exporting electricity, under safety, economic and emissions constraints. Every component is research-stage and must beat a simple fixed-load baseline to earn its place.</p>
     </div>
     <div class="engine">
       <div class="col">
-        <div class="feat"><span class="mono ix">01 · Digital twin</span><h3>A physics model of the hydrogen plant, driven by reactor output and offtake demand.</h3></div>
-        <div class="feat"><span class="mono ix">02 · Prediction</span><h3>Forecasts electricity price and demand across the control horizon.</h3></div>
+        <div class="feat"><span class="mono ix">01 · Process model · in development</span><h3>A physics-based model of the hydrogen plant: electrolysis, heat integration and stack degradation.</h3></div>
+        <div class="feat"><span class="mono ix">02 · Scenario inputs · simulated</span><h3>Electricity value, hydrogen value and grid-emissions scenarios. Simulated or sample data, not live forecasts.</h3></div>
       </div>
-      <div class="core" id="coreHost"><span class="ring-lbl mono">Hydrox control layer</span></div>
+      <div class="core" id="coreHost"><span class="ring-lbl mono">Hydrox framework</span></div>
       <div class="col r">
-        <div class="feat"><span class="mono ix">03 · Optimisation</span><h3>Schedules production against opportunity cost, ramp limits and degradation penalties.</h3></div>
-        <div class="feat"><span class="mono ix">04 · Validation</span><h3>Every proposed setpoint is checked against hard engineering limits before it reaches equipment.</h3></div>
+        <div class="feat"><span class="mono ix">03 · Optimisation · in development</span><h3>Schedules production against electricity opportunity cost, ramp limits and degradation, benchmarked against fixed-load and rule-based operation.</h3></div>
+        <div class="feat"><span class="mono ix">04 · Constraints · simulation only</span><h3>Within the simulation, candidate operating decisions are checked against explicitly specified model constraints. No commands are sent to nuclear or industrial equipment.</h3></div>
       </div>
     </div>
 
-    <div class="console bracket ctl" aria-label="Hydrox control interface, illustrative and modelled">
-      <div class="note mono">Illustrative interface: modelled, not measured</div>
-      <div class="hdr mono"><span>Hydrox control · modelled</span><span class="pill">Optimised</span></div>
+    <div class="console bracket ctl" aria-label="Hydrox interface, illustrative simulation">
+      <div class="note mono">All displayed operational data are simulated, not measured from Barakah or a physical hydrogen plant</div>
+      <div class="hdr mono"><span>Hydrox · screening case</span><span class="pill">Illustrative simulation</span></div>
       <div class="ctl-grid">
         <div class="ring-wrap">
-          <svg class="ring" viewBox="0 0 120 120" role="img" aria-label="System efficiency about 56 percent, higher heating value">
+          <svg class="ring" viewBox="0 0 120 120" role="img" aria-label="Hypothetical allocation about 23 percent of an assumed 1,337 megawatt unit rating">
             <circle cx="60" cy="60" r="50" fill="none" stroke="#1b2318" stroke-width="10"/>
-            <circle cx="60" cy="60" r="50" fill="none" stroke="#BFF34E" stroke-width="10" stroke-dasharray="175.9 314.2" transform="rotate(-90 60 60)" stroke-linecap="butt"/>
+            <circle cx="60" cy="60" r="50" fill="none" stroke="#BFF34E" stroke-width="10" data-calc-ring="share" stroke-dasharray="72.8 314.2" transform="rotate(-90 60 60)" stroke-linecap="butt"/>
           </svg>
-          <div class="ring-tx"><span class="v">~56%</span><span class="mono">System eff. (HHV)</span></div>
+          <div class="ring-tx"><span class="v" data-calc="sharePct">~23%</span><span class="mono">of assumed unit rating</span></div>
         </div>
         <div class="readings2">
-          <div class="rd"><span class="mono">Stack temperature</span><b>~800°C</b></div>
-          <div class="rd"><span class="mono">H₂ yield (design case)</span><b>7.4 t/hr</b></div>
-          <div class="rd"><span class="mono">Capacity factor</span><b>~90%</b><div class="meter"><i style="width:90%"></i></div></div>
+          <div class="rd"><span class="mono">Allocation (hypothetical)</span><b data-calc="mwe">310 MWe</b></div>
+          <div class="rd"><span class="mono">H₂ at rated load</span><b data-calc="rateRange">7.8–8.4 t/h</b></div>
+          <div class="rd"><span class="mono">Electrolyser utilisation (assumed)</span><b data-calc="utilPct">90%</b><div class="meter"><i style="width:90%"></i></div></div>
         </div>
         <div class="disp">
-          <div class="dbars" id="dbars" role="img" aria-label="Illustrative modelled dispatch, fixed-load baseline against optimised"></div>
-          <p class="cap">Modelled dispatch · fixed-load baseline vs. optimised (illustrative). The optimiser also answers the carbon question: it schedules production so diverted nuclear power is not simply replaced by gas on the grid.</p>
+          <div class="dbars" id="dbars" role="img" aria-label="Illustrative dispatch pattern, fixed-load baseline against a candidate schedule, not a result"></div>
+          <p class="cap">Illustrative dispatch pattern only, not a validated result. Hydrox is designed to evaluate the emissions consequences of allocating nuclear electricity to hydrogen rather than the grid, using an explicit counterfactual generation scenario. Profit and emissions are tracked as separate objectives, because they do not always align.</p>
         </div>
       </div>
     </div>
+    <p class="cap ctl-foot">Electrical consumption and total-energy efficiency depend on system boundaries, heat integration, auxiliary loads and operating conditions. INL reference HTSE studies report approximately 36.8 kWh electrical plus 6.4 kWh thermal per kilogram of hydrogen (<a href="https://inldigitallibrary.inl.gov/sites/STI/STI/Sort_65909.pdf" target="_blank" rel="noopener">INL/RPT-23-71939</a>). Rated hourly output depends on effective electrical consumption: 310 MWe ÷ 40 kWh/kg ≈ 7.8 t/h; ÷ 36.8 kWh/kg ≈ 8.4 t/h.</p>
   </div>
 </section>
 
 <!-- ===== ECONOMICS ===== -->
 <section class="section" id="economics" style="padding-top:0">
-  <span class="sheet-id mono" aria-hidden="true">SHEET 05 / ECONOMICS</span>
+  <span class="sheet-id mono" aria-hidden="true">SHEET 06 / ECONOMICS</span>
   <div class="wrap">
     <div class="sec-head">
       <span class="eyebrow mono">The economics</span>
-      <h2>Where the cost lands, under stated assumptions.</h2>
+      <h2>Hydrogen economics depend on more than efficiency.</h2>
+      <p>Published studies demonstrate the technical and economic potential of nuclear-powered electrolysis. Hydrox investigates the operational conditions under which hydrogen production creates more value than exporting electricity to the grid.</p>
     </div>
     <div class="econ">
       <div class="console">
-        <div class="hdr mono"><span>H₂ production cost</span><span>$ / kg</span></div>
+        <div class="hdr mono"><span>Published benchmarks and scenario-dependent hydrogen economics</span><span>$ / kg H₂</span></div>
         <div class="bars" id="bars">
-          <div class="bar"><span class="n">Grey fossil gas</span><div class="t"><div class="f" style="transform:scaleX(.3333)"></div></div><span class="p">$2</span></div>
-          <div class="bar"><span class="n">Blue gas + CCS</span><div class="t"><div class="f" style="transform:scaleX(.5)"></div></div><span class="p">$3</span></div>
-          <div class="bar"><span class="n">Green electrolysis</span><div class="t"><div class="f" style="transform:scaleX(1)"></div></div><span class="p">$6</span></div>
-          <div class="bar us"><span class="n">Hydrox modelled range</span><div class="t"><div class="f" style="transform:scaleX(.3167)"></div><div class="rng" style="left:31.67%;width:11.67%"></div></div><span class="p">$1.9–2.6</span></div>
-          <div class="axis mono" aria-hidden="true"><span></span><div><span>$0</span><span>$2</span><span>$4</span><span>$6</span></div><span></span></div>
+          <p class="bgrp mono">Barakah-specific study, 2026 · same model and assumptions</p>
+          <div class="bar"><span class="n">Grid-electricity reference</span><div class="t"><div class="f" style="transform:scaleX(.8288)"></div></div><span class="p">$6.63</span></div>
+          <div class="bar"><span class="n">Conventional electrolysis</span><div class="t"><div class="f" style="transform:scaleX(.6088)"></div></div><span class="p">$4.87</span></div>
+          <div class="bar us"><span class="n">High-temp. steam electrolysis</span><div class="t"><div class="f" style="transform:scaleX(.4238)"></div></div><span class="p">$3.39</span></div>
+          <p class="bgrp mono">Different assumptions · not directly comparable</p>
+          <div class="bar"><span class="n">INL US nth-of-a-kind HTSE scenario</span><div class="t"><div class="f" style="transform:scaleX(.2325)"></div></div><span class="p">~$1.86</span></div>
+          <p class="bgrp mono">Hydrox · Barakah-compatible boundaries</p>
+          <div class="bar"><span class="n">Fixed-load simulation baseline</span><div class="t"></div><span class="pending">Validation pending</span></div>
+          <div class="bar"><span class="n">Optimised simulation result</span><div class="t"></div><span class="pending">Validation pending</span></div>
+          <div class="axis mono" aria-hidden="true"><span></span><div><span>$0</span><span>$2</span><span>$4</span><span>$6</span><span>$8</span></div><span></span></div>
         </div>
-        <p class="cap">The Hydrox bar is model output under stated assumptions, not a quotation. Excludes compression above 30 bar, storage and transport. Sensitivity analysis in the technical brief.</p>
-        <div class="assume">
-          <div><span class="mono">Electricity</span><b>$30/MWh</b></div>
-          <div><span class="mono">Capacity factor</span><b>90%</b></div>
-          <div><span class="mono">SOEC stack life</span><b>4 yrs</b></div>
-          <div class="anchor"><span class="mono">External anchor · INL</span><b>~$1.86/kg</b></div>
-        </div>
+        <p class="cap">A 2026 Barakah-specific techno-economic study (<a href="https://www.sciencedirect.com/science/article/pii/S0360319926029617" target="_blank" rel="noopener">IAEA HEEP-based, Int. J. Hydrogen Energy</a>) estimated hydrogen production at approximately $3.39/kg using high-temperature steam electrolysis, compared with $4.87/kg for conventional electrolysis, under its model assumptions. It also notes that UAE solar and wind scenarios can show lower estimated costs, with intermittent generation. This is an independent research benchmark, not Hydrox's projected cost. Hydrox investigates whether dispatch optimisation and operating strategies can improve economic outcomes beyond an explicitly defined baseline. No incremental cost reduction has yet been independently validated. The INL figure is a separate conditional US scenario (<a href="https://inldigitallibrary.inl.gov/sites/STI/STI/Sort_65909.pdf" target="_blank" rel="noopener">INL</a>), not a price available to Hydrox.</p>
+        <details class="cmodel">
+          <summary><span>What goes into the cost of hydrogen?</span><span class="mono k">Show the full list</span></summary>
+          <p class="cm-lede">Far more than electricity. Our cost model has to account for all of these before we publish a Hydrox figure:</p>
+          <ul class="clist">
+            <li>Electricity price or opportunity cost</li><li>Thermal input and extraction cost</li><li>Electrolyser capital expenditure</li>
+            <li>Installation and balance of plant</li><li>Stack replacement and degradation</li><li>Operating and maintenance</li>
+            <li>Water treatment and purification</li><li>Financing and discount rate</li><li>Utilisation and availability</li>
+            <li>Auxiliary power</li><li>Cooling and heat-recovery equipment</li><li>Product pressure and purity</li>
+            <li>Facility lifetime</li><li>Stated exclusions: compression, storage, transport, delivery</li>
+          </ul>
+          <p class="note-sm">Each input will be labelled as measured data, a published reference value, or a hypothetical scenario. No electricity price on this site is a Barakah tariff.</p>
+        </details>
       </div>
     </div>
     <div class="ecards">
       <article class="ecard"><div class="img"><img src="assets/tanks.jpg" alt="Rendered hydrogen storage tanks" loading="lazy"></div>
-        <div class="tx"><span class="v" data-count="65000" data-fmt="{} t">65,000 t</span><p>per year at ~310 MWe allocated. Derived, not per-reactor.</p></div></article>
+        <div class="tx"><span class="v" data-calc="annualRange">61–66 kt/yr</span><p>Illustrative production potential from a 310 MW electrical allocation at 90% utilisation, at 36.8–40 kWh/kg effective electrical consumption, plus ~6.4 kWh/kg of external thermal energy (<span data-calc="thermalMW">~50–54 MW</span> thermal at rated load). A screening estimate, not a validated Barakah plant design.</p></div></article>
       <article class="ecard"><div class="img"><img src="assets/barakah.jpg" alt="Rendered Barakah site with a Hydrox electrolysis plant" loading="lazy"></div>
-        <div class="tx"><span class="v" data-count="23" data-fmt="~{}%">~23%</span><p>of one Barakah unit's output for a 65,000 t/yr facility</p></div></article>
+        <div class="tx"><span class="v" data-calc="sharePct">~23%</span><p>310 MW represents approximately 23% of an assumed 1,337 MWe unit rating. This is a hypothetical allocation, not electricity currently allocated to Hydrox.</p></div></article>
       <article class="ecard"><div class="img"><img src="assets/stack.jpg" alt="Rendered solid-oxide electrolysis stack" loading="lazy"></div>
-        <div class="tx"><span class="v">4–7 yrs</span><p>SOEC stack replacement interval: the cost driver</p></div></article>
+        <div class="tx"><span class="v">20k–80k h</span><p>SOEC durability is a major economic uncertainty. <a href="https://www.energy.gov/cmei/fuels/technical-targets-high-temperature-electrolysis" target="_blank" rel="noopener">DOE benchmarks</a> distinguish 20,000-hour historical status (2022), a 40,000-hour target for 2026 and an 80,000-hour ultimate target. Lifetime is a sensitivity variable, not a fixed fact.</p></div></article>
     </div>
   </div>
 </section>
 
 <!-- ===== PROOF ===== -->
 <section class="section" id="proof" style="padding-top:0">
-  <span class="sheet-id mono" aria-hidden="true">SHEET 06 / EVIDENCE</span>
+  <span class="sheet-id mono" aria-hidden="true">SHEET 07 / EVIDENCE</span>
   <div class="wrap">
     <div class="sec-head" style="margin-inline:auto;text-align:center;align-items:center">
-      <span class="eyebrow mono">Proven foundations</span>
-      <h2>Every stage is proven, at its own scale.</h2>
+      <span class="eyebrow mono">Evidence</span>
+      <h2>Research foundations and technology readiness.</h2>
+      <p>These references establish the scientific and technical foundations of the proposed pathways. They do not establish the commercial readiness or performance of an integrated Hydrox system.</p>
     </div>
   </div>
   <div class="carousel">
     <div class="track" id="track" tabindex="0" aria-label="Evidence, scroll sideways">
       <article class="slide bracket on" data-i="0">
-        <div class="st"><h3>Nuclear hydrogen is already commercial</h3><span class="mono">001</span></div>
-        <div class="org mono">Stage 1 · Nine Mile Point · USA · 2023</div>
+        <div class="st"><h3>Nuclear-powered electrolysis has been demonstrated at an operating nuclear site</h3><span class="mono">001</span></div>
+        <div class="org mono">Nine Mile Point · USA · 2023 · Demonstration scale</div>
         <div class="img"><img src="assets/h2.jpg" alt="Rendered hydrogen molecule" loading="lazy"></div>
-        <div class="meta"><div><span class="k mono">Evidence</span><p>Constellation has produced hydrogen from nuclear electricity since March 2023: a 1.25 MW electrolyser making 560 kg/day at an existing reactor.</p></div><div><span class="k mono">Scale</span><p>Commercial, with no plant modification.</p></div></div>
+        <div class="meta"><div><span class="k mono">Evidence</span><p>Constellation began producing hydrogen in March 2023 with an approximately 1.25 MW low-temperature (PEM) electrolyser producing up to approximately 560 kg/day (<a href="https://investors.constellationenergy.com/news-releases/news-release-details/constellation-starts-production-nations-first-one-megawatt" target="_blank" rel="noopener">Constellation</a>).</p></div><div><span class="k mono">What it shows</span><p>Validates nuclear electricity as a hydrogen energy source. It is not SOEC/HTSE technology and not commercial-scale Barakah deployment.</p></div></div>
       </article>
       <article class="slide bracket" data-i="1">
-        <div class="st"><h3>The pathway is modelled and tested</h3><span class="mono">002</span></div>
-        <div class="org mono">Stage 1 · Idaho National Laboratory</div>
+        <div class="st"><h3>High-temperature electrolysis performance</h3><span class="mono">002</span></div>
+        <div class="org mono">INL · experimental measurements and engineering studies</div>
         <div class="img"><img src="assets/stack.jpg" alt="Rendered solid-oxide electrolysis stack" loading="lazy"></div>
-        <div class="meta"><div><span class="k mono">Evidence</span><p>DOE's lead nuclear lab develops high-temperature steam electrolysis and supplied the dynamic controller for the Nine Mile Point demonstration.</p></div><div><span class="k mono">HTSE model</span><p>36.8 kWh electricity + 6.4 kWh heat per kg, against ~50 kWh/kg for PEM.</p></div></div>
+        <div class="meta"><div><span class="k mono">Evidence</span><p>INL reference HTSE studies report ~36.8 kWh electrical plus 6.4 kWh thermal per kg H₂ (<a href="https://inldigitallibrary.inl.gov/sites/STI/STI/Sort_65909.pdf" target="_blank" rel="noopener">INL</a>). A 2025 study of a 100 kW SOEC system tested at INL measured ~36.7 kWh/kg DC (<a href="https://www.sciencedirect.com/science/article/abs/pii/S0360319925032811" target="_blank" rel="noopener">IJHE</a>).</p></div><div><span class="k mono">What it shows</span><p>Strong stack and system performance at research scale. The DC figure is not whole-plant consumption, and neither is a nuclear-integrated commercial plant.</p></div></div>
       </article>
       <article class="slide bracket" data-i="2">
-        <div class="st"><h3>High-temperature reactors are commercial</h3><span class="mono">003</span></div>
-        <div class="org mono">Stage 2 · HTR-PM · China · 2023</div>
+        <div class="st"><h3>Commercial HTGR electricity generation</h3><span class="mono">003</span></div>
+        <div class="org mono">HTR-PM · China · 2023 · Commercial reactor</div>
         <div class="img"><img src="assets/pebble.jpg" alt="Rendered pebble-bed reactor fuel" loading="lazy"></div>
-        <div class="meta"><div><span class="k mono">Evidence</span><p>The first modular high-temperature gas-cooled plant entered commercial operation in December 2023, at ~750°C helium outlet.</p></div><div><span class="k mono">UAE link</span><p>ENEC's ADVANCE programme is evaluating this reactor class for the UAE.</p></div></div>
+        <div class="meta"><div><span class="k mono">Evidence</span><p>The first modular high-temperature gas-cooled plant entered commercial electricity generation in December 2023, with a ~750 °C helium outlet.</p></div><div><span class="k mono">What it shows</span><p>Commercial HTGR electricity generation has been demonstrated; integrated HTGR hydrogen production remains a separate engineering and commercialisation challenge.</p></div></div>
       </article>
       <article class="slide bracket" data-i="3">
-        <div class="st"><h3>Thermochemical chemistry, at lab scale</h3><span class="mono">004</span></div>
-        <div class="org mono">Stage 3 · JAEA · Japan · 2004</div>
+        <div class="st"><h3>Thermochemical hydrogen research</h3><span class="mono">004</span></div>
+        <div class="org mono">JAEA · Japan · 2004 · Bench scale</div>
         <div class="img"><img src="assets/columns.jpg" alt="Rendered sulfur–iodine process columns" loading="lazy"></div>
-        <div class="meta"><div><span class="k mono">Evidence</span><p>Japan's atomic agency ran continuous closed-loop sulfur–iodine production in 2004 at ~30 L/h.</p></div><div><span class="k mono">Open problems</span><p>Corrosion, separation and integration remain active research problems.</p></div></div>
+        <div class="meta"><div><span class="k mono">Evidence</span><p>About 30 L/h of hydrogen sustained for one week in 2004 on bench-scale sulfur–iodine apparatus (<a href="https://www.jaea.go.jp/04/o-arai/nhc/en/faq/is_process.html" target="_blank" rel="noopener">JAEA</a>).</p></div><div><span class="k mono">What it shows</span><p>Bench-scale experimental demonstration, not commercial nuclear hydrogen production. Corrosion, separation and integration remain open problems.</p></div></div>
+      </article>
+      <article class="slide bracket" data-i="4">
+        <div class="st"><h3>Barakah-specific techno-economic study</h3><span class="mono">005</span></div>
+        <div class="org mono">APR-1400 · IAEA HEEP model · 2026 · Peer-reviewed modelling</div>
+        <div class="img"><img src="assets/barakah.jpg" alt="Rendered Barakah site model" loading="lazy"></div>
+        <div class="meta"><div><span class="k mono">Evidence</span><p>Estimated ~$3.39/kg for high-temperature steam electrolysis and ~$4.87/kg for conventional electrolysis integrated with Barakah, against a ~$6.63/kg grid-electricity reference (<a href="https://www.sciencedirect.com/science/article/pii/S0360319926029617" target="_blank" rel="noopener">IJHE</a>).</p></div><div><span class="k mono">What it shows</span><p>An independent, geographically relevant baseline under that study's assumptions. It is not Hydrox's cost, and UAE solar and wind scenarios can be cheaper.</p></div></div>
       </article>
     </div>
     <div class="cnav"><div class="bar-in" role="group" aria-label="Choose evidence card">
@@ -853,6 +944,7 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
       <button type="button" data-go="1" aria-label="Idaho National Laboratory">002</button>
       <button type="button" data-go="2" aria-label="HTR-PM">003</button>
       <button type="button" data-go="3" aria-label="JAEA">004</button>
+      <button type="button" data-go="4" aria-label="Barakah study">005</button>
       <button type="button" id="cNext" aria-label="Next">→</button>
     </div></div>
   </div>
@@ -860,50 +952,73 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
 
 <!-- ===== UAE ===== -->
 <section class="section" id="uae" style="padding-top:0">
-  <span class="sheet-id mono" aria-hidden="true">SHEET 07 / UAE</span>
+  <span class="sheet-id mono" aria-hidden="true">SHEET 08 / UAE</span>
   <div class="wrap">
     <div class="globe-row sec-head" style="max-width:none">
       <div style="display:flex;flex-direction:column;gap:20px">
-        <span class="eyebrow mono">National benefits</span>
-        <h2>Why this matters for the UAE.</h2>
+        <span class="eyebrow mono">UAE context</span>
+        <h2>Why the UAE is a useful test case.</h2>
+        <p>Hydrox is independent research. It is not affiliated with, endorsed, funded, approved or operated by ENEC, ADNOC, TA'ZIZ or INL.</p>
       </div>
       <img src="assets/globe.jpg" alt="Rendered globe marking the UAE" loading="lazy">
     </div>
     <div class="ucards">
       <article class="ucard"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M4 20h16M6 20V11a6 6 0 0 1 12 0v9"/><path d="M12 5V2"/></svg></div>
-        <span class="mono muted">01 · Stage 1</span><h3>No new reactors required</h3><p>Hydrox attaches to reactors the UAE already operates. Nuclear-powered electrolysis is proven commercially at existing plants.</p></article>
+        <span class="mono muted">01 · Stage 1</span><h3>Existing reactors, no hydrogen integration</h3><p>Barakah's four units provide up to 5,600 MW of generating capacity (<a href="https://enec.ae/our-subsidiaries/enec-operations/overview/" target="_blank" rel="noopener">ENEC</a>). Stage 1 asks whether part of one unit's output could be worth more as hydrogen than as electricity sold to existing consumers. That allocation is hypothetical; Barakah has not agreed to supply Hydrox.</p></article>
       <article class="ucard"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 21V10l5 3V10l5 3V7l8 4v10z"/><path d="M7 17h2M12 17h2M17 17h2"/></svg></div>
-        <span class="mono muted">02</span><h3>A named customer</h3><p>ADNOC's Ta'ziz ammonia facility at Ruwais: 1 Mtpa capacity, roughly 177,000 t/yr of hydrogen demand. A 65,000 t/yr facility covers about a third of one domestic customer.</p></article>
+        <span class="mono muted">02</span><h3>Regional industrial hydrogen demand</h3><p>TA'ZIZ's planned 1 Mtpa ammonia facility (<a href="https://taziz.com/projects" target="_blank" rel="noopener">TA'ZIZ</a>, <a href="https://www.mitsui.com/jp/en/release/2024/1249366_14372.html" target="_blank" rel="noopener">Mitsui</a>) illustrates the scale of hydrogen use in UAE industrial chemicals. Producing that quantity of ammonia requires approximately 176,500 tonnes/year of hydrogen on a stoichiometric basis (3/17 by mass). This does not imply that TA'ZIZ is a Hydrox customer or has uncontracted hydrogen demand.</p></article>
       <article class="ucard"><div class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1" fill="currentColor"/></svg></div>
-        <span class="mono muted">03</span><h3>Aligned with national targets</h3><p>65,000 t/yr ≈ 4.6% of the UAE's 2031 low-carbon hydrogen production target (1.4 Mtpa), drawing ~23% of one Barakah unit's output.</p></article>
+        <span class="mono muted">03</span><h3>National hydrogen strategy</h3><p>The <a href="https://u.ae/en/about-the-uae/strategies-initiatives-and-awards/strategies-plans-and-visions/environment-and-energy/national-hydrogen-strategy" target="_blank" rel="noopener">UAE National Hydrogen Strategy</a> targets approximately 1.4 Mtpa of hydrogen production by 2031 across specified pathways, and identifies nuclear-derived hydrogen as a potential pathway: it forecasts about 7,500 t/yr from a proposed 50 MW nuclear electricity allocation by 2031. That is a forecast, not achieved production. Hydrox explores nuclear hydrogen within this broader energy-transition context.</p></article>
     </div>
     <div class="barakah bracket">
       <img src="assets/barakah.jpg" alt="Rendered model of the Barakah site with a Hydrox electrolysis plant attached" loading="lazy">
       <div class="tx">
-        <div style="display:flex;flex-direction:column;gap:16px"><span class="mono" style="color:var(--neon)">Example · UAE</span>
-          <h3>ENEC has stated Barakah's potential at around 1 Mtpa of hydrogen, and its ADVANCE programme is already evaluating high-temperature reactors for steam, heat and hydrogen.</h3></div>
-        <div class="figure"><span class="v">~1 Mtpa</span><p>Hydrox is the layer that makes those decisions economic.</p></div>
+        <div style="display:flex;flex-direction:column;gap:16px"><span class="mono" style="color:var(--neon)">Context · January 2022</span>
+          <h3>ENEC previously identified a theoretical potential of approximately 1 million tonnes of nuclear-powered hydrogen annually from Barakah's four units, subject to major electricity allocation and hydrogen infrastructure assumptions.</h3></div>
+        <div class="figure"><span class="v">~1 Mt/yr</span><p>Theoretical potential reported by <a href="https://www.spglobal.com/energy/en/news-research/latest-news/energy-transition/011222-uae-can-produce-1-mil-mtyear-of-hydrogen-from-nuclear-units-at-full-capacity" target="_blank" rel="noopener" style="color:inherit">S&amp;P Global</a>, 2022. Not a project, funded investment or production forecast, and it would divert electricity from existing consumers. Hydrox is not part of any ENEC programme.</p></div>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== HARD QUESTIONS ===== -->
+<section class="section" id="questions" style="padding-top:0">
+  <span class="sheet-id mono" aria-hidden="true">SHEET 09 / QUESTIONS</span>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow mono">Questions engineers ask us</span>
+      <h2>The hard questions, answered plainly.</h2>
+    </div>
+    <div class="faq">
+      <details open><summary>Why not just sell the electricity?</summary><p>Often that will be the better choice. Hydrogen production may create higher value under specific conditions, especially where hydrogen has a strong industrial market and the electricity's opportunity cost is sufficiently low. That has to be calculated, not assumed, and it is exactly what Hydrox is built to test.</p></details>
+      <details><summary>Why nuclear instead of solar?</summary><p>Nuclear electricity can support high electrolyser utilisation and reduce dependence on variable generation, but it may carry a higher electricity opportunity cost. Published UAE studies show solar and wind hydrogen can be cheaper under some assumptions, and storage or flexible supply can serve industrial users. Hydrox evaluates the complete economics rather than claiming nuclear is universally superior.</p></details>
+      <details><summary>Why is AI needed?</summary><p>An optimiser may add value when decisions involve many coupled variables, changing forecasts, constraints, nonlinear degradation and competing objectives. But a simple fixed-load or rule-based controller may already perform well. Hydrox has to demonstrate incremental value by benchmarking against those baselines, and will report it if it cannot.</p></details>
+      <details><summary>Why would ENEC need Hydrox?</summary><p>Hydrox is not an ENEC product and has not shown that ENEC needs it. Its relevance is that nuclear-hydrogen integration raises planning and operational optimisation questions worth independent study. The proposed next step is technical validation, not equipment deployment.</p></details>
+      <details><summary>What is actually original?</summary><p>Not nuclear hydrogen, not SOEC chemistry, not sulfur–iodine thermochemistry and not generic model predictive control. The potential contribution is the specific integration of a transparent hydrogen process model, electrical opportunity-cost modelling, degradation-aware dispatch and power-system emissions accounting within a UAE nuclear-hydrogen feasibility framework. It is a research contribution that still requires validation, not a proven breakthrough.</p></details>
     </div>
   </div>
 </section>
 
 <!-- ===== INVITATION ===== -->
 <section class="section" id="invitation" style="padding-top:0">
-  <span class="sheet-id mono" aria-hidden="true">SHEET 08 / PARTNERS</span>
+  <span class="sheet-id mono" aria-hidden="true">SHEET 10 / PARTNERS</span>
   <div class="wrap">
     <div class="sec-head">
       <span class="eyebrow mono">The invitation</span>
       <h2>What we are asking for.</h2>
+      <p>Our immediate objective is not to build a reactor-connected hydrogen facility. It is to develop and validate an auditable optimisation model and establish whether the opportunity merits further engineering investigation.</p>
     </div>
     <div class="icards">
-      <article class="icard"><span class="mono verb">Review</span><h3>Technical validation</h3><p>Independent review of our process model and assumptions by nuclear, process and controls engineers.</p></article>
-      <article class="icard"><span class="mono verb">Data</span><h3>Realistic operating envelopes</h3><p>Non-sensitive operating-data ranges to ground the digital twin in real plant behaviour.</p></article>
-      <article class="icard"><span class="mono verb">Mentor</span><h3>12-week pre-feasibility study</h3><p>A 12-week pre-feasibility study taking Hydrox from simulation to a defensible case.</p></article>
+      <article class="icard"><span class="mono verb">Review</span><h3>Independent technical feedback</h3><p>Review of our process model and assumptions by nuclear, process, electrochemical and controls engineers.</p></article>
+      <article class="icard"><span class="mono verb">Data</span><h3>Realistic operating assumptions</h3><p>Non-sensitive operating ranges to ground the process model in realistic plant behaviour.</p></article>
+      <article class="icard"><span class="mono verb">Mentor</span><h3>12-week pre-feasibility study</h3><p>Engineering mentorship to evaluate the model rigorously and decide whether it merits further work.</p></article>
     </div>
     <div class="status bracket">
       <span class="mono" style="color:var(--neon)">Where we are</span>
-      <p>Concept and simulation stage. We have built a digital twin, an MPC controller and a heat-integration analysis, not a plant. ENEC's ADVANCE programme is evaluating advanced reactors for steam, heat and hydrogen; Hydrox is the optimisation layer those decisions will need, validated first on Barakah's existing output, then extended to the reactors ADVANCE selects.</p>
+      <div class="status-tx">
+        <p><strong>Research-stage concept and simulation. No physical deployment.</strong> Hydrogen production through electrolysis is technically established, and nuclear-powered electrolysis has already been demonstrated. High-temperature steam electrolysis offers a promising route to lower electrical energy requirements where suitable heat integration is available. None of this automatically makes nuclear hydrogen economical: diverted electricity has an opportunity cost, and electrolysers degrade, need substantial capital and can lose to other hydrogen pathways.</p>
+        <p>Hydrox combines a physics-based hydrogen process model with constrained optimisation of electrical allocation, production scheduling, equipment degradation and emissions. A 2026 Barakah-specific study estimated HTSE hydrogen at approximately $3.39/kg under its assumptions; Hydrox uses independent evidence like this as a realistic baseline, then investigates whether better operating strategies can improve on it.</p>
+      </div>
     </div>
     <div class="cta">
       <svg class="dial" data-dial="3" viewBox="0 0 1000 1000" aria-hidden="true"></svg>
@@ -920,7 +1035,7 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
 
 <!-- ===== CONTACT ===== -->
 <section class="section" id="contact" style="padding-top:0">
-  <span class="sheet-id mono" aria-hidden="true">SHEET 09 / CONTACT</span>
+  <span class="sheet-id mono" aria-hidden="true">SHEET 11 / CONTACT</span>
   <div class="wrap contact-grid">
     <div class="contact-copy">
       <span class="eyebrow mono">Contact us</span>
@@ -960,7 +1075,7 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
 
 <!-- ===== FOUNDERS ===== -->
 <section class="section" id="founders" style="padding-top:0">
-  <span class="sheet-id mono" aria-hidden="true">SHEET 10 / FOUNDERS</span>
+  <span class="sheet-id mono" aria-hidden="true">SHEET 12 / FOUNDERS</span>
   <div class="wrap">
     <div class="sec-head">
       <span class="eyebrow mono">Founders' note</span>
@@ -968,7 +1083,7 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
     </div>
     <div class="founders">
       <div class="fnote bracket">
-        <p>Barakah already produces firm, low-carbon power around the clock. We kept asking why that hasn't turned into cheap clean hydrogen, and found the gap is less about reactors than about how their energy is allocated. Hydrox is our attempt to close it: a control layer that is honest about its assumptions, never touches the reactor, and is proven in simulation before anyone builds anything.</p>
+        <p>Barakah already produces large amounts of firm, low-carbon electricity. We kept asking whether some of it could be worth more as hydrogen, and found the honest answer is "it depends": on electricity value, hydrogen demand, equipment degradation and grid emissions. Hydrox is our attempt to quantify that with a model that is open about its assumptions, stays outside reactor safety systems, and is willing to conclude that exporting the electricity is the better choice.</p>
         <p>We're at the concept and simulation stage, and there is a lot we don't know yet. If you work in nuclear, process engineering or controls and can help us find out, we'd like to hear from you.</p>
         <span class="sig mono">Suleiman &amp; Ibrahim · Abu Dhabi</span>
       </div>
@@ -993,6 +1108,36 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
     </div>
   </div>
 </section>
+
+<!-- ===== REFERENCES ===== -->
+<section class="section" id="references" style="padding-top:0">
+  <span class="sheet-id mono" aria-hidden="true">SHEET 13 / REFERENCES</span>
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="eyebrow mono">References</span>
+      <h2>Sources behind every number.</h2>
+      <p>Figures marked as screening estimates are Hydrox calculations from the stated inputs. Published values are attributed to their source. Nothing on this site is measured from Barakah or a physical hydrogen plant.</p>
+    </div>
+    <ol class="refs">
+      <li><a href="https://inldigitallibrary.inl.gov/sites/STI/STI/Sort_65909.pdf" target="_blank" rel="noopener">Idaho National Laboratory, INL/RPT-23-71939: nuclear hydrogen integration study</a></li>
+      <li><a href="https://www.sciencedirect.com/science/article/abs/pii/S0360319925032811" target="_blank" rel="noopener">Int. J. Hydrogen Energy (2025): high-efficiency 100 kW SOEC system tested at INL</a></li>
+      <li><a href="https://www.sciencedirect.com/science/article/pii/S0360319926029617" target="_blank" rel="noopener">Int. J. Hydrogen Energy (2026): integration of electrolytic hydrogen production with the Barakah APR 1400 facility</a></li>
+      <li><a href="https://www.energy.gov/cmei/fuels/technical-targets-high-temperature-electrolysis" target="_blank" rel="noopener">US DOE: technical targets for high-temperature electrolysis</a></li>
+      <li><a href="https://www.iea.org/reports/global-hydrogen-review-2026" target="_blank" rel="noopener">IEA: Global Hydrogen Review 2026</a></li>
+      <li><a href="https://enec.ae/our-subsidiaries/enec-operations/overview/" target="_blank" rel="noopener">ENEC: Barakah operations overview</a></li>
+      <li><a href="https://investors.constellationenergy.com/news-releases/news-release-details/constellation-starts-production-nations-first-one-megawatt" target="_blank" rel="noopener">Constellation: Nine Mile Point hydrogen demonstration (2023)</a></li>
+      <li><a href="https://www.jaea.go.jp/04/o-arai/nhc/en/faq/is_process.html" target="_blank" rel="noopener">JAEA: sulfur–iodine (IS) process research</a></li>
+      <li><a href="https://u.ae/en/about-the-uae/strategies-initiatives-and-awards/strategies-plans-and-visions/environment-and-energy/national-hydrogen-strategy" target="_blank" rel="noopener">UAE National Hydrogen Strategy</a> (<a href="https://u.ae/-/media/Documents-2nd-half-2023/UAE-National-Hydrogen-Strategy-2023.pdf" target="_blank" rel="noopener">full document</a>)</li>
+      <li><a href="https://taziz.com/projects" target="_blank" rel="noopener">TA'ZIZ: projects</a></li>
+      <li><a href="https://www.mitsui.com/jp/en/release/2024/1249366_14372.html" target="_blank" rel="noopener">Mitsui: TA'ZIZ ammonia project announcement (2024)</a></li>
+      <li><a href="https://www.spglobal.com/energy/en/news-research/latest-news/energy-transition/011222-uae-can-produce-1-mil-mtyear-of-hydrogen-from-nuclear-units-at-full-capacity" target="_blank" rel="noopener">S&amp;P Global (Jan 2022): ENEC on Barakah's theoretical hydrogen potential</a></li>
+    </ol>
+    <div class="calc">
+      <span class="mono k">Screening calculation · one shared source for every figure above</span>
+      <p data-calc="method">310 MWe × 8,760 h × 90% = 2.44 TWh/yr of electricity. ÷ 36.8 kWh/kg ≈ 66,400 t H₂/yr; ÷ 40 kWh/kg ≈ 61,100 t H₂/yr. Plus ~6.4 kWh/kg of thermal input. 310 ÷ 1,337 ≈ 23% of an assumed unit rating.</p>
+    </div>
+  </div>
+</section>
 </main>
 
 <footer>
@@ -1000,16 +1145,16 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
     <div class="fcard">
       <div class="fbrand">
         <a class="brand" href="#model"><img src="assets/hydrox-logo.png" alt=""><span>HYDROX</span></a>
-        <p>A staged AI dispatch and control layer for nuclear hydrogen, from Barakah today to high-temperature reactors next.</p>
+        <p>An AI-assisted, physics-constrained optimisation framework for evaluating nuclear hydrogen production. Research-stage concept and simulation; no physical deployment.</p>
       </div>
       <div class="fcol"><span class="h mono">[Navigation]</span>
-        <a href="#how">Stage 1 today</a><a href="#problem">Problem</a><a href="#solution">Three stages</a><a href="#ai">AI layer</a><a href="#economics">Economics</a><a href="#contact">Contact</a></div>
+        <a href="#question">Research question</a><a href="#problem">Problem</a><a href="#solution">Three pathways</a><a href="#ai">Framework</a><a href="#economics">Economics</a><a href="#questions">Hard questions</a><a href="#contact">Contact</a></div>
       <div class="fcol"><span class="h mono">[Site model]</span>
-        <button type="button" data-jump="0">Stage 1 · Barakah</button><button type="button" data-jump="1">Stage 2 · HTGR</button><button type="button" data-jump="2">Stage 3 · S–I cycle</button></div>
+        <button type="button" data-jump="0">Stage 1 · Existing PWR</button><button type="button" data-jump="1">Stage 2 · HTGR</button><button type="button" data-jump="2">Stage 3 · S–I cycle</button></div>
       <div class="fcol"><span class="h mono">[Sources]</span>
-        <span class="muted" style="font-size:14px">IEA Global Hydrogen Review 2025</span><span class="muted" style="font-size:14px">UAE National Hydrogen Strategy 2050</span><span class="muted" style="font-size:14px">Idaho National Laboratory (HTSE)</span></div>
+        <a href="#references">All 12 references</a><a href="#references">Screening calculation</a></div>
     </div>
-    <div class="fbase mono"><span>© 2026 Hydrox</span><span>Concept and simulation stage</span></div>
+    <div class="fbase mono"><span>© 2026 Hydrox · Independent research, not affiliated with ENEC, ADNOC, TA'ZIZ or INL</span><span>Concept and simulation stage</span></div>
   </div>
 </footer>
 
@@ -1024,13 +1169,13 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
   var HEX = {}; Object.keys(TONE).forEach(function(k){ HEX[k] = parseInt(TONE[k].slice(1),16); });
 
   var STAGE_META = [
-    {sub:"Stage 1 · Barakah · electrolysis", badge:"Deployable today",
+    {sub:"Stage 1 · Existing-reactor feasibility pathway", badge:"Existing technologies · integration unproven",
      legend:[["power","Electricity"],["steam","Low-grade steam / water"],["h2","Hydrogen"],["oxy","Oxygen"]],
      target:[14,8,0], dist:250, az:-0.62, pol:0.90},
-    {sub:"Stage 2 · high-temperature reactor", badge:"ENEC ADVANCE · in evaluation",
+    {sub:"Stage 2 · high-temperature reactor", badge:"Advanced reactors · under evaluation",
      legend:[["heat","High-temperature helium"],["power","Electricity"],["steam","Water / steam"],["h2","Hydrogen"],["oxy","Oxygen"]],
      target:[6,8,0], dist:215, az:-0.66, pol:0.90},
-    {sub:"Stage 3 · thermochemical cycle", badge:"Laboratory scale · research",
+    {sub:"Stage 3 · thermochemical cycle", badge:"Bench scale · research",
      legend:[["heat","Process heat 850–950 °C"],["chem","Sulfur / iodine recycle"],["steam","Water feed"],["h2","Hydrogen"],["oxy","Oxygen"]],
      target:[6,10,0], dist:205, az:-0.70, pol:0.88}
   ];
@@ -1153,7 +1298,7 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
       });
 
       var sw = S.part("Switchyard","Transformers · allocation point",
-        "Where power divides between the national grid and the hydrogen plant. This split is the decision the Hydrox optimiser makes.","power");
+        "Where power would divide between the national grid and a hypothetical hydrogen plant. This split is the question the Hydrox model studies.","power");
       S.mesh(sw, BOX(28,1.2,40), mDark, -8, 0.6, 0);
       [-14,-4,6,16].forEach(function(z){
         S.mesh(sw, BOX(8,8,6), mSteel, -15, 4.5, z);
@@ -1174,13 +1319,13 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
       });
 
       var st = S.part("Steam Tie-In","Secondary loop · below 200 °C",
-        "Low-grade steam vaporises feedwater for the electrolyser. An external connection only — no modification to reactor safety systems.","steam");
+        "Optional low-grade steam integration to pre-heat electrolyser feed. Extraction conditions, hardware, hazards and the resulting loss of electrical output need engineering verification and regulatory review; this is not a simple external connection.","steam");
       S.mesh(st, BOX(13,6,10), mPanel, -34, 3, 52);
       S.mesh(st, CYL(2.2,2.2,12,14), mSteel, -27, 5, 52, [0,0,Math.PI/2]);
       S.mesh(st, CYL(1.3,1.3,8,10), mDark, -38, 9, 52);
 
       var eh = S.part("Electrolyser Hall","Solid oxide electrolysis · ~800 °C",
-        "Splits steam rather than cold water. 314 MW electrical demand at 36.8 kWh per kilogram — about a quarter less electricity than low-temperature electrolysis.","h2");
+        "Splits steam rather than cold water. A hypothetical 310 MWe allocation; INL reference HTSE needs ~36.8 kWh electrical plus ~6.4 kWh thermal per kilogram. A PWR cannot supply ~800 °C, so electrical heating and recuperation make up the difference.","h2");
       S.mesh(eh, BOX(54,18,34), mPanel, 36, 9, 0);
       S.mesh(eh, BOX(56,1.4,36), mSteel, 36, 18.7, 0);
       for(var i=0;i<6;i++) S.mesh(eh, BOX(5,4,26), mConcrete, 16+i*8, 21.5, 0);
@@ -1197,7 +1342,7 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
       [-4,0,4].forEach(function(z){ S.mesh(cp, CYL(1.7,1.7,8,12), mSteel, 72+z*1.5, 10.5, -14+z*1.6); });
 
       var sg = S.part("Hydrogen Storage","Production buffer",
-        "Decouples production from offtake, so the plant can make hydrogen during low-cost hours and still deliver on a steady contract schedule.","h2");
+        "Would decouple production from offtake, so a plant could run when hydrogen is worth more than electricity and still meet a delivery schedule.","h2");
       [12,0,-12].forEach(function(z){
         S.mesh(sg, CYL(4.5,4.5,26,20), mConcrete, 86, 8, z, [0,0,Math.PI/2]);
         S.mesh(sg, SPH(4.5), mConcrete, 73, 8, z);
@@ -1207,7 +1352,7 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
       });
 
       var pp = S.part("Export Pipeline","To industrial offtake",
-        "Hydrogen to refining, ammonia and fertiliser customers. ADNOC's Ta'ziz ammonia plant at Ruwais alone needs roughly 177,000 tonnes a year.","h2");
+        "Illustrative route to refining, ammonia and fertiliser users. No offtake agreement exists; regional demand is shown for scale only.","h2");
       for(var k=0;k<5;k++){
         S.mesh(pp, BOX(1.8,10,20), mSteel, 112+k*12, 5, 30);
         S.mesh(pp, BOX(2.6,1.2,22), mSteel, 112+k*12, 10, 30);
@@ -1215,7 +1360,7 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
       S.mesh(pp, CYL(1.7,1.7,62,14), mPanel, 140, 11.6, 30, [0,0,Math.PI/2]);
 
       var wt = S.part("Water Treatment","Desalinated feedwater",
-        "At least 9 kg of water per kilogram of hydrogen before cooling and purification losses — about 585,000 tonnes a year at full output.","steam");
+        "At least 9 kg of water per kilogram of hydrogen (stoichiometric), before cooling and purification losses: roughly 550,000–600,000 tonnes a year at the screening estimate.","steam");
       [0,1,2].forEach(function(i){
         S.mesh(wt, CYL(7,7,6,20), mPanel, -8+i*17, 3, 64);
         S.mesh(wt, CYL(7.4,7.4,0.7,20), mSteel, -8+i*17, 6.3, 64);
@@ -1237,7 +1382,7 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
     var S2 = new Stage(STAGE_META[1]);
     (function(S){
       var rm = S.part("Modular HTGR Units","Xe-100 class · pebble bed",
-        "Four 200 MW thermal modules. Helium leaves the core near 750 °C — genuine process heat, not only electricity. ENEC's ADVANCE programme is evaluating this reactor class for the UAE.","heat");
+        "Four 200 MW thermal modules. Helium leaves the core near 750 °C; usable process temperature is lower after intermediate heat exchange. ENEC's ADVANCE programme is evaluating advanced reactors.","heat");
       [-33,-11,11,33].forEach(function(z){
         S.mesh(rm, BOX(22,4,16), mDark, -62, 2, z);
         S.mesh(rm, BOX(18,22,13), mConcrete, -62, 15, z);
@@ -1261,7 +1406,7 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
       S.mesh(tb, BOX(10,9,9), mSteel, -2, 4.5, -46);
 
       var eh = S.part("Electrolyser Hall","SOEC with process heat",
-        "The same solid oxide stacks as Stage 1, but the 800 °C operating temperature now comes largely from reactor heat rather than electricity — so electricity per kilogram falls further.","h2");
+        "Solid oxide stacks as in Stage 1. Higher-grade heat, delivered through an intermediate loop, may supply more of the thermal demand and reduce electricity per kilogram. Net gains depend on reactor design, heat-transfer losses and integration.","h2");
       S.mesh(eh, BOX(46,17,34), mPanel, 24, 8.5, 0);
       S.mesh(eh, BOX(48,1.4,36), mSteel, 24, 17.7, 0);
       for(var i=0;i<5;i++) S.mesh(eh, BOX(5,4,26), mConcrete, 8+i*8, 20.5, 0);
@@ -1273,7 +1418,7 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
       S.mesh(ox, CYL(2.9,2.9,1.6,14), mDark, 24, 26.5, -32);
 
       var sg = S.part("Hydrogen Storage","Buffer and offtake",
-        "Higher output per megawatt of electricity than Stage 1, because heat has displaced part of the electrical demand.","h2");
+        "Potentially more hydrogen per megawatt of electricity than Stage 1, if usable heat displaces part of the electrical demand.","h2");
       [10,-10].forEach(function(z){
         S.mesh(sg, CYL(4.2,4.2,24,20), mConcrete, 68, 7.5, z, [0,0,Math.PI/2]);
         S.mesh(sg, SPH(4.2), mConcrete, 56, 7.5, z);
@@ -1355,7 +1500,7 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
       [-5,0,5].forEach(function(z){ S.mesh(pu, CYL(2.2,2.2,10,14), mSteel, 36+z*1.3, 17, 16+z*1.4); });
 
       var sg = S.part("Hydrogen Storage","Product buffer",
-        "Thermochemical routes target 40–50% thermal efficiency, against roughly a third for the electrolysis pathway at a conventional reactor.","h2");
+        "Thermochemical cycles aim to reduce direct electrical demand, but need large heat input, corrosion-resistant materials, chemical separation and validated continuous operation at scale.","h2");
       [8,-8].forEach(function(z){
         S.mesh(sg, CYL(4,4,22,20), mConcrete, 72, 7, z, [0,0,Math.PI/2]);
         S.mesh(sg, SPH(4), mConcrete, 61, 7, z);
@@ -1590,7 +1735,7 @@ document.querySelectorAll("[data-count]").forEach(function(el){ cio.observe(el);
 
 /* ---------- utilisation tick rows (drawn to scale: 40 ticks = 100%) ---------- */
 document.querySelectorAll(".util .ticks").forEach(function(t){
-  var lit = Math.round(+t.dataset.fill / 100 * 40), h = "";
+  var f = +t.dataset.fill, lit = f > 0 ? Math.max(1, Math.round(f / 100 * 40)) : 0, h = "";
   for(var i=0;i<40;i++) h += '<i class="' + (i < lit ? "" : "off") + '"></i>';
   t.innerHTML = h;
 });
@@ -1600,7 +1745,7 @@ document.querySelectorAll(".util .ticks").forEach(function(t){
   var el = document.getElementById("dbars"); if(!el) return;
   var v = [24,27,25,30,33,38,37,47,53,60,66,72], h = "";
   v.forEach(function(x, i){ h += '<i class="' + (i < 6 ? "base" : "opt") + '" style="height:' + x + '%"></i>'; });
-  el.innerHTML = h + '<div class="dleg mono"><span class="b">Fixed-load baseline</span><span class="o">Optimised</span></div>';
+  el.innerHTML = h + '<div class="dleg mono"><span class="b">Fixed-load baseline</span><span class="o">Candidate schedule (illustrative)</span></div>';
 })();
 
 /* ---------- carousel ---------- */
@@ -1688,7 +1833,7 @@ var clamp = function(v,a,b){ return Math.max(a, Math.min(b, v)); };
 var section = document.getElementById("how"), canvas = document.getElementById("particles");
 var chapters = [].slice.call(document.querySelectorAll(".chapter")), railItems = [].slice.call(document.querySelectorAll(".rail span"));
 var roLbl = document.getElementById("roLbl"), roVal = document.getElementById("roVal"), storyTop = document.getElementById("storyTop");
-var READ = [["Capacity factor","~90%"],["Allocated","1,337 MWe"],["Stack temperature","~800 °C"],["Plant gate","20–30 bar"],["Stage 3","850–950 °C"]];
+var READ = [["Unit rating (assumed)","1,337 MWe"],["Hypothetical allocation","310 MWe"],["SOEC stack","~800 °C"],["Plant gate","20–30 bar"],["Stage 3 · research","850–950 °C"]];
 var narrow = innerWidth <= 820, N = narrow ? 3600 : 7000;
 
 var renderer = new THREE.WebGLRenderer({canvas:canvas, antialias:false, alpha:true});
@@ -1856,6 +2001,34 @@ function frame(now){
 }
 new IntersectionObserver(function(es){ es.forEach(function(e){ var was = running; running = e.isIntersecting; if(running && !was){ resize(); requestAnimationFrame(frame); } }); }, {rootMargin:"100px"}).observe(host);
 running = true; frame(performance.now()); running = false;
+})();
+</script>
+<script>
+/* ---------- screening calculation: the single source for every derived figure on the page ---------- */
+(function(){
+"use strict";
+var IN = { mwe:310, util:0.90, unitMWe:1337, kwhE:[36.8, 40], kwhTh:6.4 };   // kWh per kg H2
+var annualMWh = IN.mwe * 8760 * IN.util;                       // MWh/yr of electricity
+var tHigh = annualMWh / IN.kwhE[0], tLow = annualMWh / IN.kwhE[1];      // t/yr (MWh ÷ kWh/kg = t)
+var rateLow = IN.mwe / IN.kwhE[1], rateHigh = IN.mwe / IN.kwhE[0];      // t/h at rated load
+var share = IN.mwe / IN.unitMWe;
+var r0 = function(v){ return Math.round(v); }, r1 = function(v){ return v.toFixed(1); };
+var fmt = function(v){ return (Math.round(v/100)*100).toLocaleString("en-US"); };   // nearest 100
+var OUT = {
+  sharePct: "~" + r0(share*100) + "%",
+  mwe: IN.mwe + " MWe",
+  utilPct: r0(IN.util*100) + "%",
+  rateRange: r1(rateLow) + "–" + r1(rateHigh) + " t/h",
+  annualRange: r0(tLow/1000) + "–" + r0(tHigh/1000) + " kt/yr",
+  thermalMW: "~" + r0(rateLow*IN.kwhTh) + "–" + r0(rateHigh*IN.kwhTh) + " MW",
+  method: IN.mwe + " MWe × 8,760 h × " + r0(IN.util*100) + "% = " + (annualMWh/1e6).toFixed(2) + " TWh/yr of electricity. ÷ " + IN.kwhE[0] + " kWh/kg ≈ " + fmt(tHigh) +
+          " t H₂/yr; ÷ " + IN.kwhE[1] + " kWh/kg ≈ " + fmt(tLow) + " t H₂/yr. Rated output " + r1(rateLow) + "–" + r1(rateHigh) + " t/h, needing ~" + IN.kwhTh +
+          " kWh/kg of thermal input (" + r0(rateLow*IN.kwhTh) + "–" + r0(rateHigh*IN.kwhTh) + " MW thermal). " + IN.mwe + " ÷ " + IN.unitMWe.toLocaleString("en-US") + " ≈ " + r0(share*100) +
+          "% of an assumed unit rating. Annual output ≠ rated hourly output × 8,760: utilisation is applied once, to annual energy."
+};
+document.querySelectorAll("[data-calc]").forEach(function(el){ var k = el.getAttribute("data-calc"); if(OUT[k]) el.textContent = OUT[k]; });
+document.querySelectorAll("[data-calc-ring]").forEach(function(c){ c.setAttribute("stroke-dasharray", (share*314.16).toFixed(1) + " 314.2"); });
+window.HYDROX_CALC = { inputs:IN, annualMWh:annualMWh, tLow:tLow, tHigh:tHigh, rateLow:rateLow, rateHigh:rateHigh, share:share };
 })();
 </script>
 <script>
