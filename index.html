@@ -377,6 +377,40 @@ p{margin:0;text-wrap:pretty}
 .cta h2{font-size:clamp(34px,5.4vw,72px)}
 .cta p{color:var(--muted);max-width:46ch}
 
+/* ---------- CONTACT ---------- */
+.contact-grid{display:grid;grid-template-columns:1fr 1.15fr;gap:clamp(32px,5vw,72px);align-items:start}
+.contact-copy{display:flex;flex-direction:column;gap:20px;min-width:0}
+.contact-copy p{color:var(--muted);max-width:44ch}
+.clinks{display:flex;flex-direction:column;gap:10px;margin-top:12px;padding-top:22px;border-top:1px solid var(--line)}
+.clinks .mono{color:var(--dim)}
+.clinks a{color:var(--fg);text-decoration:none;overflow-wrap:anywhere;transition:color .2s}
+.clinks a:hover{color:var(--neon)}
+.cform{background:var(--panel);border:1px solid var(--line);padding:clamp(22px,3vw,36px);display:flex;flex-direction:column;gap:20px;min-width:0}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.field{display:flex;flex-direction:column;gap:8px;min-width:0;border:0;margin:0;padding:0}
+.field > label,.field > legend{color:var(--muted);padding:0}
+.field > legend{margin-bottom:8px}
+.field .opt{color:var(--dim)}
+.cform input:not([type="radio"]),.cform textarea{width:100%;background:var(--bg);color:var(--fg);border:1px solid var(--line);border-radius:2px;
+  padding:12px 14px;font-family:var(--font-body);font-size:16px;line-height:1.4;transition:border-color .2s,box-shadow .2s}
+.cform textarea{resize:vertical;min-height:120px}
+.cform input:not([type="radio"]):focus,.cform textarea:focus{outline:none;border-color:var(--neon);box-shadow:0 0 0 3px rgba(191,243,78,.12),0 0 18px rgba(191,243,78,.18)}
+.cform [aria-invalid="true"]{border-color:var(--neon)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{position:relative}
+.chip input{position:absolute;opacity:0;width:1px;height:1px;margin:0}
+.chip span{display:inline-flex;padding:10px 14px;border:1px solid var(--line);border-radius:2px;background:var(--bg);color:var(--muted);cursor:pointer;transition:background .2s,color .2s,border-color .2s}
+.chip span:hover{border-color:var(--neon);color:var(--neon)}
+.chip input:checked + span{background:var(--neon);border-color:var(--neon);color:#071004}
+.chip input:focus-visible + span{outline:2px solid var(--neon);outline-offset:3px}
+.hp{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}
+.csend{display:flex;align-items:center;gap:16px;flex-wrap:wrap}
+.csend .btn[disabled]{opacity:.6;cursor:progress}
+.csend small{color:var(--dim);font-size:13px}
+.cstatus{min-height:1.55em;color:var(--fg);font-size:15px}
+.cstatus.ok{color:var(--neon)}
+@media (max-width:900px){.contact-grid,.frow{grid-template-columns:1fr}}
+
 /* ---------- UTILISATION ROWS ---------- */
 .util{display:flex;flex-direction:column;gap:14px}
 .urow{display:grid;grid-template-columns:150px 1fr 54px;gap:14px;align-items:center}
@@ -498,7 +532,7 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
       <a href="#uae">UAE</a>
     </nav>
     <div style="display:flex;gap:8px">
-      <a class="btn btn-primary nav-cta" href="#invitation">Partner with us <span class="arr">→</span></a>
+      <a class="btn btn-primary nav-cta" href="#contact">Contact us <span class="arr">→</span></a>
       <button class="btn menu-btn" id="menuBtn" aria-expanded="false" aria-controls="navLinks">Menu</button>
     </div>
   </div>
@@ -848,9 +882,49 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
         <span class="eyebrow mono">Get in touch</span>
         <h2 data-scramble>From simulation to a defensible case.</h2>
         <p>Review the model, share an operating envelope, or mentor the pre-feasibility study.</p>
-        <a class="btn btn-primary" id="ctaBtn" href="#model">Start a conversation <span class="arr">→</span></a>
+        <a class="btn btn-primary" id="ctaBtn" href="#contact">Start a conversation <span class="arr">→</span></a>
       </div>
     </div>
+  </div>
+</section>
+
+<!-- ===== CONTACT ===== -->
+<section class="section" id="contact" style="padding-top:0">
+  <span class="sheet-id mono" aria-hidden="true">SHEET 09 / CONTACT</span>
+  <div class="wrap contact-grid">
+    <div class="contact-copy">
+      <span class="eyebrow mono">Contact us</span>
+      <h2 data-scramble>Let's talk.</h2>
+      <p>Leave your name and email and we'll reply within 48 hours. Tell us if you'd like to review our model, share data or mentor the study.</p>
+      <div class="clinks">
+        <span class="mono">Or email us directly</span>
+        <a href="mailto:skhan.innovates@gmail.com">skhan.innovates@gmail.com</a>
+        <a href="mailto:ibrahim.rahman70@outlook.com">ibrahim.rahman70@outlook.com</a>
+      </div>
+    </div>
+    <form class="cform" id="contactForm" novalidate>
+      <div class="frow">
+        <div class="field"><label class="mono" for="cName">Name</label><input id="cName" name="name" type="text" autocomplete="name" required></div>
+        <div class="field"><label class="mono" for="cEmail">Email</label><input id="cEmail" name="email" type="email" autocomplete="email" inputmode="email" required></div>
+      </div>
+      <div class="field"><label class="mono" for="cOrg">Organisation <span class="opt">(optional)</span></label><input id="cOrg" name="organisation" type="text" autocomplete="organization"></div>
+      <fieldset class="field">
+        <legend class="mono">I'm interested in</legend>
+        <div class="chips">
+          <label class="chip"><input type="radio" name="interest" value="Reviewing the model"><span class="mono">Reviewing the model</span></label>
+          <label class="chip"><input type="radio" name="interest" value="Sharing data"><span class="mono">Sharing data</span></label>
+          <label class="chip"><input type="radio" name="interest" value="Mentoring"><span class="mono">Mentoring</span></label>
+          <label class="chip"><input type="radio" name="interest" value="Just curious" checked><span class="mono">Just curious</span></label>
+        </div>
+      </fieldset>
+      <div class="field"><label class="mono" for="cMsg">Message <span class="opt">(optional)</span></label><textarea id="cMsg" name="message" rows="4"></textarea></div>
+      <div class="hp" aria-hidden="true"><label for="cHoney">Leave this empty</label><input id="cHoney" name="_honey" type="text" tabindex="-1" autocomplete="off"></div>
+      <div class="csend">
+        <button class="btn btn-primary" type="submit">Send <span class="arr">→</span></button>
+        <small>We only use your details to reply to you.</small>
+      </div>
+      <p class="cstatus" id="cStatus" role="status" aria-live="polite"></p>
+    </form>
   </div>
 </section>
 </main>
@@ -863,7 +937,7 @@ footer{padding-block:clamp(60px,8vw,110px) 40px}
         <p>A staged AI dispatch and control layer for nuclear hydrogen, from Barakah today to high-temperature reactors next.</p>
       </div>
       <div class="fcol"><span class="h mono">[Navigation]</span>
-        <a href="#how">Stage 1 today</a><a href="#problem">Problem</a><a href="#solution">Three stages</a><a href="#ai">AI layer</a><a href="#economics">Economics</a></div>
+        <a href="#how">Stage 1 today</a><a href="#problem">Problem</a><a href="#solution">Three stages</a><a href="#ai">AI layer</a><a href="#economics">Economics</a><a href="#contact">Contact</a></div>
       <div class="fcol"><span class="h mono">[Site model]</span>
         <button type="button" data-jump="0">Stage 1 · Barakah</button><button type="button" data-jump="1">Stage 2 · HTGR</button><button type="button" data-jump="2">Stage 3 · S–I cycle</button></div>
       <div class="fcol"><span class="h mono">[Sources]</span>
@@ -1738,6 +1812,96 @@ function frame(now){
 }
 new IntersectionObserver(function(es){ es.forEach(function(e){ var was = running; running = e.isIntersecting; if(running && !was){ resize(); requestAnimationFrame(frame); } }); }, {rootMargin:"100px"}).observe(host);
 running = true; frame(performance.now()); running = false;
+})();
+</script>
+<script>
+/* ---------- contact form: FormSubmit + offline queue ---------- */
+(function(){
+"use strict";
+var ENDPOINT = "https://formsubmit.co/ajax/skhan.innovates@gmail.com";
+var CC = "ibrahim.rahman70@outlook.com";
+var QUEUE_KEY = "hydrox-contact-queue";
+var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
+
+var form = document.getElementById("contactForm");
+if(!form) return;
+var status = document.getElementById("cStatus"), btn = form.querySelector("button[type=submit]");
+
+function say(msg, ok){ status.textContent = msg; status.classList.toggle("ok", !!ok); }
+function firstName(n){ return n.trim().split(/\s+/)[0]; }
+
+function payload(d){
+  return { name:d.name, email:d.email, organisation:d.organisation, interest:d.interest, message:d.message,
+    _cc:CC, _subject:"Hydrox website: " + d.interest + " - " + d.name, _template:"table", _captcha:"false" };
+}
+
+/* resolves on success, rejects on network error, timeout or a FormSubmit failure */
+function send(d){
+  var ctrl = "AbortController" in window ? new AbortController() : null;
+  var timer = ctrl && setTimeout(function(){ ctrl.abort(); }, 15000);
+  return fetch(ENDPOINT, { method:"POST", headers:{ "Content-Type":"application/json", "Accept":"application/json" },
+    body:JSON.stringify(payload(d)), signal:ctrl ? ctrl.signal : undefined })
+    .then(function(r){ return r.json().catch(function(){ return {}; }).then(function(j){
+      if(!r.ok || String(j.success) === "false") throw new Error(j.message || ("HTTP " + r.status));
+    }); })
+    .finally(function(){ if(timer) clearTimeout(timer); });
+}
+
+function readQueue(){ try { return JSON.parse(localStorage.getItem(QUEUE_KEY)) || []; } catch(e){ return []; } }
+function writeQueue(q){
+  try { if(q.length) localStorage.setItem(QUEUE_KEY, JSON.stringify(q)); else localStorage.removeItem(QUEUE_KEY); return true; }
+  catch(e){ return false; }
+}
+function enqueue(d){ var q = readQueue(); q.push(d); return writeQueue(q); }
+
+var flushing = false;
+function flush(){
+  if(flushing || !navigator.onLine) return;
+  var q = readQueue(); if(!q.length) return;
+  flushing = true;
+  var left = [];
+  q.reduce(function(p, d){
+    return p.then(function(){ return send(d).catch(function(){ left.push(d); }); });
+  }, Promise.resolve()).then(function(){
+    /* keep anything queued while we were sending */
+    var added = readQueue().slice(q.length);
+    writeQueue(left.concat(added));
+    flushing = false;
+  });
+}
+
+function reset(){
+  form.reset();
+  form.querySelectorAll("[aria-invalid]").forEach(function(el){ el.removeAttribute("aria-invalid"); });
+}
+
+form.addEventListener("submit", function(e){
+  e.preventDefault();
+  if(form.elements._honey.value) return;
+
+  var name = form.elements.name, email = form.elements.email;
+  name.removeAttribute("aria-invalid"); email.removeAttribute("aria-invalid");
+  if(!name.value.trim()){ name.setAttribute("aria-invalid", "true"); say("Please enter your name."); name.focus(); return; }
+  if(!EMAIL_RE.test(email.value.trim())){ email.setAttribute("aria-invalid", "true"); say("Please enter a valid email address."); email.focus(); return; }
+
+  var checked = form.querySelector("input[name=interest]:checked");
+  var d = { name:name.value.trim(), email:email.value.trim(), organisation:form.elements.organisation.value.trim(),
+    interest:checked ? checked.value : "Just curious", message:form.elements.message.value.trim(), at:new Date().toISOString() };
+  var who = firstName(d.name);
+
+  btn.disabled = true; say("Sending…");
+  (navigator.onLine ? send(d) : Promise.reject(new Error("offline")))
+    .then(function(){ say("Thanks, " + who + ". We'll be in touch within 48 hours.", true); reset(); })
+    .catch(function(){
+      if(enqueue(d)){ say("Thanks, " + who + ". Your details are saved on this device and will send as soon as we're connected.", true); reset(); }
+      else say("Sorry, that didn't send. Please email us at skhan.innovates@gmail.com.");
+    })
+    .finally(function(){ btn.disabled = false; });
+});
+
+addEventListener("online", flush);
+setInterval(flush, 60000);
+flush();
 })();
 </script>
 
